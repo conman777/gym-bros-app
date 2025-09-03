@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  workouts Workout[]
+  stats    Stats?
+}
+
+model Workout {
+  id         String     @id @default(cuid())
+  userId     String
+  date       DateTime
+  completed  Boolean    @default(false)
+  exercises  Exercise[]
+  user       User       @relation(fields: [userId], references: [id])
+
+  @@index([userId, date])
+}
+
+model Exercise {
+  id         String   @id @default(cuid())
+  workoutId  String
+  name       String
+  orderIndex Int
+  sets       Set[]
+  workout    Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  @@index([workoutId])
+}
+
+model Set {
+  id         String   @id @default(cuid())
+  exerciseId String
+  reps       Int
+  weight     Float
+  completed  Boolean  @default(false)
+  orderIndex Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@index([exerciseId])
+}
+
+model Stats {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  totalSetsCompleted Int     @default(0)
+  totalExercises    Int     @default(0)
+  lastWorkoutDate   DateTime?
+  user              User     @relation(fields: [userId], references: [id])
+}

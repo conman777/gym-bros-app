@@ -1,0 +1,105 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Home, Calendar, TrendingUp, User } from 'lucide-react'
+import { motion } from 'framer-motion'
+
+const navItems = [
+  { href: '/dashboard', icon: Home, label: 'Home' },
+  { href: '/calendar', icon: Calendar, label: 'Calendar' },
+  { href: '/stats', icon: TrendingUp, label: 'Stats' },
+  { href: '/import', icon: User, label: 'Plans' },
+]
+
+export default function BottomNav() {
+  const pathname = usePathname()
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[var(--surface)] border-t border-[var(--border)] z-50">
+      <div className="flex justify-around items-center h-16">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href
+          const Icon = item.icon
+          
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="relative flex flex-col items-center justify-center flex-1 h-full"
+            >
+              <motion.div
+                className="flex flex-col items-center relative py-1"
+                whileHover={{ 
+                  scale: 1.2,
+                  y: -5,
+                  transition: { 
+                    type: "spring", 
+                    stiffness: 400, 
+                    damping: 10 
+                  }
+                }}
+                whileTap={{ 
+                  scale: 0.9,
+                  y: 0
+                }}
+              >
+                <motion.div
+                  animate={isActive ? { 
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 5, -5, 0]
+                  } : {}}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Icon
+                    size={24}
+                    className={`mb-1 transition-colors ${
+                      isActive 
+                        ? 'text-[var(--primary)]' 
+                        : 'text-[var(--foreground-muted)] hover:text-[var(--primary)]'
+                    }`}
+                  />
+                </motion.div>
+                <motion.span
+                  className={`text-xs transition-all ${
+                    isActive 
+                      ? 'text-[var(--primary)] font-medium' 
+                      : 'text-[var(--foreground-muted)] hover:text-[var(--primary)]'
+                  }`}
+                  animate={isActive ? { 
+                    scale: 1.1,
+                    fontWeight: 600 
+                  } : { 
+                    scale: 1,
+                    fontWeight: 400 
+                  }}
+                >
+                  {item.label}
+                </motion.span>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-[var(--primary)] rounded-full"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  />
+                )}
+                {/* Hover indicator dot */}
+                <motion.div
+                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[var(--primary)] rounded-full"
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileHover={{ 
+                    opacity: isActive ? 0 : 1, 
+                    scale: isActive ? 0 : 1,
+                    transition: { duration: 0.2 }
+                  }}
+                />
+              </motion.div>
+            </Link>
+          )
+        })}
+      </div>
+    </nav>
+  )
+}

@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gym Bros
+
+A simple gym tracking app for Conor and Devlin to track workouts and stay on schedule.
+
+## Features
+
+- **User Profiles**: Separate tracking for Conor and Devlin
+- **Workout Templates**: Import workout plans via copy/paste
+- **Calendar View**: See all scheduled workouts at a glance
+- **Workout Tracking**: Check off sets as you complete them with weight tracking
+- **Auto-adjustment**: Missed workouts automatically shift forward
+- **Progress Stats**: Track total sets, exercises, and streaks
+- **Mobile-friendly**: Designed for use during workouts
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+   The app will run on http://localhost:8879
+
+3. Select your profile (Conor or Devlin)
+
+4. Import a workout template:
+   ```
+   Monday - Chest & Triceps
+   Bench Press: 3x10 @ 135lbs
+   Incline Dumbbell Press: 3x12 @ 50lbs
+   Cable Flyes: 3x15 @ 30lbs
+   Tricep Pushdowns: 3x12 @ 40lbs
+   
+   Wednesday - Back & Biceps
+   Deadlifts: 3x5 @ 225lbs
+   Pull-ups: 3x8 @ bodyweight
+   Barbell Rows: 3x10 @ 95lbs
+   Bicep Curls: 3x12 @ 30lbs
+   
+   Friday - Legs
+   Squats: 3x8 @ 185lbs
+   Leg Press: 3x12 @ 270lbs
+   Leg Curls: 3x15 @ 60lbs
+   Calf Raises: 3x20 @ 100lbs
+   ```
+
+5. Start your workout and check off sets as you complete them
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Database**: SQLite with Prisma ORM
+- **Styling**: Tailwind CSS
+- **Port**: 8879
+
+## Database Management
+
+The app uses SQLite for local data storage. The database file is located at `prisma/dev.db`.
+
+To reset the database:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx prisma db push --force-reset
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To view the database:
+```bash
+npx prisma studio
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app follows TDD principles and best practices as outlined in CLAUDE.md.
 
-## Learn More
+### Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/              # Next.js App Router pages
+│   ├── api/         # API routes
+│   ├── calendar/    # Calendar view
+│   ├── dashboard/   # Main dashboard
+│   ├── import/      # Template import
+│   ├── stats/       # Statistics page
+│   └── workout/     # Workout tracking
+├── lib/             # Utilities and types
+└── generated/       # Prisma client
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Production Build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To build for production:
+```bash
+npm run build
+npm start
+```

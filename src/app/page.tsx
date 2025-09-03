@@ -1,103 +1,196 @@
-import Image from "next/image";
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Dumbbell, User, Zap } from 'lucide-react'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const router = useRouter()
+  const [mounted, setMounted] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<'Conor' | 'Devlin' | null>(null)
+  const [loading, setLoading] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const selectUser = async (userName: 'Conor' | 'Devlin') => {
+    setSelectedUser(userName)
+    setLoading(true)
+    
+    try {
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName }),
+      })
+      
+      if (response.ok) {
+        setTimeout(() => {
+          router.push('/dashboard')
+        }, 500)
+      }
+    } catch (error) {
+      console.error('Failed to select user:', error)
+      setLoading(false)
+      setSelectedUser(null)
+    }
+  }
+
+  if (!mounted) return null
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex flex-col items-center justify-center overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: Math.random() * 300 + 100,
+              height: Math.random() * 300 + 100,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 - 50],
+            }}
+            transition={{
+              duration: Math.random() * 20 + 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 text-center px-4">
+        <motion.div
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", duration: 0.8 }}
+          className="mb-8"
+        >
+          <Dumbbell className="w-24 h-24 text-white mx-auto" />
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-6xl md:text-7xl font-bold text-white mb-4"
+        >
+          GYM BROS
+        </motion.h1>
+        
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-white/80 text-xl mb-12"
+        >
+          Choose your profile to continue
+        </motion.p>
+        
+        <motion.div 
+          className="flex flex-col sm:flex-row gap-6 justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => selectUser('Conor')}
+            disabled={loading}
+            className={`relative group bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all ${
+              selectedUser === 'Conor' ? 'scale-105 border-white/60' : ''
+            } ${loading && selectedUser !== 'Conor' ? 'opacity-50' : ''}`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            
+            <div className="relative">
+              <div className="w-20 h-20 bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-full mx-auto mb-4 flex items-center justify-center">
+                {loading && selectedUser === 'Conor' ? (
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Dumbbell className="w-10 h-10 text-white" />
+                  </motion.div>
+                ) : (
+                  <User className="w-10 h-10 text-white" />
+                )}
+              </div>
+              
+              <h3 className="text-2xl font-bold text-white mb-2">CONOR</h3>
+              <div className="flex items-center justify-center gap-1 text-white/60">
+                <Zap className="w-4 h-4" />
+                <span className="text-sm">Ready to train</span>
+              </div>
+            </div>
+
+            <AnimatePresence>
+              {selectedUser === 'Conor' && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -inset-1 border-2 border-white/40 rounded-2xl"
+                />
+              )}
+            </AnimatePresence>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => selectUser('Devlin')}
+            disabled={loading}
+            className={`relative group bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all ${
+              selectedUser === 'Devlin' ? 'scale-105 border-white/60' : ''
+            } ${loading && selectedUser !== 'Devlin' ? 'opacity-50' : ''}`}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+            
+            <div className="relative">
+              <div className="w-20 h-20 bg-gradient-to-br from-[var(--secondary)] to-[var(--secondary-dark)] rounded-full mx-auto mb-4 flex items-center justify-center">
+                {loading && selectedUser === 'Devlin' ? (
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Dumbbell className="w-10 h-10 text-white" />
+                  </motion.div>
+                ) : (
+                  <User className="w-10 h-10 text-white" />
+                )}
+              </div>
+              
+              <h3 className="text-2xl font-bold text-white mb-2">DEVLIN</h3>
+              <div className="flex items-center justify-center gap-1 text-white/60">
+                <Zap className="w-4 h-4" />
+                <span className="text-sm">Ready to train</span>
+              </div>
+            </div>
+
+            <AnimatePresence>
+              {selectedUser === 'Devlin' && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  className="absolute -inset-1 border-2 border-white/40 rounded-2xl"
+                />
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </motion.div>
+      </div>
     </div>
-  );
+  )
 }
