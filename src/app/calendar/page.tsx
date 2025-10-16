@@ -39,13 +39,13 @@ export default function CalendarPage() {
     try {
       const response = await fetch(`/api/calendar?month=${month}&year=${year}`)
       if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 404) {
           router.push('/')
           return
         }
         throw new Error('Failed to fetch workouts')
       }
-      
+
       const data = await response.json()
       setWorkouts(data.workouts.map((w: any) => ({
         ...w,

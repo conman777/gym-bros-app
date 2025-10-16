@@ -35,13 +35,13 @@ export default function StatsPage() {
     try {
       const response = await fetch('/api/stats')
       if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 404) {
           router.push('/')
           return
         }
         throw new Error('Failed to fetch stats')
       }
-      
+
       const data = await response.json()
       setStats(data)
     } catch (error) {

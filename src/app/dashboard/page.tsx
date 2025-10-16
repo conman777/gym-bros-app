@@ -45,13 +45,13 @@ export default function Dashboard() {
     try {
       const response = await fetch('/api/dashboard')
       if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 404) {
           router.push('/')
           return
         }
         throw new Error('Failed to fetch dashboard data')
       }
-      
+
       const data = await response.json()
       setUser(data.user)
       setTodayWorkout(data.todayWorkout)
