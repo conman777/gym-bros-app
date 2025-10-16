@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { cookies } from 'next/headers'
 import { createDemoWorkouts } from '@/lib/demo-data'
+import type { UserName } from '@/lib/types'
 
 export async function POST(request: NextRequest) {
   try {
-    const { userName } = await request.json()
+    const { userName } = await request.json() as { userName?: UserName }
     
     if (!userName || (userName !== 'Conor' && userName !== 'Devlin')) {
       return NextResponse.json({ error: 'Invalid user' }, { status: 400 })
@@ -40,19 +40,18 @@ export async function POST(request: NextRequest) {
 
     // Create demo workouts for new users
     if (isNewUser) {
-      await createDemoWorkouts(user.id)
+      await createDemoWorkouts(user.id, userName)
     }
 
     // Set cookie
-    const cookieStore = await cookies()
-    cookieStore.set('userId', user.id, {
+    const response = NextResponse.json({ success: true, userId: user.id })
+    response.cookies.set('userId', user.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30 // 30 days
     })
-
-    return NextResponse.json({ success: true, userId: user.id })
+    return response
   } catch (error) {
     console.error('Auth error:', error)
     return NextResponse.json({ error: 'Failed to authenticate' }, { status: 500 })

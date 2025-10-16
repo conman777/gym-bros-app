@@ -1,17 +1,40 @@
-const http = require('http');
+const { createServer } = require('http');
+const { parse } = require('url');
+const next = require('next');
 
-const server = http.createServer((req, res) => {
-  console.log(`Request from: ${req.socket.remoteAddress} to ${req.url}`);
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.end(`
-    <h1>Gym Bros Test Server</h1>
-    <p>If you can see this, port forwarding is working!</p>
-    <p>Time: ${new Date().toISOString()}</p>
-    <p>Request from: ${req.socket.remoteAddress}</p>
-    <p><a href="/">Click here to go to the actual app</a></p>
-  `);
-});
+const dev = process.env.NODE_ENV !== 'production';
+const hostname = '0.0.0.0';
+const port = 8879;
 
-server.listen(8879, '0.0.0.0', () => {
-  console.log('Test server running on http://0.0.0.0:8879');
+const app = next({ dev, hostname, port });
+const handle = app.getRequestHandler();
+
+app.prepare().then(() => {
+  createServer(async (req, res) => {
+    try {
+      const parsedUrl = parse(req.url, true);
+      await handle(req, res, parsedUrl);
+    } catch (err) {
+      console.error('Error occurred handling', req.url, err);
+      res.statusCode = 500;
+      res.end('internal server error');
+    }
+  }).listen(port, hostname, (err) => {
+    if (err) throw err;
+    console.log(`> Ready on http://localhost:${port}`);
+    console.log(`> Also accessible on http://0.0.0.0:${port}`);
+
+    // Get network IP
+    const { networkInterfaces } = require('os');
+    const nets = networkInterfaces();
+    for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+        if (net.family === 'IPv4' && !net.internal) {
+          console.log(`> Network: http://${net.address}:${port}`);
+        }
+      }
+    }
+  });
+}).catch((err) => {
+  console.error('Failed to prepare Next.js app:', err);
 });
