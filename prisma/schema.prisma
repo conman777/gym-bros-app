@@ -12,10 +12,11 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(cuid())
-  name     String    @unique
-  workouts Workout[]
-  stats    Stats?
+  id             String          @id @default(cuid())
+  name           String          @unique
+  workouts       Workout[]
+  stats          Stats?
+  rehabExercises RehabExercise[]
 }
 
 model Workout {
@@ -59,4 +60,27 @@ model Stats {
   totalExercises    Int     @default(0)
   lastWorkoutDate   DateTime?
   user              User     @relation(fields: [userId], references: [id])
+}
+
+model RehabExercise {
+  id            String    @id @default(cuid())
+  userId        String
+  name          String
+  description   String?
+  category      String?   // e.g., "Warm-up", "Mobility & Stretching", "Band / Dumbbell / Machine Strength"
+  setsLeft      Int?      // Number of sets for left side
+  setsRight     Int?      // Number of sets for right side
+  sets          Int?      // Number of sets (when not side-specific)
+  reps          Int?      // Number of repetitions
+  hold          Int?      // Hold time in seconds
+  load          String?   // Load/weight (e.g., "2 kg", "7.5 kg")
+  bandColor     String?   // Resistance band color
+  time          String?   // Time duration (e.g., "3-5 min")
+  cues          String?   // Exercise cues and instructions
+  completed     Boolean   @default(false)
+  completedDate DateTime?
+  orderIndex    Int
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

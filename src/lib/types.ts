@@ -4,6 +4,7 @@ export type UserId = Brand<string, 'UserId'>
 export type WorkoutId = Brand<string, 'WorkoutId'>
 export type ExerciseId = Brand<string, 'ExerciseId'>
 export type SetId = Brand<string, 'SetId'>
+export type RehabExerciseId = Brand<string, 'RehabExerciseId'>
 
 export type UserName = 'Conor' | 'Devlin'
 
@@ -15,4 +16,23 @@ export interface WorkoutTemplate {
     reps: number
     weight: number
   }[]
+}
+
+export interface RehabExercise {
+  id: string
+  name: string
+  description: string | null
+  category: string | null
+  setsLeft: number | null
+  setsRight: number | null
+  sets: number | null
+  reps: number | null
+  hold: number | null
+  load: string | null
+  bandColor: string | null
+  time: string | null
+  cues: string | null
+  completed: boolean
+  completedDate: Date | null
+  orderIndex: number
 }

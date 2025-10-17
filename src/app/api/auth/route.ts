@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { createDemoWorkouts } from '@/lib/demo-data'
+import { createDemoWorkouts, createRehabExercises } from '@/lib/demo-data'
 import type { UserName } from '@/lib/types'
 
 export async function POST(request: NextRequest) {
@@ -41,6 +41,11 @@ export async function POST(request: NextRequest) {
     // Create demo workouts for new users
     if (isNewUser) {
       await createDemoWorkouts(user.id, userName)
+
+      // Create rehab exercises for Devlin
+      if (userName === 'Devlin') {
+        await createRehabExercises(user.id)
+      }
     }
 
     // Set cookie
