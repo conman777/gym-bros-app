@@ -34,7 +34,10 @@ export async function GET(request: NextRequest) {
     })
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      // User cookie exists but user not found in DB - clear the invalid cookie
+      const response = NextResponse.json({ error: 'User not found' }, { status: 404 })
+      response.cookies.delete('userId')
+      return response
     }
 
     const todayWorkout = user.workouts[0] || null
