@@ -26,8 +26,8 @@ export default function CalendarPage() {
   const [loading, setLoading] = useState(true)
   
   const now = new Date()
-  const monthParam = searchParams.get('month')
-  const yearParam = searchParams.get('year')
+  const monthParam = searchParams?.get('month')
+  const yearParam = searchParams?.get('year')
   const [month, setMonth] = useState(monthParam ? parseInt(monthParam) : now.getMonth())
   const [year, setYear] = useState(yearParam ? parseInt(yearParam) : now.getFullYear())
   

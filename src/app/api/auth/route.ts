@@ -25,10 +25,15 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       user = await prisma.user.create({
-        data: { 
+        data: {
           name: userName,
           stats: {
             create: {}
+          }
+        },
+        include: {
+          workouts: {
+            take: 1
           }
         }
       })
