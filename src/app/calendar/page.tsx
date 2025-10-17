@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -19,7 +19,7 @@ interface WorkoutDay {
   }>
 }
 
-export default function CalendarPage() {
+function CalendarContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [workouts, setWorkouts] = useState<WorkoutDay[]>([])
@@ -312,5 +312,22 @@ export default function CalendarPage() {
 
       <BottomNav />
     </div>
+  )
+}
+
+export default function CalendarPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        >
+          <CalendarIcon className="w-8 h-8 text-[var(--primary)]" />
+        </motion.div>
+      </div>
+    }>
+      <CalendarContent />
+    </Suspense>
   )
 }
