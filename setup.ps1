@@ -1,4 +1,7 @@
-# Setup script for Gym Bros App
+# ⚠️ DEPRECATED: This script is deprecated. Use the unified setup instead:
+#    npm run setup
+#
+# Setup script for Gym Bros App (LEGACY)
 $env:DATABASE_URL = "file:./prisma/dev.db"
 Write-Host "Setting DATABASE_URL to $env:DATABASE_URL"
 

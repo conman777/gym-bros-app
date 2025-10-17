@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build --turbopack",
-    "start": "NODE_ENV=production node server.js"
+    "start": "cross-env NODE_ENV=production node server.js",
+    "setup": "node setup.js"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0",
@@ -24,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
