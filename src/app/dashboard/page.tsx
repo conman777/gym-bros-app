@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { formatDateForUrl } from "@/lib/date-utils";
 import BottomNav from "@/components/BottomNav";
@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import * as Progress from "@radix-ui/react-progress";
 import type { RehabExercise } from "@/lib/types";
+import { SetupProgressHandler } from "./SetupProgressHandler";
 
 interface User {
   id: string;
@@ -46,7 +47,6 @@ interface Workout {
 
 export default function Dashboard() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
   const [todayWorkout, setTodayWorkout] = useState<Workout | null>(null);
   const [rehabExercises, setRehabExercises] = useState<RehabExercise[]>([]);
@@ -54,39 +54,6 @@ export default function Dashboard() {
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
   const [setupProgress, setSetupProgress] = useState<number | null>(null);
   const [setupComplete, setSetupComplete] = useState(false);
-
-  // Poll for setup job progress
-  useEffect(() => {
-    const setupJobId = searchParams.get("setupJobId");
-    if (!setupJobId) return;
-
-    const pollSetupStatus = async () => {
-      try {
-        const response = await fetch(`/api/setup-status?jobId=${setupJobId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setSetupProgress(data.progress);
-
-          if (data.status === "completed") {
-            setSetupComplete(true);
-            // Refresh data after a short delay to ensure DB is updated
-            setTimeout(() => {
-              fetchDashboardData();
-              setSetupProgress(null);
-            }, 500);
-          } else if (data.status === "failed") {
-            console.error("Setup failed:", data.error);
-            setSetupProgress(null);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to poll setup status:", error);
-      }
-    };
-
-    const interval = setInterval(pollSetupStatus, 500);
-    return () => clearInterval(interval);
-  }, [searchParams]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -190,6 +157,15 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] pb-20">
+      {/* Setup Progress Handler - wrapped in Suspense for useSearchParams */}
+      <Suspense fallback={null}>
+        <SetupProgressHandler
+          onProgressUpdate={setSetupProgress}
+          onSetupComplete={setSetupComplete}
+          onRefreshData={fetchDashboardData}
+        />
+      </Suspense>
+
       {/* Header */}
       <header className="bg-[var(--surface)] shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
