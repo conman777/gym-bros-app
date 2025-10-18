@@ -5,8 +5,31 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  // For development, use local SQLite
-  // Turso adapter is available in production but optional for dev
+  // Use Turso adapter in production when env vars are available
+  if (
+    process.env.DATABASE_TURSO_DATABASE_URL &&
+    process.env.DATABASE_TURSO_AUTH_TOKEN
+  ) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { PrismaLibSQL } = require("@prisma/adapter-libsql");
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { createClient } = require("@libsql/client");
+
+      const libsql = createClient({
+        url: process.env.DATABASE_TURSO_DATABASE_URL,
+        authToken: process.env.DATABASE_TURSO_AUTH_TOKEN,
+      });
+
+      const adapter = new PrismaLibSQL(libsql);
+      return new PrismaClient({ adapter });
+    } catch (error) {
+      console.error("Turso adapter failed, using fallback:", error);
+      return new PrismaClient();
+    }
+  }
+
+  // Local SQLite for development
   return new PrismaClient();
 }
 

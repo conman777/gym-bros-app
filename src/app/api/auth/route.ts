@@ -111,8 +111,20 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     console.error("Auth error:", error);
+    console.error(
+      "Error stack:",
+      error instanceof Error ? error.stack : "No stack",
+    );
+    console.error("Environment check:", {
+      hasTursoUrl: !!process.env.DATABASE_TURSO_DATABASE_URL,
+      hasTursoToken: !!process.env.DATABASE_TURSO_AUTH_TOKEN,
+      nodeEnv: process.env.NODE_ENV,
+    });
     return NextResponse.json(
-      { error: "Failed to authenticate" },
+      {
+        error: "Failed to authenticate",
+        detail: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }
