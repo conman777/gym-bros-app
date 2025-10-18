@@ -22,7 +22,10 @@ function createPrismaClient() {
       });
 
       const adapter = new PrismaLibSQL(libsql);
-      return new PrismaClient({ adapter });
+      return new PrismaClient({
+        adapter,
+        datasourceUrl: process.env.DATABASE_TURSO_DATABASE_URL,
+      });
     } catch (error) {
       console.error("Turso adapter failed, using fallback:", error);
       return new PrismaClient();
