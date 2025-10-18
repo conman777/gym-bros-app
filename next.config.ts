@@ -19,10 +19,6 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  // Disable static page generation for pages that use dynamic functions
-  experimental: {
-    dynamicIO: true,
-  },
 };
 
 export default nextConfig;
