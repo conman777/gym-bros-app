@@ -1,108 +1,163 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { formatDateForUrl } from '@/lib/date-utils'
-import BottomNav from '@/components/BottomNav'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, Dumbbell, Flame, Trophy, LogOut, Calendar, TrendingUp, Heart, Settings, FileText, Info } from 'lucide-react'
-import * as Progress from '@radix-ui/react-progress'
-import type { RehabExercise } from '@/lib/types'
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { formatDateForUrl } from "@/lib/date-utils";
+import BottomNav from "@/components/BottomNav";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ChevronRight,
+  Dumbbell,
+  Flame,
+  Trophy,
+  LogOut,
+  Calendar,
+  TrendingUp,
+  Heart,
+  Settings,
+  FileText,
+  Info,
+} from "lucide-react";
+import * as Progress from "@radix-ui/react-progress";
+import type { RehabExercise } from "@/lib/types";
 
 interface User {
-  id: string
-  name: string
+  id: string;
+  name: string;
   stats: {
-    totalSetsCompleted: number
-    totalExercises: number
-  } | null
+    totalSetsCompleted: number;
+    totalExercises: number;
+  } | null;
 }
 
 interface Workout {
-  id: string
-  date: Date
+  id: string;
+  date: Date;
   exercises: {
-    id: string
-    name: string
+    id: string;
+    name: string;
     sets: {
-      id: string
-      completed: boolean
-    }[]
-  }[]
+      id: string;
+      completed: boolean;
+    }[];
+  }[];
 }
 
 export default function Dashboard() {
-  const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
-  const [todayWorkout, setTodayWorkout] = useState<Workout | null>(null)
-  const [rehabExercises, setRehabExercises] = useState<RehabExercise[]>([])
-  const [loading, setLoading] = useState(true)
-  const [expandedExercise, setExpandedExercise] = useState<string | null>(null)
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [user, setUser] = useState<User | null>(null);
+  const [todayWorkout, setTodayWorkout] = useState<Workout | null>(null);
+  const [rehabExercises, setRehabExercises] = useState<RehabExercise[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+  const [setupProgress, setSetupProgress] = useState<number | null>(null);
+  const [setupComplete, setSetupComplete] = useState(false);
+
+  // Poll for setup job progress
+  useEffect(() => {
+    const setupJobId = searchParams.get("setupJobId");
+    if (!setupJobId) return;
+
+    const pollSetupStatus = async () => {
+      try {
+        const response = await fetch(`/api/setup-status?jobId=${setupJobId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setSetupProgress(data.progress);
+
+          if (data.status === "completed") {
+            setSetupComplete(true);
+            // Refresh data after a short delay to ensure DB is updated
+            setTimeout(() => {
+              fetchDashboardData();
+              setSetupProgress(null);
+            }, 500);
+          } else if (data.status === "failed") {
+            console.error("Setup failed:", data.error);
+            setSetupProgress(null);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to poll setup status:", error);
+      }
+    };
+
+    const interval = setInterval(pollSetupStatus, 500);
+    return () => clearInterval(interval);
+  }, [searchParams]);
 
   useEffect(() => {
-    fetchDashboardData()
-  }, [])
+    fetchDashboardData();
+  }, []);
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch('/api/dashboard')
+      const response = await fetch("/api/dashboard");
       if (!response.ok) {
         if (response.status === 401 || response.status === 404) {
-          router.push('/')
-          return
+          router.push("/");
+          return;
         }
-        throw new Error('Failed to fetch dashboard data')
+        throw new Error("Failed to fetch dashboard data");
       }
 
-      const data = await response.json()
-      setUser(data.user)
-      setTodayWorkout(data.todayWorkout)
+      const data = await response.json();
+      setUser(data.user);
+      setTodayWorkout(data.todayWorkout);
 
-      if (data.user?.name === 'Devlin') {
-        const rehabResponse = await fetch('/api/rehab')
+      if (data.user?.name === "Devlin") {
+        const rehabResponse = await fetch("/api/rehab");
         if (rehabResponse.ok) {
-          const rehabData = await rehabResponse.json()
-          setRehabExercises(rehabData)
+          const rehabData = await rehabResponse.json();
+          setRehabExercises(rehabData);
         }
       }
     } catch (error) {
-      console.error('Dashboard error:', error)
+      console.error("Dashboard error:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const toggleRehabExercise = async (exerciseId: string, completed: boolean) => {
+  const toggleRehabExercise = async (
+    exerciseId: string,
+    completed: boolean,
+  ) => {
     try {
       const response = await fetch(`/api/rehab/${exerciseId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ completed }),
-      })
+      });
 
       if (response.ok) {
-        setRehabExercises(exercises =>
-          exercises.map(ex =>
+        setRehabExercises((exercises) =>
+          exercises.map((ex) =>
             ex.id === exerciseId
-              ? { ...ex, completed, completedDate: completed ? new Date() : null }
-              : ex
-          )
-        )
+              ? {
+                  ...ex,
+                  completed,
+                  completedDate: completed ? new Date() : null,
+                }
+              : ex,
+          ),
+        );
       }
     } catch (error) {
-      console.error('Failed to toggle rehab exercise:', error)
+      console.error("Failed to toggle rehab exercise:", error);
     }
-  }
+  };
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
-      router.push('/')
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/");
     } catch (error) {
-      console.error('Logout error:', error)
+      console.error("Logout error:", error);
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -114,18 +169,24 @@ export default function Dashboard() {
           <Dumbbell className="w-8 h-8 text-[var(--primary)]" />
         </motion.div>
       </div>
-    )
+    );
   }
 
-  if (!user) return null
+  if (!user) return null;
 
-  const totalSetsToday = todayWorkout?.exercises.reduce(
-    (acc, exercise) => acc + exercise.sets.length, 0
-  ) || 0
-  const completedSetsToday = todayWorkout?.exercises.reduce(
-    (acc, exercise) => acc + exercise.sets.filter(set => set.completed).length, 0
-  ) || 0
-  const progressPercentage = totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0
+  const totalSetsToday =
+    todayWorkout?.exercises.reduce(
+      (acc, exercise) => acc + exercise.sets.length,
+      0,
+    ) || 0;
+  const completedSetsToday =
+    todayWorkout?.exercises.reduce(
+      (acc, exercise) =>
+        acc + exercise.sets.filter((set) => set.completed).length,
+      0,
+    ) || 0;
+  const progressPercentage =
+    totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0;
 
   return (
     <div className="min-h-screen bg-[var(--background)] pb-20">
@@ -138,7 +199,11 @@ export default function Dashboard() {
                 Hey, {user.name}! 💪
               </h1>
               <p className="text-sm text-[var(--foreground-muted)]">
-                {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                {new Date().toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}
               </p>
             </div>
             <button
@@ -151,6 +216,56 @@ export default function Dashboard() {
           </div>
         </div>
       </header>
+
+      {/* Setup Progress Overlay */}
+      <AnimatePresence>
+        {setupProgress !== null && !setupComplete && (
+          <motion.div
+            key="setup-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white dark:bg-[var(--surface)] rounded-2xl p-8 max-w-sm mx-4 shadow-xl"
+            >
+              <div className="text-center">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="inline-block mb-6"
+                >
+                  <Dumbbell className="w-12 h-12 text-[var(--primary)]" />
+                </motion.div>
+                <h2 className="text-xl font-bold text-[var(--foreground)] mb-2">
+                  Setting up your profile
+                </h2>
+                <p className="text-[var(--foreground-muted)] mb-6">
+                  Creating personalized workouts and exercises...
+                </p>
+                <Progress.Root
+                  className="relative overflow-hidden bg-[var(--surface)] rounded-full w-full h-2"
+                  value={setupProgress}
+                >
+                  <Progress.Indicator
+                    className="bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] w-full h-full rounded-full"
+                    style={{
+                      transform: `translateX(-${100 - setupProgress}%)`,
+                    }}
+                  />
+                </Progress.Root>
+                <p className="text-sm text-[var(--foreground-muted)] mt-4">
+                  {setupProgress}%
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         <AnimatePresence mode="wait">
@@ -170,36 +285,52 @@ export default function Dashboard() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold">{completedSetsToday}/{totalSetsToday}</div>
+                  <div className="text-3xl font-bold">
+                    {completedSetsToday}/{totalSetsToday}
+                  </div>
                   <div className="text-sm opacity-90">sets done</div>
                 </div>
               </div>
 
-              <Progress.Root 
+              <Progress.Root
                 className="relative overflow-hidden bg-white/20 rounded-full w-full h-3 mb-6"
                 value={progressPercentage}
               >
                 <Progress.Indicator
                   className="bg-white w-full h-full transition-transform duration-500 ease-out rounded-full"
-                  style={{ transform: `translateX(-${100 - progressPercentage}%)` }}
+                  style={{
+                    transform: `translateX(-${100 - progressPercentage}%)`,
+                  }}
                 />
               </Progress.Root>
 
               <div className="space-y-2 mb-6">
                 {todayWorkout.exercises.slice(0, 3).map((exercise, index) => (
                   <div key={exercise.id} className="flex items-center text-sm">
-                    <div className={`w-5 h-5 rounded-full mr-3 flex items-center justify-center text-xs
-                      ${exercise.sets.every(s => s.completed) 
-                        ? 'bg-white text-[var(--primary)]' 
-                        : 'bg-white/20'}`}
+                    <div
+                      className={`w-5 h-5 rounded-full mr-3 flex items-center justify-center text-xs
+                      ${
+                        exercise.sets.every((s) => s.completed)
+                          ? "bg-white text-[var(--primary)]"
+                          : "bg-white/20"
+                      }`}
                     >
-                      {exercise.sets.every(s => s.completed) ? '✓' : index + 1}
+                      {exercise.sets.every((s) => s.completed)
+                        ? "✓"
+                        : index + 1}
                     </div>
-                    <span className={exercise.sets.every(s => s.completed) ? 'line-through opacity-70' : ''}>
+                    <span
+                      className={
+                        exercise.sets.every((s) => s.completed)
+                          ? "line-through opacity-70"
+                          : ""
+                      }
+                    >
                       {exercise.name}
                     </span>
                     <span className="ml-auto opacity-70">
-                      {exercise.sets.filter(s => s.completed).length}/{exercise.sets.length}
+                      {exercise.sets.filter((s) => s.completed).length}/
+                      {exercise.sets.length}
                     </span>
                   </div>
                 ))}
@@ -210,11 +341,11 @@ export default function Dashboard() {
                 )}
               </div>
 
-              <Link 
+              <Link
                 href={`/workout/${formatDateForUrl(new Date(todayWorkout.date))}`}
                 className="flex items-center justify-center w-full bg-white text-[var(--primary)] py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
               >
-                {completedSetsToday > 0 ? 'Continue Workout' : 'Start Workout'}
+                {completedSetsToday > 0 ? "Continue Workout" : "Start Workout"}
                 <ChevronRight className="w-5 h-5 ml-1" />
               </Link>
             </motion.div>
@@ -232,7 +363,7 @@ export default function Dashboard() {
                 <p className="text-[var(--foreground-muted)] mb-6">
                   Import a workout plan to get started
                 </p>
-                <Link 
+                <Link
                   href="/import"
                   className="inline-flex items-center bg-[var(--primary)] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[var(--primary-dark)] transition-colors"
                 >
@@ -254,7 +385,9 @@ export default function Dashboard() {
           >
             <div className="flex items-center justify-between mb-2">
               <Trophy className="w-8 h-8 text-[var(--accent)]" />
-              <span className="text-2xl font-bold">{user.stats?.totalSetsCompleted || 0}</span>
+              <span className="text-2xl font-bold">
+                {user.stats?.totalSetsCompleted || 0}
+              </span>
             </div>
             <p className="text-sm text-[var(--foreground-muted)]">Total Sets</p>
           </motion.div>
@@ -268,15 +401,19 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-2">
               <Flame className="w-8 h-8 text-[var(--danger)]" />
               <span className="text-2xl font-bold">
-                {user.stats?.totalSetsCompleted ? Math.floor(user.stats.totalSetsCompleted / 7) : 0}
+                {user.stats?.totalSetsCompleted
+                  ? Math.floor(user.stats.totalSetsCompleted / 7)
+                  : 0}
               </span>
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">Week Streak</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              Week Streak
+            </p>
           </motion.div>
         </div>
 
         {/* Rehabilitation Section - Only for Devlin */}
-        {user.name === 'Devlin' && (
+        {user.name === "Devlin" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -323,17 +460,24 @@ export default function Dashboard() {
               <>
                 <div className="mb-4">
                   <div className="flex justify-between text-sm opacity-90 mb-2">
-                    <span>{rehabExercises.filter(ex => ex.completed).length} completed</span>
+                    <span>
+                      {rehabExercises.filter((ex) => ex.completed).length}{" "}
+                      completed
+                    </span>
                     <span>{rehabExercises.length} total</span>
                   </div>
                   <Progress.Root
                     className="relative overflow-hidden bg-white/20 rounded-full w-full h-2"
-                    value={(rehabExercises.filter(ex => ex.completed).length / rehabExercises.length) * 100}
+                    value={
+                      (rehabExercises.filter((ex) => ex.completed).length /
+                        rehabExercises.length) *
+                      100
+                    }
                   >
                     <Progress.Indicator
                       className="bg-white w-full h-full transition-transform duration-500 ease-out rounded-full"
                       style={{
-                        transform: `translateX(-${100 - (rehabExercises.filter(ex => ex.completed).length / rehabExercises.length) * 100}%)`
+                        transform: `translateX(-${100 - (rehabExercises.filter((ex) => ex.completed).length / rehabExercises.length) * 100}%)`,
                       }}
                     />
                   </Progress.Root>
@@ -341,20 +485,25 @@ export default function Dashboard() {
 
                 <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
                   {rehabExercises.map((exercise) => {
-                    const isExpanded = expandedExercise === exercise.id
+                    const isExpanded = expandedExercise === exercise.id;
 
                     // Build prescription text
-                    const prescription = []
+                    const prescription = [];
                     if (exercise.setsLeft || exercise.setsRight) {
-                      prescription.push(`L: ${exercise.setsLeft || 0} / R: ${exercise.setsRight || 0} sets`)
+                      prescription.push(
+                        `L: ${exercise.setsLeft || 0} / R: ${exercise.setsRight || 0} sets`,
+                      );
                     } else if (exercise.sets) {
-                      prescription.push(`${exercise.sets} sets`)
+                      prescription.push(`${exercise.sets} sets`);
                     }
-                    if (exercise.reps) prescription.push(`${exercise.reps} reps`)
-                    if (exercise.hold) prescription.push(`hold ${exercise.hold}s`)
-                    if (exercise.load) prescription.push(exercise.load)
-                    if (exercise.bandColor) prescription.push(`${exercise.bandColor} band`)
-                    if (exercise.time) prescription.push(exercise.time)
+                    if (exercise.reps)
+                      prescription.push(`${exercise.reps} reps`);
+                    if (exercise.hold)
+                      prescription.push(`hold ${exercise.hold}s`);
+                    if (exercise.load) prescription.push(exercise.load);
+                    if (exercise.bandColor)
+                      prescription.push(`${exercise.bandColor} band`);
+                    if (exercise.time) prescription.push(exercise.time);
 
                     return (
                       <motion.div
@@ -364,11 +513,16 @@ export default function Dashboard() {
                       >
                         <div
                           className="flex items-start gap-3 p-3 cursor-pointer hover:bg-white/5 transition-colors"
-                          onClick={() => toggleRehabExercise(exercise.id, !exercise.completed)}
+                          onClick={() =>
+                            toggleRehabExercise(
+                              exercise.id,
+                              !exercise.completed,
+                            )
+                          }
                         >
                           <div
                             className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-                              exercise.completed ? 'bg-white' : 'bg-transparent'
+                              exercise.completed ? "bg-white" : "bg-transparent"
                             }`}
                           >
                             {exercise.completed && (
@@ -388,19 +542,23 @@ export default function Dashboard() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={`font-medium ${exercise.completed ? 'line-through opacity-70' : ''}`}>
+                            <p
+                              className={`font-medium ${exercise.completed ? "line-through opacity-70" : ""}`}
+                            >
                               {exercise.name}
                             </p>
                             {prescription.length > 0 && (
                               <p className="text-sm opacity-90 mt-0.5">
-                                {prescription.join(' • ')}
+                                {prescription.join(" • ")}
                               </p>
                             )}
                           </div>
                           <button
                             onClick={(e) => {
-                              e.stopPropagation()
-                              setExpandedExercise(isExpanded ? null : exercise.id)
+                              e.stopPropagation();
+                              setExpandedExercise(
+                                isExpanded ? null : exercise.id,
+                              );
                             }}
                             className="p-1 rounded hover:bg-white/10 transition-colors flex-shrink-0"
                           >
@@ -412,13 +570,15 @@ export default function Dashboard() {
                           {isExpanded && exercise.cues && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
+                              animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
                               className="overflow-hidden"
                             >
                               <div className="px-3 pb-3 pt-1 border-t border-white/10">
-                                <p className="text-xs opacity-75 font-medium mb-1">Cues:</p>
+                                <p className="text-xs opacity-75 font-medium mb-1">
+                                  Cues:
+                                </p>
                                 <p className="text-sm opacity-90 leading-relaxed">
                                   {exercise.cues}
                                 </p>
@@ -427,7 +587,7 @@ export default function Dashboard() {
                           )}
                         </AnimatePresence>
                       </motion.div>
-                    )
+                    );
                   })}
                 </div>
 
@@ -447,7 +607,7 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: user.name === 'Devlin' ? 0.4 : 0.3 }}
+          transition={{ delay: user.name === "Devlin" ? 0.4 : 0.3 }}
           className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
         >
           <h3 className="font-semibold mb-4">Quick Actions</h3>
@@ -478,5 +638,5 @@ export default function Dashboard() {
 
       <BottomNav />
     </div>
-  )
+  );
 }
