@@ -17,6 +17,7 @@ export function SetupProgressHandler({
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    if (!searchParams) return;
     const setupJobId = searchParams.get("setupJobId");
     if (!setupJobId) return;
 
