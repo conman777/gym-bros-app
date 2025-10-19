@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { parseWorkoutTemplate } from '@/lib/template-parser'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Dumbbell, FileText, Upload, Check, Sparkles, Target, Clock, Award } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Dumbbell, FileText, Upload, Check, Sparkles, Target, Clock, Award, Calendar } from 'lucide-react'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { PageNav } from '@/components/PageNav'
 
@@ -386,7 +386,7 @@ Incline Dumbbell Press: 3x12 @ 23kg
                     Start Date
                   </label>
                   <div className="flex items-center gap-3">
-                    <CalendarIcon className="w-5 h-5 text-white/70" />
+                    <Calendar className="w-5 h-5 text-white/70" />
                     <input
                       type="date"
                       value={startDate}
