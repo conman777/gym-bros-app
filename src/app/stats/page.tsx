@@ -52,6 +52,18 @@ export default function StatsPage() {
     }
   }
 
+  // Memoize expensive calculations (must be before early returns - Rules of Hooks)
+  const totalSets = useMemo(() => stats?.user.stats?.totalSetsCompleted || 0, [stats?.user.stats])
+  const totalExercises = useMemo(() => stats?.user.stats?.totalExercises || 0, [stats?.user.stats])
+  const activeDays = useMemo(() => stats?.user.workouts.length || 0, [stats?.user.workouts])
+  const weekStreak = useMemo(() => (totalSets ? Math.floor(totalSets / 7) : 0), [totalSets])
+
+  const monthlyGoal = 100 // Example goal
+  const monthlyProgress = useMemo(
+    () => Math.min(((stats?.monthlySets || 0) / monthlyGoal) * 100, 100),
+    [stats?.monthlySets, monthlyGoal]
+  )
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
@@ -68,18 +80,6 @@ export default function StatsPage() {
   if (!stats) return null
 
   const { user, monthlySets, topExercise, currentStreak } = stats
-
-  // Memoize expensive calculations
-  const totalSets = useMemo(() => user.stats?.totalSetsCompleted || 0, [user.stats])
-  const totalExercises = useMemo(() => user.stats?.totalExercises || 0, [user.stats])
-  const activeDays = useMemo(() => user.workouts.length, [user.workouts])
-  const weekStreak = useMemo(() => (totalSets ? Math.floor(totalSets / 7) : 0), [totalSets])
-
-  const monthlyGoal = 100 // Example goal
-  const monthlyProgress = useMemo(
-    () => Math.min((monthlySets / monthlyGoal) * 100, 100),
-    [monthlySets, monthlyGoal]
-  )
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">

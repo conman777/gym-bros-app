@@ -125,22 +125,7 @@ export default function Dashboard() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        >
-          <Dumbbell className="w-8 h-8 text-white" />
-        </motion.div>
-      </div>
-    );
-  }
-
-  if (!user) return null;
-
-  // Memoize expensive calculations
+  // Memoize expensive calculations (must be before early returns - Rules of Hooks)
   const totalSetsToday = useMemo(
     () =>
       todayWorkout?.exercises.reduce(
@@ -164,6 +149,21 @@ export default function Dashboard() {
     () => (totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0),
     [totalSetsToday, completedSetsToday]
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        >
+          <Dumbbell className="w-8 h-8 text-white" />
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
