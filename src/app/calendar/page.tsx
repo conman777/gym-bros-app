@@ -307,13 +307,13 @@ function CalendarContent() {
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           className={`aspect-square rounded-xl p-2 flex flex-col items-center justify-center transition-all cursor-pointer relative ${
-                            isToday 
-                              ? 'ring-2 ring-[var(--primary)] ring-offset-2' 
+                            isToday
+                              ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent'
                               : ''
                           } ${
-                            isCompleted 
-                              ? 'bg-gradient-to-br from-[var(--secondary)] to-[var(--secondary-dark)] text-white shadow-md' 
-                              : 'bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 text-[var(--primary)]'
+                            isCompleted
+                              ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-md'
+                              : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm'
                           }`}
                         >
                           <span className="font-semibold text-lg">{day}</span>
@@ -328,20 +328,20 @@ function CalendarContent() {
                             )}
                           </div>
                           {isToday && (
-                            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-[var(--accent)] rounded-full animate-pulse" />
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-white rounded-full animate-pulse shadow-lg" />
                           )}
                         </motion.div>
                       </Link>
                     ) : (
-                      <div className={`aspect-square rounded-xl p-2 flex items-center justify-center ${
-                        isToday 
-                          ? 'ring-2 ring-[var(--primary)] ring-offset-2 bg-[var(--surface-hover)]' 
+                      <div className={`aspect-square rounded-xl p-2 flex items-center justify-center transition-colors ${
+                        isToday
+                          ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent bg-white/10'
                           : isPast
-                            ? 'bg-[var(--background)] text-[var(--foreground-muted)]'
-                            : 'bg-[var(--background)] hover:bg-[var(--surface-hover)] transition-colors'
+                            ? 'bg-transparent text-white/30'
+                            : 'bg-transparent hover:bg-white/10 text-white/70'
                       }`}>
                         <span className={`font-semibold text-lg ${
-                          isPast ? 'opacity-50' : ''
+                          isPast ? '' : ''
                         }`}>
                           {day}
                         </span>
