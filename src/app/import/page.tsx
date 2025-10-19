@@ -1,12 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { parseWorkoutTemplate } from '@/lib/template-parser'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Dumbbell, FileText, Calendar, Upload, Check, Sparkles, Target, Clock, Award } from 'lucide-react'
-import BottomNav from '@/components/BottomNav'
+import { ChevronLeft, ChevronRight, Dumbbell, FileText, Calendar as CalendarIcon, Upload, Check, Sparkles, Target, Clock, Award, Home, TrendingUp, User } from 'lucide-react'
+
+const navItems = [
+  { href: '/dashboard', icon: Home, label: 'Home' },
+  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
+  { href: '/stats', icon: TrendingUp, label: 'Stats' },
+  { href: '/import', icon: User, label: 'Plans' },
+];
 
 const TEMPLATES = {
   'Demo Workout': `Monday - Upper Body
@@ -149,6 +155,7 @@ const templateInfo: Record<string, TemplateInfo> = {
 
 export default function ImportPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const [template, setTemplate] = useState('')
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0])
   const [preview, setPreview] = useState<ReturnType<typeof parseWorkoutTemplate> | null>(null)
@@ -191,31 +198,57 @@ export default function ImportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)] pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: Math.random() * 300 + 100,
+              height: Math.random() * 300 + 100,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 - 50],
+            }}
+            transition={{
+              duration: Math.random() * 20 + 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
       {/* Header */}
-      <header className="bg-[var(--surface)] shadow-sm sticky top-0 z-40">
+      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center">
-            <Link 
-              href="/dashboard" 
-              className="p-2 -ml-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+            <Link
+              href="/dashboard"
+              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
-            <h1 className="text-xl font-bold flex-1 text-center mr-8">Import Workout Plan</h1>
+            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Import Workout Plan</h1>
           </div>
-          
+
           {/* Progress Steps */}
           <div className="flex items-center justify-center mt-4 space-x-2">
             {['select', 'customize', 'preview'].map((s, i) => (
               <div key={s} className="flex items-center">
                 <motion.div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    step === s 
-                      ? 'bg-[var(--primary)] text-white' 
+                    step === s
+                      ? 'bg-white text-[var(--primary)]'
                       : ['customize', 'preview'].indexOf(step) > i
-                        ? 'bg-[var(--secondary)] text-white'
-                        : 'bg-[var(--border)] text-[var(--foreground-muted)]'
+                        ? 'bg-green-400 text-white'
+                        : 'bg-white/20 text-white/60'
                   }`}
                   animate={{ scale: step === s ? 1.1 : 1 }}
                 >
@@ -224,17 +257,65 @@ export default function ImportPage() {
                 {i < 2 && (
                   <div className={`w-12 h-0.5 mx-2 ${
                     ['customize', 'preview'].indexOf(step) > i
-                      ? 'bg-[var(--secondary)]'
-                      : 'bg-[var(--border)]'
+                      ? 'bg-green-400'
+                      : 'bg-white/20'
                   }`} />
                 )}
               </div>
             ))}
           </div>
+
+          {/* Navigation */}
+          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative flex flex-col items-center"
+                >
+                  <motion.div
+                    className="flex flex-col items-center"
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Icon
+                      size={20}
+                      className={`mb-1 transition-colors ${
+                        isActive
+                          ? 'text-white'
+                          : 'text-white/60'
+                      }`}
+                    />
+                    <span
+                      className={`text-xs transition-all ${
+                        isActive
+                          ? 'text-white font-medium'
+                          : 'text-white/60'
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeMobileTab"
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                      />
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-6">
         <AnimatePresence mode="wait">
           {/* Step 1: Select Template */}
           {step === 'select' && (
@@ -244,7 +325,7 @@ export default function ImportPage() {
               exit={{ opacity: 0, x: -100 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <h2 className="text-2xl font-bold mb-6">Choose a Workout Plan</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">Choose a Workout Plan</h2>
               
               {/* Template Cards */}
               <div className="space-y-4 mb-6">
@@ -259,32 +340,32 @@ export default function ImportPage() {
                     }}
                     className={`w-full text-left p-6 rounded-2xl border-2 transition-all ${
                       selectedTemplate === key
-                        ? 'bg-[var(--primary)]/10 border-[var(--primary)]'
-                        : 'bg-[var(--surface)] border-[var(--border)] hover:border-[var(--primary)]/50'
+                        ? 'bg-white/30 border-white backdrop-blur-md'
+                        : 'bg-white/10 border-white/20 hover:border-white/40 backdrop-blur-md'
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <div className={`p-2 rounded-lg ${
-                            selectedTemplate === key ? 'bg-[var(--primary)]' : 'bg-[var(--border)]'
+                            selectedTemplate === key ? 'bg-white' : 'bg-white/20'
                           }`}>
-                            <div className={selectedTemplate === key ? 'text-white' : 'text-[var(--foreground-muted)]'}>
+                            <div className={selectedTemplate === key ? 'text-[var(--primary)]' : 'text-white'}>
                               {info.icon}
                             </div>
                           </div>
-                          <h3 className="text-lg font-semibold">{info.name}</h3>
+                          <h3 className="text-lg font-semibold text-white">{info.name}</h3>
                         </div>
-                        <p className="text-[var(--foreground-muted)] mb-2">{info.description}</p>
+                        <p className="text-white/70 mb-2">{info.description}</p>
                         <div className="flex gap-4 text-sm">
                           <span className={`px-3 py-1 rounded-full ${
-                            info.difficulty === 'Beginner' ? 'bg-[var(--secondary)]/20 text-[var(--secondary-dark)]' :
-                            info.difficulty === 'Intermediate' ? 'bg-[var(--accent)]/20 text-[var(--accent)]' :
-                            'bg-[var(--danger)]/20 text-[var(--danger)]'
+                            info.difficulty === 'Beginner' ? 'bg-green-400/30 text-green-100' :
+                            info.difficulty === 'Intermediate' ? 'bg-yellow-400/30 text-yellow-100' :
+                            'bg-red-400/30 text-red-100'
                           }`}>
                             {info.difficulty}
                           </span>
-                          <span className="text-[var(--foreground-muted)]">
+                          <span className="text-white/70">
                             {info.daysPerWeek} days/week
                           </span>
                         </div>
@@ -293,7 +374,7 @@ export default function ImportPage() {
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          className="text-[var(--primary)]"
+                          className="text-white"
                         >
                           <Check className="w-6 h-6" />
                         </motion.div>
@@ -312,21 +393,21 @@ export default function ImportPage() {
                   }}
                   className={`w-full text-left p-6 rounded-2xl border-2 transition-all ${
                     selectedTemplate === ''
-                      ? 'bg-[var(--primary)]/10 border-[var(--primary)]'
-                      : 'bg-[var(--surface)] border-[var(--border)] hover:border-[var(--primary)]/50'
+                      ? 'bg-white/30 border-white backdrop-blur-md'
+                      : 'bg-white/10 border-white/20 hover:border-white/40 backdrop-blur-md'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${
-                      selectedTemplate === '' ? 'bg-[var(--primary)]' : 'bg-[var(--border)]'
+                      selectedTemplate === '' ? 'bg-white' : 'bg-white/20'
                     }`}>
                       <FileText className={`w-5 h-5 ${
-                        selectedTemplate === '' ? 'text-white' : 'text-[var(--foreground-muted)]'
+                        selectedTemplate === '' ? 'text-[var(--primary)]' : 'text-white'
                       }`} />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold">Custom Workout</h3>
-                      <p className="text-[var(--foreground-muted)]">Create your own plan</p>
+                      <h3 className="text-lg font-semibold text-white">Custom Workout</h3>
+                      <p className="text-white/70">Create your own plan</p>
                     </div>
                   </div>
                 </motion.button>
@@ -337,7 +418,7 @@ export default function ImportPage() {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setStep('customize')}
                 disabled={!selectedTemplate && !template}
-                className="w-full bg-[var(--primary)] text-white py-4 rounded-xl font-semibold text-lg hover:bg-[var(--primary-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-white text-[var(--primary)] py-4 rounded-xl font-semibold text-lg hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
               >
                 Continue
                 <ChevronRight className="w-5 h-5" />
@@ -353,13 +434,13 @@ export default function ImportPage() {
               exit={{ opacity: 0, x: -100 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <h2 className="text-2xl font-bold mb-6">Customize Your Plan</h2>
-              
-              <div className="bg-[var(--surface)] rounded-2xl p-6 shadow-sm border border-[var(--border)] mb-6">
-                <label className="block text-sm font-medium mb-2">
+              <h2 className="text-2xl font-bold text-white mb-6">Customize Your Plan</h2>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 mb-6">
+                <label className="block text-sm font-medium text-white mb-2">
                   Workout Plan Details
                 </label>
-                <p className="text-xs text-[var(--foreground-muted)] mb-4">
+                <p className="text-xs text-white/70 mb-4">
                   Format: Day - Name, then Exercise: SetsxReps @ Weight
                 </p>
                 <textarea
@@ -369,20 +450,20 @@ export default function ImportPage() {
 Bench Press: 3x10 @ 61kg
 Incline Dumbbell Press: 3x12 @ 23kg
 ..."
-                  className="w-full h-64 p-4 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent font-mono text-sm"
+                  className="w-full h-64 p-4 bg-white/10 border border-white/20 text-white placeholder:text-white/40 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent font-mono text-sm"
                 />
-                
+
                 <div className="mt-6">
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Start Date
                   </label>
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-[var(--primary)]" />
+                    <CalendarIcon className="w-5 h-5 text-white/70" />
                     <input
                       type="date"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
-                      className="px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+                      className="px-4 py-2 bg-white/10 border border-white/20 text-white rounded-lg focus:ring-2 focus:ring-white focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -391,7 +472,7 @@ Incline Dumbbell Press: 3x12 @ 23kg
               <div className="flex gap-4">
                 <button
                   onClick={() => setStep('select')}
-                  className="flex-1 bg-[var(--surface)] text-[var(--foreground)] py-4 rounded-xl font-semibold text-lg hover:bg-[var(--surface-hover)] transition-colors border border-[var(--border)]"
+                  className="flex-1 bg-white/10 text-white py-4 rounded-xl font-semibold text-lg hover:bg-white/20 transition-colors border border-white/20 backdrop-blur-md"
                 >
                   Back
                 </button>
@@ -402,7 +483,7 @@ Incline Dumbbell Press: 3x12 @ 23kg
                     handlePreview()
                     if (template) setStep('preview')
                   }}
-                  className="flex-1 bg-[var(--primary)] text-white py-4 rounded-xl font-semibold text-lg hover:bg-[var(--primary-dark)] transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 bg-white text-[var(--primary)] py-4 rounded-xl font-semibold text-lg hover:bg-white/90 transition-colors flex items-center justify-center gap-2 shadow-lg"
                 >
                   Preview
                   <ChevronRight className="w-5 h-5" />
@@ -419,9 +500,9 @@ Incline Dumbbell Press: 3x12 @ 23kg
               exit={{ opacity: 0, x: -100 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <h2 className="text-2xl font-bold mb-6">Review Your Plan</h2>
-              
-              <div className="bg-[var(--surface)] rounded-2xl p-6 shadow-sm border border-[var(--border)] mb-6">
+              <h2 className="text-2xl font-bold text-white mb-6">Review Your Plan</h2>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 mb-6">
                 <div className="space-y-4 max-h-96 overflow-y-auto">
                   {preview.map((workout, index) => (
                     <motion.div
@@ -429,16 +510,16 @@ Incline Dumbbell Press: 3x12 @ 23kg
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="border-b border-[var(--border)] pb-4 last:border-0"
+                      className="border-b border-white/10 pb-4 last:border-0"
                     >
-                      <h4 className="font-semibold text-lg mb-2 flex items-center gap-2">
-                        <Dumbbell className="w-4 h-4 text-[var(--primary)]" />
+                      <h4 className="font-semibold text-lg text-white mb-2 flex items-center gap-2">
+                        <Dumbbell className="w-4 h-4 text-white/70" />
                         {workout.day}
                       </h4>
                       <ul className="space-y-2">
                         {workout.exercises.map((exercise, i) => (
-                          <li key={i} className="text-[var(--foreground-muted)] text-sm pl-6">
-                            <span className="font-medium text-[var(--foreground)]">{exercise.name}:</span>{' '}
+                          <li key={i} className="text-white/70 text-sm pl-6">
+                            <span className="font-medium text-white">{exercise.name}:</span>{' '}
                             {exercise.sets}x{exercise.reps} @ {exercise.weight}kg
                           </li>
                         ))}
@@ -451,7 +532,7 @@ Incline Dumbbell Press: 3x12 @ 23kg
               <div className="flex gap-4">
                 <button
                   onClick={() => setStep('customize')}
-                  className="flex-1 bg-[var(--surface)] text-[var(--foreground)] py-4 rounded-xl font-semibold text-lg hover:bg-[var(--surface-hover)] transition-colors border border-[var(--border)]"
+                  className="flex-1 bg-white/10 text-white py-4 rounded-xl font-semibold text-lg hover:bg-white/20 transition-colors border border-white/20 backdrop-blur-md"
                 >
                   Back
                 </button>
@@ -460,7 +541,7 @@ Incline Dumbbell Press: 3x12 @ 23kg
                   whileTap={{ scale: 0.98 }}
                   onClick={handleImport}
                   disabled={importing}
-                  className="flex-1 bg-gradient-to-r from-[var(--secondary)] to-[var(--secondary-dark)] text-white py-4 rounded-xl font-semibold text-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-gradient-to-r from-green-400 to-emerald-500 text-white py-4 rounded-xl font-semibold text-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {importing ? (
                     <>
@@ -484,8 +565,6 @@ Incline Dumbbell Press: 3x12 @ 23kg
           )}
         </AnimatePresence>
       </main>
-
-      <BottomNav />
     </div>
   )
 }
