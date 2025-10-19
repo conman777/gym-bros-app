@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@/generated/prisma";
 
 type ActivityStatus = "SUCCESS" | "ERROR" | "IN_PROGRESS";
 type ActivityCategory = "PRICE_UPDATE" | "PREDICTION" | "API_CALL" | "SYSTEM";
@@ -8,7 +9,7 @@ interface LogActivityParams {
   operation: string;
   message: string;
   status: ActivityStatus;
-  details?: Record<string, unknown>;
+  details?: Prisma.InputJsonValue;
 }
 
 /**
@@ -28,7 +29,7 @@ export async function logActivity({
         operation,
         message,
         status,
-        details: details || undefined,
+        details,
       },
     });
   } catch (error) {
