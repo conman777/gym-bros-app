@@ -227,8 +227,8 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
-          <div className="md:hidden flex justify-around items-center mt-4 pt-4 border-t border-white/10">
+          {/* Navigation */}
+          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
