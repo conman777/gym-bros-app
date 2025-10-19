@@ -31,14 +31,8 @@ function createPrismaClient() {
 
       const adapter = new PrismaLibSQL(libsql);
       console.log("Turso adapter created successfully");
-      return new PrismaClient({
-        adapter,
-        datasources: {
-          db: {
-            url: "file:./dev.db", // Dummy URL - adapter handles actual connection
-          },
-        },
-      });
+      // Do NOT pass datasourceUrl - the adapter handles the connection entirely
+      return new PrismaClient({ adapter });
     } catch (error) {
       console.error("Turso adapter failed, using fallback:", error);
       console.error("Error details:", {
