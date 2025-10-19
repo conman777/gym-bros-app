@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ChevronLeft, Trophy, Flame, TrendingUp, Target, Award, Activity } from 'lucide-react'
+import { ChevronLeft, Trophy, Flame, TrendingUp, Target, Award, Activity, Calendar as CalendarIcon } from 'lucide-react'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { PageNav } from '@/components/PageNav'
 
