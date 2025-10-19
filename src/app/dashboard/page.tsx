@@ -277,7 +277,7 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-2xl p-6 text-white shadow-lg"
+              className="bg-white/20 backdrop-blur-md rounded-2xl p-6 text-white shadow-lg border border-white/30"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -357,17 +357,17 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-[var(--surface)] rounded-2xl p-6 shadow-sm border border-[var(--border)]"
+              className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
             >
               <div className="text-center py-8">
-                <Dumbbell className="w-16 h-16 text-[var(--foreground-muted)] mx-auto mb-4" />
-                <h2 className="text-xl font-semibold mb-2">No Workout Today</h2>
-                <p className="text-[var(--foreground-muted)] mb-6">
+                <Dumbbell className="w-16 h-16 text-white/60 mx-auto mb-4" />
+                <h2 className="text-xl font-semibold text-white mb-2">No Workout Today</h2>
+                <p className="text-white/70 mb-6">
                   Import a workout plan to get started
                 </p>
                 <Link
                   href="/import"
-                  className="inline-flex items-center bg-[var(--primary)] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[var(--primary-dark)] transition-colors"
+                  className="inline-flex items-center bg-white text-[var(--primary)] px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
                 >
                   Import Workout Plan
                   <ChevronRight className="w-5 h-5 ml-1" />
@@ -383,32 +383,32 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-2">
-              <Trophy className="w-8 h-8 text-[var(--accent)]" />
-              <span className="text-2xl font-bold">
+              <Trophy className="w-8 h-8 text-yellow-300" />
+              <span className="text-2xl font-bold text-white">
                 {user.stats?.totalSetsCompleted || 0}
               </span>
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">Total Sets</p>
+            <p className="text-sm text-white/70">Total Sets</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-2">
-              <Flame className="w-8 h-8 text-[var(--danger)]" />
-              <span className="text-2xl font-bold">
+              <Flame className="w-8 h-8 text-orange-400" />
+              <span className="text-2xl font-bold text-white">
                 {user.stats?.totalSetsCompleted
                   ? Math.floor(user.stats.totalSetsCompleted / 7)
                   : 0}
               </span>
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">
+            <p className="text-sm text-white/70">
               Week Streak
             </p>
           </motion.div>
@@ -610,29 +610,29 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: user.name === "Devlin" ? 0.4 : 0.3 }}
-          className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
+          className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
         >
-          <h3 className="font-semibold mb-4">Quick Actions</h3>
+          <h3 className="font-semibold text-white mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <Link
               href="/calendar"
-              className="flex items-center justify-between p-3 rounded-xl hover:bg-[var(--surface-hover)] transition-colors"
+              className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-colors"
             >
               <div className="flex items-center">
-                <Calendar className="w-5 h-5 text-[var(--primary)] mr-3" />
-                <span>View Calendar</span>
+                <Calendar className="w-5 h-5 text-blue-300 mr-3" />
+                <span className="text-white">View Calendar</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-[var(--foreground-muted)]" />
+              <ChevronRight className="w-5 h-5 text-white/60" />
             </Link>
             <Link
               href="/stats"
-              className="flex items-center justify-between p-3 rounded-xl hover:bg-[var(--surface-hover)] transition-colors"
+              className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-colors"
             >
               <div className="flex items-center">
-                <TrendingUp className="w-5 h-5 text-[var(--secondary)] mr-3" />
-                <span>View Progress</span>
+                <TrendingUp className="w-5 h-5 text-green-300 mr-3" />
+                <span className="text-white">View Progress</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-[var(--foreground-muted)]" />
+              <ChevronRight className="w-5 h-5 text-white/60" />
             </Link>
           </div>
         </motion.div>
