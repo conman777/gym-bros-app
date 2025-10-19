@@ -1,18 +1,13 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import { useState, useEffect, Suspense, useMemo } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell, Home, TrendingUp, User } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell } from 'lucide-react'
 import { formatDateForUrl } from '@/lib/date-utils'
-
-const navItems = [
-  { href: '/dashboard', icon: Home, label: 'Home' },
-  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
-  { href: '/stats', icon: TrendingUp, label: 'Stats' },
-  { href: '/import', icon: User, label: 'Plans' },
-];
+import { AnimatedBackground } from '@/components/AnimatedBackground'
+import { PageNav } from '@/components/PageNav'
 
 interface WorkoutDay {
   id: string
@@ -28,7 +23,6 @@ interface WorkoutDay {
 function CalendarContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const pathname = usePathname()
   const [workouts, setWorkouts] = useState<WorkoutDay[]>([])
   const [loading, setLoading] = useState(true)
   
@@ -65,12 +59,15 @@ function CalendarContent() {
     }
   }
 
-  // Create a map of date to workout
-  const workoutMap = new Map<string, WorkoutDay>()
-  workouts.forEach(workout => {
-    const dateKey = `${year}-${month}-${workout.date.getDate()}`
-    workoutMap.set(dateKey, workout)
-  })
+  // Memoize workout map to avoid recreating on every render
+  const workoutMap = useMemo(() => {
+    const map = new Map<string, WorkoutDay>()
+    workouts.forEach(workout => {
+      const dateKey = `${year}-${month}-${workout.date.getDate()}`
+      map.set(dateKey, workout)
+    })
+    return map
+  }, [workouts, year, month])
   
   // Get first day of month and number of days
   const firstDay = new Date(year, month, 1).getDay()
@@ -124,31 +121,7 @@ function CalendarContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white/5"
-            style={{
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-            }}
-            transition={{
-              duration: Math.random() * 20 + 10,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+      <AnimatedBackground />
 
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
@@ -171,53 +144,7 @@ function CalendarContent() {
             <div className="w-10"></div>
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative flex flex-col items-center"
-                >
-                  <motion.div
-                    className="flex flex-col items-center"
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Icon
-                      size={20}
-                      className={`mb-1 transition-colors ${
-                        isActive
-                          ? 'text-white'
-                          : 'text-white/60'
-                      }`}
-                    />
-                    <span
-                      className={`text-xs transition-all ${
-                        isActive
-                          ? 'text-white font-medium'
-                          : 'text-white/60'
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeMobileTab"
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                      />
-                    )}
-                  </motion.div>
-                </Link>
-              );
-            })}
-          </div>
+          <PageNav />
         </div>
       </header>
 

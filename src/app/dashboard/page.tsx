@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useEffect, useState, Suspense, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { formatDateForUrl } from "@/lib/date-utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,18 +11,16 @@ import {
   Flame,
   Trophy,
   LogOut,
-  Calendar,
-  TrendingUp,
   Heart,
   Settings,
   FileText,
   Info,
-  Home,
-  User,
 } from "lucide-react";
 import * as Progress from "@radix-ui/react-progress";
 import type { RehabExercise } from "@/lib/types";
 import { SetupProgressHandler } from "./SetupProgressHandler";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { PageNav } from "@/components/PageNav";
 
 interface User {
   id: string;
@@ -46,16 +44,8 @@ interface Workout {
   }[];
 }
 
-const navItems = [
-  { href: '/dashboard', icon: Home, label: 'Home' },
-  { href: '/calendar', icon: Calendar, label: 'Calendar' },
-  { href: '/stats', icon: TrendingUp, label: 'Stats' },
-  { href: '/import', icon: User, label: 'Plans' },
-];
-
 export default function Dashboard() {
   const router = useRouter();
-  const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [todayWorkout, setTodayWorkout] = useState<Workout | null>(null);
   const [rehabExercises, setRehabExercises] = useState<RehabExercise[]>([]);
@@ -150,47 +140,34 @@ export default function Dashboard() {
 
   if (!user) return null;
 
-  const totalSetsToday =
-    todayWorkout?.exercises.reduce(
-      (acc, exercise) => acc + exercise.sets.length,
-      0,
-    ) || 0;
-  const completedSetsToday =
-    todayWorkout?.exercises.reduce(
-      (acc, exercise) =>
-        acc + exercise.sets.filter((set) => set.completed).length,
-      0,
-    ) || 0;
-  const progressPercentage =
-    totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0;
+  // Memoize expensive calculations
+  const totalSetsToday = useMemo(
+    () =>
+      todayWorkout?.exercises.reduce(
+        (acc, exercise) => acc + exercise.sets.length,
+        0,
+      ) || 0,
+    [todayWorkout]
+  );
+
+  const completedSetsToday = useMemo(
+    () =>
+      todayWorkout?.exercises.reduce(
+        (acc, exercise) =>
+          acc + exercise.sets.filter((set) => set.completed).length,
+        0,
+      ) || 0,
+    [todayWorkout]
+  );
+
+  const progressPercentage = useMemo(
+    () => (totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0),
+    [totalSetsToday, completedSetsToday]
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white/5"
-            style={{
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-            }}
-            transition={{
-              duration: Math.random() * 20 + 10,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+      <AnimatedBackground />
 
       {/* Setup Progress Handler - wrapped in Suspense for useSearchParams */}
       <Suspense fallback={null}>
@@ -226,53 +203,7 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative flex flex-col items-center"
-                >
-                  <motion.div
-                    className="flex flex-col items-center"
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Icon
-                      size={20}
-                      className={`mb-1 transition-colors ${
-                        isActive
-                          ? 'text-white'
-                          : 'text-white/60'
-                      }`}
-                    />
-                    <span
-                      className={`text-xs transition-all ${
-                        isActive
-                          ? 'text-white font-medium'
-                          : 'text-white/60'
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeMobileTab"
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                      />
-                    )}
-                  </motion.div>
-                </Link>
-              );
-            })}
-          </div>
+          <PageNav />
         </div>
       </header>
 

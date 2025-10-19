@@ -1,17 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useState, useEffect, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Trophy, Flame, TrendingUp, Calendar as CalendarIcon, Target, Award, Activity, Home, User } from 'lucide-react'
-
-const navItems = [
-  { href: '/dashboard', icon: Home, label: 'Home' },
-  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
-  { href: '/stats', icon: TrendingUp, label: 'Stats' },
-  { href: '/import', icon: User, label: 'Plans' },
-];
+import { motion } from 'framer-motion'
+import { ChevronLeft, Trophy, Flame, TrendingUp, Target, Award, Activity } from 'lucide-react'
+import { AnimatedBackground } from '@/components/AnimatedBackground'
+import { PageNav } from '@/components/PageNav'
 
 interface StatsData {
   user: {
@@ -30,7 +25,6 @@ interface StatsData {
 
 export default function StatsPage() {
   const router = useRouter()
-  const pathname = usePathname()
   const [stats, setStats] = useState<StatsData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -74,44 +68,22 @@ export default function StatsPage() {
   if (!stats) return null
 
   const { user, monthlySets, topExercise, currentStreak } = stats
-  const totalSets = user.stats?.totalSetsCompleted || 0
-  const totalExercises = user.stats?.totalExercises || 0
-  const activeDays = user.workouts.length
 
-  // Calculate week streak based on total sets
-  const weekStreak = totalSets ? Math.floor(totalSets / 7) : 0
+  // Memoize expensive calculations
+  const totalSets = useMemo(() => user.stats?.totalSetsCompleted || 0, [user.stats])
+  const totalExercises = useMemo(() => user.stats?.totalExercises || 0, [user.stats])
+  const activeDays = useMemo(() => user.workouts.length, [user.workouts])
+  const weekStreak = useMemo(() => (totalSets ? Math.floor(totalSets / 7) : 0), [totalSets])
 
-  // Calculate progress percentages for visual indicators
   const monthlyGoal = 100 // Example goal
-  const monthlyProgress = Math.min((monthlySets / monthlyGoal) * 100, 100)
+  const monthlyProgress = useMemo(
+    () => Math.min((monthlySets / monthlyGoal) * 100, 100),
+    [monthlySets, monthlyGoal]
+  )
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white/5"
-            style={{
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-            }}
-            transition={{
-              duration: Math.random() * 20 + 10,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+      <AnimatedBackground />
 
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
@@ -126,53 +98,7 @@ export default function StatsPage() {
             <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Progress & Stats</h1>
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative flex flex-col items-center"
-                >
-                  <motion.div
-                    className="flex flex-col items-center"
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Icon
-                      size={20}
-                      className={`mb-1 transition-colors ${
-                        isActive
-                          ? 'text-white'
-                          : 'text-white/60'
-                      }`}
-                    />
-                    <span
-                      className={`text-xs transition-all ${
-                        isActive
-                          ? 'text-white font-medium'
-                          : 'text-white/60'
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeMobileTab"
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                      />
-                    )}
-                  </motion.div>
-                </Link>
-              );
-            })}
-          </div>
+          <PageNav />
         </div>
       </header>
 

@@ -1,18 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useState, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { parseWorkoutTemplate } from '@/lib/template-parser'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Dumbbell, FileText, Calendar as CalendarIcon, Upload, Check, Sparkles, Target, Clock, Award, Home, TrendingUp, User } from 'lucide-react'
-
-const navItems = [
-  { href: '/dashboard', icon: Home, label: 'Home' },
-  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
-  { href: '/stats', icon: TrendingUp, label: 'Stats' },
-  { href: '/import', icon: User, label: 'Plans' },
-];
+import { ChevronLeft, ChevronRight, Dumbbell, FileText, Upload, Check, Sparkles, Target, Clock, Award } from 'lucide-react'
+import { AnimatedBackground } from '@/components/AnimatedBackground'
+import { PageNav } from '@/components/PageNav'
 
 const TEMPLATES = {
   'Demo Workout': `Monday - Upper Body
@@ -155,7 +150,6 @@ const templateInfo: Record<string, TemplateInfo> = {
 
 export default function ImportPage() {
   const router = useRouter()
-  const pathname = usePathname()
   const [template, setTemplate] = useState('')
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0])
   const [preview, setPreview] = useState<ReturnType<typeof parseWorkoutTemplate> | null>(null)
@@ -199,31 +193,7 @@ export default function ImportPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white/5"
-            style={{
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-            }}
-            transition={{
-              duration: Math.random() * 20 + 10,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+      <AnimatedBackground />
 
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
@@ -238,53 +208,7 @@ export default function ImportPage() {
             <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Plans</h1>
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative flex flex-col items-center"
-                >
-                  <motion.div
-                    className="flex flex-col items-center"
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Icon
-                      size={20}
-                      className={`mb-1 transition-colors ${
-                        isActive
-                          ? 'text-white'
-                          : 'text-white/60'
-                      }`}
-                    />
-                    <span
-                      className={`text-xs transition-all ${
-                        isActive
-                          ? 'text-white font-medium'
-                          : 'text-white/60'
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeMobileTab"
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                      />
-                    )}
-                  </motion.div>
-                </Link>
-              );
-            })}
-          </div>
+          <PageNav />
         </div>
       </header>
 
