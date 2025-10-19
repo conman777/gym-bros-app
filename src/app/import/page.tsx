@@ -235,34 +235,7 @@ export default function ImportPage() {
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
-            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Import Workout Plan</h1>
-          </div>
-
-          {/* Progress Steps */}
-          <div className="flex items-center justify-center mt-4 space-x-2">
-            {['select', 'customize', 'preview'].map((s, i) => (
-              <div key={s} className="flex items-center">
-                <motion.div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    step === s
-                      ? 'bg-white text-[var(--primary)]'
-                      : ['customize', 'preview'].indexOf(step) > i
-                        ? 'bg-green-400 text-white'
-                        : 'bg-white/20 text-white/60'
-                  }`}
-                  animate={{ scale: step === s ? 1.1 : 1 }}
-                >
-                  {['customize', 'preview'].indexOf(step) > i ? <Check className="w-4 h-4" /> : i + 1}
-                </motion.div>
-                {i < 2 && (
-                  <div className={`w-12 h-0.5 mx-2 ${
-                    ['customize', 'preview'].indexOf(step) > i
-                      ? 'bg-green-400'
-                      : 'bg-white/20'
-                  }`} />
-                )}
-              </div>
-            ))}
+            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Plans</h1>
           </div>
 
           {/* Navigation */}
@@ -316,6 +289,37 @@ export default function ImportPage() {
       </header>
 
       <main className="relative z-10 max-w-4xl mx-auto px-4 py-6">
+        {/* Page Title and Progress Steps */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-white text-center mb-4">Import Workout Plan</h2>
+
+          {/* Progress Steps */}
+          <div className="flex items-center justify-center space-x-2">
+            {['select', 'customize', 'preview'].map((s, i) => (
+              <div key={s} className="flex items-center">
+                <motion.div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                    step === s
+                      ? 'bg-white text-[var(--primary)]'
+                      : ['customize', 'preview'].indexOf(step) > i
+                        ? 'bg-green-400 text-white'
+                        : 'bg-white/20 text-white/60'
+                  }`}
+                  animate={{ scale: step === s ? 1.1 : 1 }}
+                >
+                  {['customize', 'preview'].indexOf(step) > i ? <Check className="w-4 h-4" /> : i + 1}
+                </motion.div>
+                {i < 2 && (
+                  <div className={`w-12 h-0.5 mx-2 ${
+                    ['customize', 'preview'].indexOf(step) > i
+                      ? 'bg-green-400'
+                      : 'bg-white/20'
+                  }`} />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
         <AnimatePresence mode="wait">
           {/* Step 1: Select Template */}
           {step === 'select' && (
