@@ -1,17 +1,27 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createRehabExercises } from "@/lib/demo-data";
+import { requireDevlinUser } from "@/lib/auth-helpers";
+import { groupExercisesByCategory } from "@/lib/rehab-helpers";
+import type { RehabExercise } from "@/lib/types";
 
 /**
  * API endpoint to fix missing rehab exercises for Devlin
  * POST to: /api/diagnostic/fix-devlin-rehab
+ * Requires: Devlin user authentication
  */
 export async function POST() {
   try {
-    console.log("🔍 Checking for Devlin user...");
+    // Require authentication as Devlin user
+    const auth = await requireDevlinUser();
+    if (!auth.authorized) {
+      return auth.response;
+    }
+
+    console.log("[FIX-REHAB] Checking for existing exercises...");
 
     const devlinUser = await prisma.user.findUnique({
-      where: { name: "Devlin" },
+      where: { id: auth.userId },
       include: {
         rehabExercises: true,
       },
@@ -21,28 +31,36 @@ export async function POST() {
       return NextResponse.json(
         {
           status: "ERROR",
-          message: "Devlin user not found in database",
-          solution: "Log in as Devlin first to create the user",
+          message: "User data not found",
         },
         { status: 404 }
       );
     }
 
     console.log(
-      `✅ Found Devlin user (ID: ${devlinUser.id}), current rehab exercises: ${devlinUser.rehabExercises.length}`
+      `[FIX-REHAB] Found user (ID: ${devlinUser.id}), current rehab exercises: ${devlinUser.rehabExercises.length}`
     );
 
     // Delete existing rehab exercises if any
     if (devlinUser.rehabExercises.length > 0) {
-      console.log("⚠️  Deleting existing rehab exercises...");
-      await prisma.rehabExercise.deleteMany({
+      console.log("[FIX-REHAB] Deleting existing rehab exercises...");
+      const deleteResult = await prisma.rehabExercise.deleteMany({
         where: { userId: devlinUser.id },
       });
-      console.log("✓ Deleted existing rehab exercises");
+
+      if (deleteResult.count !== devlinUser.rehabExercises.length) {
+        console.error(
+          `[FIX-REHAB] Warning: Expected to delete ${devlinUser.rehabExercises.length} exercises but deleted ${deleteResult.count}`
+        );
+      }
+
+      console.log(
+        `[FIX-REHAB] Deleted ${deleteResult.count} existing exercises`
+      );
     }
 
     // Create new rehab exercises
-    console.log("📝 Creating rehab exercises...");
+    console.log("[FIX-REHAB] Creating fresh set of rehab exercises...");
     await createRehabExercises(devlinUser.id);
 
     // Verify creation
@@ -55,44 +73,37 @@ export async function POST() {
       },
     });
 
+    if (!updatedUser || updatedUser.rehabExercises.length === 0) {
+      console.error("[FIX-REHAB] Failed to create rehab exercises");
+      return NextResponse.json(
+        {
+          status: "ERROR",
+          message: "Failed to create rehab exercises",
+        },
+        { status: 500 }
+      );
+    }
+
     console.log(
-      `✅ Successfully created ${updatedUser?.rehabExercises.length} rehab exercises!`
+      `[FIX-REHAB] Successfully created ${updatedUser.rehabExercises.length} rehab exercises`
     );
 
-    // Group by category for response
-    const categories =
-      updatedUser?.rehabExercises.reduce(
-        (acc, ex) => {
-          const cat = ex.category || "Uncategorized";
-          if (!acc[cat]) acc[cat] = [];
-          acc[cat].push({
-            id: ex.id,
-            name: ex.name,
-            setsLeft: ex.setsLeft,
-            setsRight: ex.setsRight,
-            sets: ex.sets,
-            reps: ex.reps,
-            hold: ex.hold,
-            load: ex.load,
-            bandColor: ex.bandColor,
-            time: ex.time,
-          });
-          return acc;
-        },
-        {} as Record<string, any[]>
-      ) || {};
+    // Group by category using helper
+    const categories = groupExercisesByCategory(
+      updatedUser.rehabExercises as RehabExercise[]
+    );
 
     return NextResponse.json({
       status: "SUCCESS",
-      message: `Successfully created ${updatedUser?.rehabExercises.length} rehab exercises for Devlin`,
+      message: `Successfully created ${updatedUser.rehabExercises.length} rehab exercises for Devlin`,
       data: {
         userId: devlinUser.id,
-        totalExercises: updatedUser?.rehabExercises.length,
+        totalExercises: updatedUser.rehabExercises.length,
         exercisesByCategory: categories,
       },
     });
   } catch (error) {
-    console.error("Error fixing Devlin rehab:", error);
+    console.error("[FIX-REHAB] Error:", error);
     return NextResponse.json(
       {
         status: "ERROR",

@@ -71,13 +71,9 @@ interface DevlinDiagnostic {
     completed: number;
     byCategory: Record<string, any[]>;
   };
-  allUsers?: {
-    name: string;
-    workoutsCount: number;
-    rehabExercisesCount: number;
-  }[];
   message?: string;
   solution?: string;
+  error?: string;
 }
 
 export default function Testing() {
@@ -250,14 +246,16 @@ export default function Testing() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-4"
                 >
-                  {devlinData.status === "NOT_FOUND" ? (
+                  {devlinData.status === "ERROR" ? (
                     <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
                       <p className="text-red-400 font-medium mb-2">
-                        {devlinData.message}
+                        {devlinData.message || devlinData.error}
                       </p>
-                      <p className="text-gray-400 text-sm">
-                        💡 {devlinData.solution}
-                      </p>
+                      {devlinData.solution && (
+                        <p className="text-gray-400 text-sm">
+                          {devlinData.solution}
+                        </p>
+                      )}
                     </div>
                   ) : devlinData.status === "SUCCESS" &&
                     devlinData.devlinUser ? (
@@ -358,32 +356,6 @@ export default function Testing() {
                             ))}
                           </div>
                         )}
-
-                      {/* All Users */}
-                      {devlinData.allUsers && (
-                        <div className="bg-gray-800/50 rounded-lg p-4">
-                          <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                            <User className="w-5 h-5" />
-                            All Users ({devlinData.allUsers.length})
-                          </h3>
-                          <div className="space-y-2">
-                            {devlinData.allUsers.map((user) => (
-                              <div
-                                key={user.name}
-                                className="text-sm text-gray-300"
-                              >
-                                <span className="font-medium text-white">
-                                  {user.name}
-                                </span>
-                                <span className="text-gray-500 ml-2">
-                                  - {user.workoutsCount} workouts,{" "}
-                                  {user.rehabExercisesCount} rehab exercises
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
                   ) : (
                     <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">

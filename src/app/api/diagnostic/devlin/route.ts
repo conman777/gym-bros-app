@@ -1,15 +1,25 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireDevlinUser } from "@/lib/auth-helpers";
+import { groupExercisesByCategory } from "@/lib/rehab-helpers";
+import type { RehabExercise } from "@/lib/types";
 
 /**
  * Diagnostic API to check Devlin user and rehab exercises
  * Access at: /api/diagnostic/devlin
+ * Requires: Devlin user authentication
  */
 export async function GET() {
   try {
-    // Check if Devlin user exists
+    // Require authentication as Devlin user
+    const auth = await requireDevlinUser();
+    if (!auth.authorized) {
+      return auth.response;
+    }
+
+    // Fetch Devlin's data
     const devlinUser = await prisma.user.findUnique({
-      where: { name: "Devlin" },
+      where: { id: auth.userId },
       include: {
         rehabExercises: {
           orderBy: { orderIndex: "asc" },
@@ -19,52 +29,23 @@ export async function GET() {
     });
 
     if (!devlinUser) {
-      return NextResponse.json({
-        status: "NOT_FOUND",
-        message: "Devlin user not found in database",
-        solution:
-          "Log in as 'Devlin' on the home page to create the user and rehab exercises",
-      });
+      return NextResponse.json(
+        {
+          status: "ERROR",
+          message: "User data not found",
+        },
+        { status: 404 }
+      );
     }
 
-    // Group exercises by category
-    const categories = devlinUser.rehabExercises.reduce(
-      (acc, ex) => {
-        const cat = ex.category || "Uncategorized";
-        if (!acc[cat]) acc[cat] = [];
-        acc[cat].push({
-          id: ex.id,
-          name: ex.name,
-          completed: ex.completed,
-          setsLeft: ex.setsLeft,
-          setsRight: ex.setsRight,
-          sets: ex.sets,
-          reps: ex.reps,
-          hold: ex.hold,
-          load: ex.load,
-          bandColor: ex.bandColor,
-          time: ex.time,
-        });
-        return acc;
-      },
-      {} as Record<string, any[]>
+    // Group exercises by category using helper
+    const categories = groupExercisesByCategory(
+      devlinUser.rehabExercises as RehabExercise[]
     );
 
     const completedCount = devlinUser.rehabExercises.filter(
       (ex) => ex.completed
     ).length;
-
-    // Get all users
-    const allUsers = await prisma.user.findMany({
-      include: {
-        _count: {
-          select: {
-            workouts: true,
-            rehabExercises: true,
-          },
-        },
-      },
-    });
 
     return NextResponse.json({
       status: "SUCCESS",
@@ -86,14 +67,9 @@ export async function GET() {
         completed: completedCount,
         byCategory: categories,
       },
-      allUsers: allUsers.map((user) => ({
-        name: user.name,
-        workoutsCount: user._count.workouts,
-        rehabExercisesCount: user._count.rehabExercises,
-      })),
     });
   } catch (error) {
-    console.error("Diagnostic error:", error);
+    console.error("[DIAGNOSTIC] Error:", error);
     return NextResponse.json(
       {
         status: "ERROR",
