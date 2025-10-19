@@ -86,6 +86,8 @@ export default function Testing() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [devlinData, setDevlinData] = useState<DevlinDiagnostic | null>(null);
   const [devlinLoading, setDevlinLoading] = useState(false);
+  const [fixLoading, setFixLoading] = useState(false);
+  const [fixMessage, setFixMessage] = useState<string | null>(null);
   const [showDevlinDiagnostic, setShowDevlinDiagnostic] = useState(false);
 
   const {
@@ -97,6 +99,7 @@ export default function Testing() {
 
   const checkDevlinRehab = async () => {
     setDevlinLoading(true);
+    setFixMessage(null);
     try {
       const response = await fetch("/api/diagnostic/devlin");
       const data = await response.json();
@@ -106,6 +109,32 @@ export default function Testing() {
       console.error("Failed to check Devlin rehab:", error);
     } finally {
       setDevlinLoading(false);
+    }
+  };
+
+  const fixDevlinRehab = async () => {
+    setFixLoading(true);
+    setFixMessage(null);
+    try {
+      const response = await fetch("/api/diagnostic/fix-devlin-rehab", {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.status === "SUCCESS") {
+        setFixMessage(
+          `✅ ${data.message}. Refresh the dashboard to see the exercises!`
+        );
+        // Re-check status after fix
+        await checkDevlinRehab();
+      } else {
+        setFixMessage(`❌ ${data.message || "Failed to create exercises"}`);
+      }
+    } catch (error) {
+      console.error("Failed to fix Devlin rehab:", error);
+      setFixMessage("❌ Error creating rehab exercises");
+    } finally {
+      setFixLoading(false);
     }
   };
 
@@ -160,24 +189,58 @@ export default function Testing() {
                   Devlin Rehab Diagnostic
                 </h2>
               </div>
-              <button
-                onClick={checkDevlinRehab}
-                disabled={devlinLoading}
-                className="px-4 py-2 bg-teal-500 hover:bg-teal-600 disabled:bg-gray-600 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-              >
-                {devlinLoading ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    Checking...
-                  </>
-                ) : (
-                  <>
-                    <Heart className="w-4 h-4" />
-                    Check Rehab Status
-                  </>
-                )}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={checkDevlinRehab}
+                  disabled={devlinLoading || fixLoading}
+                  className="px-4 py-2 bg-teal-500 hover:bg-teal-600 disabled:bg-gray-600 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
+                  {devlinLoading ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      Checking...
+                    </>
+                  ) : (
+                    <>
+                      <Heart className="w-4 h-4" />
+                      Check Status
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={fixDevlinRehab}
+                  disabled={devlinLoading || fixLoading}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
+                  {fixLoading ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      Fixing...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      Fix Rehab Exercises
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
+
+            {/* Fix Message */}
+            {fixMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-4 p-3 rounded-lg ${
+                  fixMessage.startsWith("✅")
+                    ? "bg-green-500/10 border border-green-500/30 text-green-400"
+                    : "bg-red-500/10 border border-red-500/30 text-red-400"
+                }`}
+              >
+                {fixMessage}
+              </motion.div>
+            )}
 
             <AnimatePresence>
               {showDevlinDiagnostic && devlinData && (
