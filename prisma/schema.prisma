@@ -86,3 +86,17 @@ model RehabExercise {
 
   @@index([userId])
 }
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  timestamp DateTime @default(now())
+  category  String   // e.g., "PRICE_UPDATE", "PREDICTION", "API_CALL"
+  operation String
+  message   String
+  status    String   // "SUCCESS", "ERROR", "IN_PROGRESS"
+  details   Json?
+
+  @@index([timestamp])
+  @@index([category])
+  @@index([status])
+}
