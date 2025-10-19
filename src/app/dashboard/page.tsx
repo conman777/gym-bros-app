@@ -4,7 +4,6 @@ import { useEffect, useState, Suspense } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { formatDateForUrl } from "@/lib/date-utils";
-import BottomNav from "@/components/BottomNav";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronRight,
@@ -166,7 +165,7 @@ export default function Dashboard() {
     totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-4 md:pb-20 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
       {/* Animated background elements */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(5)].map((_, i) => (
@@ -663,40 +662,7 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: user.name === "Devlin" ? 0.4 : 0.3 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
-        >
-          <h3 className="font-semibold text-white mb-4">Quick Actions</h3>
-          <div className="space-y-3">
-            <Link
-              href="/calendar"
-              className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-colors"
-            >
-              <div className="flex items-center">
-                <Calendar className="w-5 h-5 text-blue-300 mr-3" />
-                <span className="text-white">View Calendar</span>
-              </div>
-              <ChevronRight className="w-5 h-5 text-white/60" />
-            </Link>
-            <Link
-              href="/stats"
-              className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-colors"
-            >
-              <div className="flex items-center">
-                <TrendingUp className="w-5 h-5 text-green-300 mr-3" />
-                <span className="text-white">View Progress</span>
-              </div>
-              <ChevronRight className="w-5 h-5 text-white/60" />
-            </Link>
-          </div>
-        </motion.div>
       </main>
-
-      <BottomNav />
     </div>
   );
 }
