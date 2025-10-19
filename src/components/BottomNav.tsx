@@ -16,8 +16,8 @@ export default function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[var(--surface)] border-t border-[var(--border)] z-50">
-      <div className="flex justify-around items-center h-16">
+    <nav className="hidden md:flex fixed bottom-0 left-0 right-0 bg-white/10 backdrop-blur-md border-t border-white/20 z-50">
+      <div className="flex justify-around items-center h-16 w-full">
         {navItems.map((item) => {
           const isActive = pathname === item.href
           const Icon = item.icon
@@ -54,17 +54,17 @@ export default function BottomNav() {
                   <Icon
                     size={24}
                     className={`mb-1 transition-colors ${
-                      isActive 
-                        ? 'text-[var(--primary)]' 
-                        : 'text-[var(--foreground-muted)] hover:text-[var(--primary)]'
+                      isActive
+                        ? 'text-white'
+                        : 'text-white/60 hover:text-white'
                     }`}
                   />
                 </motion.div>
                 <motion.span
                   className={`text-xs transition-all ${
-                    isActive 
-                      ? 'text-[var(--primary)] font-medium' 
-                      : 'text-[var(--foreground-muted)] hover:text-[var(--primary)]'
+                    isActive
+                      ? 'text-white font-medium'
+                      : 'text-white/60 hover:text-white'
                   }`}
                   animate={isActive ? { 
                     scale: 1.1,
@@ -79,7 +79,7 @@ export default function BottomNav() {
                 {isActive && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-[var(--primary)] rounded-full"
+                    className="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-white rounded-full"
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: "spring", stiffness: 500, damping: 25 }}
@@ -87,7 +87,7 @@ export default function BottomNav() {
                 )}
                 {/* Hover indicator dot */}
                 <motion.div
-                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[var(--primary)] rounded-full"
+                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"
                   initial={{ opacity: 0, scale: 0 }}
                   whileHover={{ 
                     opacity: isActive ? 0 : 1, 

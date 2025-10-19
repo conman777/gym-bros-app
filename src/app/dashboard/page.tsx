@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { formatDateForUrl } from "@/lib/date-utils";
 import BottomNav from "@/components/BottomNav";
@@ -18,6 +18,8 @@ import {
   Settings,
   FileText,
   Info,
+  Home,
+  User,
 } from "lucide-react";
 import * as Progress from "@radix-ui/react-progress";
 import type { RehabExercise } from "@/lib/types";
@@ -45,8 +47,16 @@ interface Workout {
   }[];
 }
 
+const navItems = [
+  { href: '/dashboard', icon: Home, label: 'Home' },
+  { href: '/calendar', icon: Calendar, label: 'Calendar' },
+  { href: '/stats', icon: TrendingUp, label: 'Stats' },
+  { href: '/import', icon: User, label: 'Plans' },
+];
+
 export default function Dashboard() {
   const router = useRouter();
+  const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [todayWorkout, setTodayWorkout] = useState<Workout | null>(null);
   const [rehabExercises, setRehabExercises] = useState<RehabExercise[]>([]);
@@ -156,7 +166,7 @@ export default function Dashboard() {
     totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-20 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-4 md:pb-20 overflow-hidden relative">
       {/* Animated background elements */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(5)].map((_, i) => (
@@ -215,6 +225,54 @@ export default function Dashboard() {
             >
               <LogOut className="w-5 h-5 text-white/80" />
             </button>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="md:hidden flex justify-around items-center mt-4 pt-4 border-t border-white/10">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative flex flex-col items-center"
+                >
+                  <motion.div
+                    className="flex flex-col items-center"
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Icon
+                      size={20}
+                      className={`mb-1 transition-colors ${
+                        isActive
+                          ? 'text-white'
+                          : 'text-white/60'
+                      }`}
+                    />
+                    <span
+                      className={`text-xs transition-all ${
+                        isActive
+                          ? 'text-white font-medium'
+                          : 'text-white/60'
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeMobileTab"
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                      />
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </header>
