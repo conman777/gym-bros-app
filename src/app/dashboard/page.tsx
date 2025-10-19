@@ -128,12 +128,12 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          <Dumbbell className="w-8 h-8 text-[var(--primary)]" />
+          <Dumbbell className="w-8 h-8 text-white" />
         </motion.div>
       </div>
     );
@@ -156,7 +156,33 @@ export default function Dashboard() {
     totalSetsToday > 0 ? (completedSetsToday / totalSetsToday) * 100 : 0;
 
   return (
-    <div className="min-h-screen bg-[var(--background)] pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-20 overflow-hidden relative">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: Math.random() * 300 + 100,
+              height: Math.random() * 300 + 100,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 - 50],
+            }}
+            transition={{
+              duration: Math.random() * 20 + 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
       {/* Setup Progress Handler - wrapped in Suspense for useSearchParams */}
       <Suspense fallback={null}>
         <SetupProgressHandler
@@ -167,14 +193,14 @@ export default function Dashboard() {
       </Suspense>
 
       {/* Header */}
-      <header className="bg-[var(--surface)] shadow-sm sticky top-0 z-40">
+      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-[var(--foreground)]">
+              <h1 className="text-2xl font-bold text-white">
                 Hey, {user.name}! 💪
               </h1>
-              <p className="text-sm text-[var(--foreground-muted)]">
+              <p className="text-sm text-white/80">
                 {new Date().toLocaleDateString("en-US", {
                   weekday: "long",
                   month: "long",
@@ -184,10 +210,10 @@ export default function Dashboard() {
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
               aria-label="Switch user"
             >
-              <LogOut className="w-5 h-5 text-[var(--foreground-muted)]" />
+              <LogOut className="w-5 h-5 text-white/80" />
             </button>
           </div>
         </div>
@@ -243,7 +269,7 @@ export default function Dashboard() {
         )}
       </AnimatePresence>
 
-      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-6 space-y-6">
         <AnimatePresence mode="wait">
           {todayWorkout ? (
             <motion.div
