@@ -35,7 +35,7 @@ function createPrismaClient() {
         adapter,
         datasources: {
           db: {
-            url: process.env.DATABASE_TURSO_DATABASE_URL,
+            url: "file:./dev.db", // Dummy URL - adapter handles actual connection
           },
         },
       });
