@@ -1,11 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Trophy, Flame, TrendingUp, Calendar, Target, Award, Activity } from 'lucide-react'
-import BottomNav from '@/components/BottomNav'
+import { ChevronLeft, Trophy, Flame, TrendingUp, Calendar as CalendarIcon, Target, Award, Activity, Home, User } from 'lucide-react'
+
+const navItems = [
+  { href: '/dashboard', icon: Home, label: 'Home' },
+  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
+  { href: '/stats', icon: TrendingUp, label: 'Stats' },
+  { href: '/import', icon: User, label: 'Plans' },
+];
 
 interface StatsData {
   user: {
@@ -24,6 +30,7 @@ interface StatsData {
 
 export default function StatsPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const [stats, setStats] = useState<StatsData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -53,12 +60,12 @@ export default function StatsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          <Activity className="w-8 h-8 text-[var(--primary)]" />
+          <Activity className="w-8 h-8 text-white" />
         </motion.div>
       </div>
     )
@@ -79,28 +86,102 @@ export default function StatsPage() {
   const monthlyProgress = Math.min((monthlySets / monthlyGoal) * 100, 100)
 
   return (
-    <div className="min-h-screen bg-[var(--background)] pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: Math.random() * 300 + 100,
+              height: Math.random() * 300 + 100,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 - 50],
+            }}
+            transition={{
+              duration: Math.random() * 20 + 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
       {/* Header */}
-      <header className="bg-[var(--surface)] shadow-sm sticky top-0 z-40">
+      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center">
-            <Link 
-              href="/dashboard" 
-              className="p-2 -ml-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+            <Link
+              href="/dashboard"
+              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
-            <h1 className="text-xl font-bold flex-1 text-center mr-8">Progress & Stats</h1>
+            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Progress & Stats</h1>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative flex flex-col items-center"
+                >
+                  <motion.div
+                    className="flex flex-col items-center"
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Icon
+                      size={20}
+                      className={`mb-1 transition-colors ${
+                        isActive
+                          ? 'text-white'
+                          : 'text-white/60'
+                      }`}
+                    />
+                    <span
+                      className={`text-xs transition-all ${
+                        isActive
+                          ? 'text-white font-medium'
+                          : 'text-white/60'
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeMobileTab"
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                      />
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-6 space-y-6">
         {/* Hero Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-2xl p-6 text-white shadow-lg"
+          className="bg-white/20 backdrop-blur-md rounded-2xl p-6 text-white shadow-lg border border-white/30"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -141,35 +222,35 @@ export default function StatsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-[var(--surface)] rounded-2xl p-6 shadow-sm border border-[var(--border)]"
+          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">This Month</h3>
-            <Calendar className="w-5 h-5 text-[var(--primary)]" />
+            <h3 className="text-lg font-semibold text-white">This Month</h3>
+            <CalendarIcon className="w-5 h-5 text-white/70" />
           </div>
-          
+
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-2">
-                <span className="text-[var(--foreground-muted)]">Sets completed</span>
-                <span className="font-semibold">{monthlySets}/{monthlyGoal}</span>
+                <span className="text-white/70">Sets completed</span>
+                <span className="font-semibold text-white">{monthlySets}/{monthlyGoal}</span>
               </div>
-              <div className="bg-[var(--border)] rounded-full h-3 overflow-hidden">
+              <div className="bg-white/20 rounded-full h-3 overflow-hidden">
                 <motion.div
-                  className="bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] h-full rounded-full"
+                  className="bg-gradient-to-r from-white to-white/80 h-full rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${monthlyProgress}%` }}
                   transition={{ duration: 1, ease: "easeOut" }}
                 />
               </div>
             </div>
-            
+
             {topExercise && (
               <div className="pt-2">
-                <p className="text-[var(--foreground-muted)] mb-1">Most done exercise</p>
+                <p className="text-white/70 mb-1">Most done exercise</p>
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold">{topExercise[0]}</span>
-                  <span className="text-[var(--primary)]">{topExercise[1]} sets</span>
+                  <span className="font-semibold text-white">{topExercise[0]}</span>
+                  <span className="text-white/90">{topExercise[1]} sets</span>
                 </div>
               </div>
             )}
@@ -182,12 +263,12 @@ export default function StatsPage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
-              <Flame className="w-8 h-8 text-[var(--danger)]" />
-              <motion.span 
-                className="text-3xl font-bold"
+              <Flame className="w-8 h-8 text-orange-400" />
+              <motion.span
+                className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", delay: 0.3 }}
@@ -195,20 +276,20 @@ export default function StatsPage() {
                 {currentStreak}
               </motion.span>
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">Day Streak</p>
-            {currentStreak > 0 && <p className="text-xs text-[var(--primary)]">Keep it up! 🔥</p>}
+            <p className="text-sm text-white/70">Day Streak</p>
+            {currentStreak > 0 && <p className="text-xs text-white/90">Keep it up! 🔥</p>}
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
-              <Award className="w-8 h-8 text-[var(--accent)]" />
-              <motion.span 
-                className="text-3xl font-bold"
+              <Award className="w-8 h-8 text-yellow-300" />
+              <motion.span
+                className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", delay: 0.4 }}
@@ -216,20 +297,20 @@ export default function StatsPage() {
                 {weekStreak}
               </motion.span>
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">Week Streak</p>
-            <p className="text-xs text-[var(--accent)]">Consistency pays off!</p>
+            <p className="text-sm text-white/70">Week Streak</p>
+            <p className="text-xs text-white/90">Consistency pays off!</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
-              <Target className="w-8 h-8 text-[var(--secondary)]" />
-              <motion.span 
-                className="text-3xl font-bold"
+              <Target className="w-8 h-8 text-green-300" />
+              <motion.span
+                className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", delay: 0.5 }}
@@ -237,19 +318,19 @@ export default function StatsPage() {
                 {totalExercises}
               </motion.span>
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">Exercises Done</p>
+            <p className="text-sm text-white/70">Exercises Done</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-[var(--surface)] rounded-2xl p-5 shadow-sm border border-[var(--border)]"
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
-              <TrendingUp className="w-8 h-8 text-[var(--primary)]" />
-              <motion.span 
-                className="text-3xl font-bold"
+              <TrendingUp className="w-8 h-8 text-blue-300" />
+              <motion.span
+                className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", delay: 0.6 }}
@@ -257,7 +338,7 @@ export default function StatsPage() {
                 {Math.round(totalSets / Math.max(activeDays, 1))}
               </motion.span>
             </div>
-            <p className="text-sm text-[var(--foreground-muted)]">Avg Sets/Day</p>
+            <p className="text-sm text-white/70">Avg Sets/Day</p>
           </motion.div>
         </div>
 
@@ -267,22 +348,20 @@ export default function StatsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-[var(--surface)] rounded-2xl p-6 shadow-sm border border-[var(--border)]"
+            className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
           >
-            <h3 className="text-lg font-semibold mb-3">Last Workout</h3>
-            <p className="text-[var(--foreground-muted)]">
-              {new Date(user.stats.lastWorkoutDate).toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            <h3 className="text-lg font-semibold text-white mb-3">Last Workout</h3>
+            <p className="text-white/70">
+              {new Date(user.stats.lastWorkoutDate).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
               })}
             </p>
           </motion.div>
         )}
       </main>
-
-      <BottomNav />
     </div>
   )
 }
