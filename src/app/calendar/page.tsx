@@ -1,12 +1,18 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell } from 'lucide-react'
-import BottomNav from '@/components/BottomNav'
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell, Home, TrendingUp, User } from 'lucide-react'
 import { formatDateForUrl } from '@/lib/date-utils'
+
+const navItems = [
+  { href: '/dashboard', icon: Home, label: 'Home' },
+  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
+  { href: '/stats', icon: TrendingUp, label: 'Stats' },
+  { href: '/import', icon: User, label: 'Plans' },
+];
 
 interface WorkoutDay {
   id: string
@@ -22,6 +28,7 @@ interface WorkoutDay {
 function CalendarContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const [workouts, setWorkouts] = useState<WorkoutDay[]>([])
   const [loading, setLoading] = useState(true)
   
@@ -104,54 +111,128 @@ function CalendarContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          <CalendarIcon className="w-8 h-8 text-[var(--primary)]" />
+          <CalendarIcon className="w-8 h-8 text-white" />
         </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)] pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/5"
+            style={{
+              width: Math.random() * 300 + 100,
+              height: Math.random() * 300 + 100,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              x: [0, Math.random() * 100 - 50],
+              y: [0, Math.random() * 100 - 50],
+            }}
+            transition={{
+              duration: Math.random() * 20 + 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
       {/* Header */}
-      <header className="bg-[var(--surface)] shadow-sm sticky top-0 z-40">
+      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link 
-              href="/dashboard" 
-              className="p-2 -ml-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+            <Link
+              href="/dashboard"
+              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
-            <motion.div 
+            <motion.div
               key={`${month}-${year}`}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
             >
-              <h1 className="text-xl font-bold">{monthNames[month]} {year}</h1>
+              <h1 className="text-xl font-bold text-white">{monthNames[month]} {year}</h1>
             </motion.div>
             <div className="w-10"></div>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative flex flex-col items-center"
+                >
+                  <motion.div
+                    className="flex flex-col items-center"
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Icon
+                      size={20}
+                      className={`mb-1 transition-colors ${
+                        isActive
+                          ? 'text-white'
+                          : 'text-white/60'
+                      }`}
+                    />
+                    <span
+                      className={`text-xs transition-all ${
+                        isActive
+                          ? 'text-white font-medium'
+                          : 'text-white/60'
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeMobileTab"
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                      />
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-6">
         {/* Month Navigation */}
         <div className="flex items-center justify-between mb-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigateMonth('prev')}
-            className="p-3 rounded-xl bg-[var(--surface)] hover:bg-[var(--surface-hover)] transition-colors shadow-sm border border-[var(--border)]"
+            className="p-3 rounded-xl bg-white/10 backdrop-blur-md hover:bg-white/20 transition-colors shadow-lg border border-white/20"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
-          
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -161,18 +242,18 @@ function CalendarContent() {
               setYear(today.getFullYear())
               router.push('/calendar')
             }}
-            className="px-6 py-2 bg-[var(--primary)] text-white rounded-xl font-medium hover:bg-[var(--primary-dark)] transition-colors"
+            className="px-6 py-2 bg-white text-[var(--primary)] rounded-xl font-medium hover:bg-white/90 transition-colors shadow-lg"
           >
             Today
           </motion.button>
-          
+
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigateMonth('next')}
-            className="p-3 rounded-xl bg-[var(--surface)] hover:bg-[var(--surface-hover)] transition-colors shadow-sm border border-[var(--border)]"
+            className="p-3 rounded-xl bg-white/10 backdrop-blur-md hover:bg-white/20 transition-colors shadow-lg border border-white/20"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5 text-white" />
           </motion.button>
         </div>
 
@@ -180,13 +261,13 @@ function CalendarContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[var(--surface)] rounded-2xl shadow-sm border border-[var(--border)] p-4"
+          className="bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 p-4"
         >
           {/* Day Headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {dayNames.map(day => (
               <div key={day} className="text-center py-2">
-                <span className="text-sm font-semibold text-[var(--foreground-muted)]">
+                <span className="text-sm font-semibold text-white/70">
                   {day}
                 </span>
               </div>
@@ -273,14 +354,14 @@ function CalendarContent() {
           </div>
 
           {/* Legend */}
-          <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-[var(--border)]">
+          <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-white/10">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-[var(--primary)]/20" />
-              <span className="text-sm text-[var(--foreground-muted)]">Scheduled</span>
+              <div className="w-4 h-4 rounded bg-white/20" />
+              <span className="text-sm text-white/70">Scheduled</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-gradient-to-br from-[var(--secondary)] to-[var(--secondary-dark)]" />
-              <span className="text-sm text-[var(--foreground-muted)]">Completed</span>
+              <div className="w-4 h-4 rounded bg-gradient-to-br from-green-400 to-emerald-500" />
+              <span className="text-sm text-white/70">Completed</span>
             </div>
           </div>
         </motion.div>
@@ -290,27 +371,25 @@ function CalendarContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-6 bg-[var(--surface)] rounded-2xl p-6 shadow-sm border border-[var(--border)]"
+          className="mt-6 bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
         >
-          <h3 className="font-semibold mb-4">Month Overview</h3>
+          <h3 className="font-semibold text-white mb-4">Month Overview</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-3xl font-bold text-[var(--primary)]">
+              <p className="text-3xl font-bold text-white">
                 {workouts.filter(w => w.completed).length}
               </p>
-              <p className="text-sm text-[var(--foreground-muted)]">Workouts completed</p>
+              <p className="text-sm text-white/70">Workouts completed</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-[var(--secondary)]">
+              <p className="text-3xl font-bold text-white">
                 {workouts.filter(w => w.exercises.some(e => e.sets.length > 0)).length}
               </p>
-              <p className="text-sm text-[var(--foreground-muted)]">Total scheduled</p>
+              <p className="text-sm text-white/70">Total scheduled</p>
             </div>
           </div>
         </motion.div>
       </main>
-
-      <BottomNav />
     </div>
   )
 }
@@ -318,12 +397,12 @@ function CalendarContent() {
 export default function CalendarPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          <CalendarIcon className="w-8 h-8 text-[var(--primary)]" />
+          <CalendarIcon className="w-8 h-8 text-white" />
         </motion.div>
       </div>
     }>
