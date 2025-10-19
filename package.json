@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "start": "cross-env NODE_ENV=production node server.js",
     "setup": "node setup.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "migrate:turso": "node scripts/migrate-turso.js"
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
