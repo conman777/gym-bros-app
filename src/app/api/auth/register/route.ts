@@ -20,7 +20,7 @@ async function setupNewUserData(
     startJob(jobId);
 
     updateJobProgress(jobId, 10);
-    await createDemoWorkouts(userId, userName as "Conor" | "Devlin");
+    await createDemoWorkouts(userId, userName);
 
     updateJobProgress(jobId, 90);
 

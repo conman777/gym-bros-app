@@ -170,7 +170,7 @@ function cloneWorkoutPlan(plan: WorkoutPlan): WorkoutPlan {
   };
 }
 
-export async function createDemoWorkouts(userId: string, userName: UserName) {
+export async function createDemoWorkouts(userId: string, userName: string) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
