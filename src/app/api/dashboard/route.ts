@@ -46,6 +46,7 @@ export async function GET(request: NextRequest) {
       user: {
         id: user.id,
         name: user.name,
+        rehabEnabled: user.rehabEnabled,
         stats: user.stats
       },
       todayWorkout

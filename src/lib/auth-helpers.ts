@@ -40,12 +40,12 @@ export async function getUserFromCookies(): Promise<AuthResult | null> {
 }
 
 /**
- * Require authenticated Devlin user for endpoint
- * Returns 401 if not authenticated, 403 if not Devlin
+ * Require authenticated user with rehab enabled for endpoint
+ * Returns 401 if not authenticated, 403 if rehab not enabled
  * Returns user data if authorized
  */
-export async function requireDevlinUser(): Promise<
-  | { authorized: true; userId: string; user: { id: string; name: string } }
+export async function requireRehabUser(): Promise<
+  | { authorized: true; userId: string; user: { id: string; name: string; rehabEnabled: boolean } }
   | { authorized: false; response: NextResponse }
 > {
   const auth = await getUserFromCookies();
@@ -60,11 +60,17 @@ export async function requireDevlinUser(): Promise<
     };
   }
 
-  if (auth.user.name !== "Devlin") {
+  // Fetch full user to check rehabEnabled
+  const user = await prisma.user.findUnique({
+    where: { id: auth.userId },
+    select: { id: true, name: true, rehabEnabled: true },
+  });
+
+  if (!user || !user.rehabEnabled) {
     return {
       authorized: false,
       response: NextResponse.json(
-        { error: "Forbidden. This endpoint is only accessible to Devlin." },
+        { error: "Forbidden. This endpoint is only accessible to users with rehab features enabled." },
         { status: 403 }
       ),
     };
@@ -73,6 +79,12 @@ export async function requireDevlinUser(): Promise<
   return {
     authorized: true,
     userId: auth.userId,
-    user: auth.user,
+    user,
   };
 }
+
+/**
+ * @deprecated Use requireRehabUser instead
+ * Kept for backward compatibility
+ */
+export const requireDevlinUser = requireRehabUser;

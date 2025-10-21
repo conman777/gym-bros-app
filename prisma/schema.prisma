@@ -8,13 +8,15 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_POSTGRES_PRISMA_URL")
-  directUrl = env("DATABASE_DATABASE_URL_UNPOOLED")
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id             String          @id @default(cuid())
   name           String          @unique
+  email          String?         @unique
+  passwordHash   String?
+  rehabEnabled   Boolean         @default(false)
   setupComplete  Boolean         @default(false)
   workouts       Workout[]
   stats          Stats?

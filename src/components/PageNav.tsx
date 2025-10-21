@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Calendar, TrendingUp, User } from 'lucide-react'
+import { Home, Calendar, TrendingUp, User, Settings } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { memo } from 'react'
 
@@ -11,6 +11,7 @@ const navItems = [
   { href: '/calendar', icon: Calendar, label: 'Calendar' },
   { href: '/stats', icon: TrendingUp, label: 'Stats' },
   { href: '/import', icon: User, label: 'Plans' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ]
 
 function PageNavComponent() {

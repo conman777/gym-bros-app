@@ -25,6 +25,7 @@ import { PageNav } from "@/components/PageNav";
 interface User {
   id: string;
   name: string;
+  rehabEnabled: boolean;
   stats: {
     totalSetsCompleted: number;
     totalExercises: number;
@@ -73,7 +74,7 @@ export default function Dashboard() {
       setUser(data.user);
       setTodayWorkout(data.todayWorkout);
 
-      if (data.user?.name === "Devlin") {
+      if (data.user?.rehabEnabled) {
         const rehabResponse = await fetch("/api/rehab");
         if (rehabResponse.ok) {
           const rehabData = await rehabResponse.json();
@@ -402,8 +403,8 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        {/* Rehabilitation Section - Only for Devlin */}
-        {user.name === "Devlin" && (
+        {/* Rehabilitation Section - Only for users with rehab enabled */}
+        {user.rehabEnabled && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
