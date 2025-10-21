@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@/generated/prisma";
+import type { Prisma } from "@prisma/client";
 
 type ActivityStatus = "SUCCESS" | "ERROR" | "IN_PROGRESS";
 type ActivityCategory = "PRICE_UPDATE" | "PREDICTION" | "API_CALL" | "SYSTEM";
