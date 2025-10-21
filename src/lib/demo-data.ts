@@ -174,7 +174,9 @@ export async function createDemoWorkouts(userId: string, userName: string) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const program = PROGRAMS[userName] ?? PROGRAMS.Conor;
+  // Use Conor's program as default for any unknown username
+  const programKey = (userName === "Conor" || userName === "Devlin") ? userName as UserName : "Conor";
+  const program = PROGRAMS[programKey];
   const baseCompletionRate = userName === "Devlin" ? 0.95 : 0.85;
 
   const workoutsToCreate: Array<{
