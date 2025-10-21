@@ -3,33 +3,47 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Dumbbell, LogIn, UserPlus } from "lucide-react";
+import { Dumbbell, UserPlus, LogIn } from "lucide-react";
 import Link from "next/link";
 
-export default function Home() {
+export default function SignupPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    confirmPassword: "",
+    name: "",
   });
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setPasswordErrors([]);
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await fetch("/api/auth", {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+          name: formData.name,
+        }),
       });
 
       const data = await response.json();
@@ -37,11 +51,14 @@ export default function Home() {
       if (response.ok) {
         router.push("/dashboard");
       } else {
-        setError(data.error || "Login failed");
+        if (data.errors) {
+          setPasswordErrors(data.errors);
+        }
+        setError(data.error || "Signup failed");
       }
     } catch (err) {
-      console.error("Login error:", err);
-      setError("Failed to login. Please try again.");
+      console.error("Signup error:", err);
+      setError("Failed to create account. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -102,7 +119,7 @@ export default function Home() {
           transition={{ delay: 0.5 }}
           className="text-white/80 text-lg mb-8 text-center"
         >
-          Login to continue
+          Create your account
         </motion.p>
 
         <motion.div
@@ -111,7 +128,28 @@ export default function Home() {
           transition={{ delay: 0.7 }}
           className="bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8"
         >
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSignup} className="space-y-6">
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-white text-sm font-medium mb-2"
+              >
+                Display Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent"
+                placeholder="Your name"
+                required
+                disabled={loading}
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="username"
@@ -127,7 +165,7 @@ export default function Home() {
                   setFormData({ ...formData, username: e.target.value })
                 }
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent"
-                placeholder="Enter your username"
+                placeholder="Choose a username"
                 required
                 disabled={loading}
               />
@@ -148,7 +186,31 @@ export default function Home() {
                   setFormData({ ...formData, password: e.target.value })
                 }
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent"
-                placeholder="Enter your password"
+                placeholder="Create a password"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-white text-sm font-medium mb-2"
+              >
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    confirmPassword: e.target.value,
+                  })
+                }
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent"
+                placeholder="Confirm your password"
                 required
                 disabled={loading}
               />
@@ -161,6 +223,20 @@ export default function Home() {
                 className="bg-red-500/20 border border-red-500/40 rounded-lg p-3 text-white text-sm"
               >
                 {error}
+              </motion.div>
+            )}
+
+            {passwordErrors.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-yellow-500/20 border border-yellow-500/40 rounded-lg p-3 text-white text-sm"
+              >
+                <ul className="list-disc list-inside space-y-1">
+                  {passwordErrors.map((err, i) => (
+                    <li key={i}>{err}</li>
+                  ))}
+                </ul>
               </motion.div>
             )}
 
@@ -184,19 +260,19 @@ export default function Home() {
                 </motion.div>
               ) : (
                 <>
-                  <LogIn className="w-5 h-5" />
-                  Login
+                  <UserPlus className="w-5 h-5" />
+                  Create Account
                 </>
               )}
             </motion.button>
 
             <div className="text-center">
               <Link
-                href="/signup"
+                href="/"
                 className="text-white/80 hover:text-white transition-colors text-sm flex items-center justify-center gap-2"
               >
-                <UserPlus className="w-4 h-4" />
-                Create a new account
+                <LogIn className="w-4 h-4" />
+                Already have an account? Login
               </Link>
             </div>
           </form>

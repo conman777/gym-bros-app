@@ -1,35 +1,50 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
-import { Dumbbell, LogIn, UserPlus } from "lucide-react";
-import Link from "next/link";
+import { Dumbbell, Lock } from "lucide-react";
 
-export default function Home() {
+function SetupPasswordContent() {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    confirmPassword: "",
   });
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!name) {
+      router.push("/");
+    }
+  }, [name, router]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setPasswordErrors([]);
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     try {
-      const response = await fetch("/api/auth", {
+      const response = await fetch("/api/auth/set-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name,
+          username: formData.username,
+          password: formData.password,
+        }),
       });
 
       const data = await response.json();
@@ -37,17 +52,20 @@ export default function Home() {
       if (response.ok) {
         router.push("/dashboard");
       } else {
-        setError(data.error || "Login failed");
+        if (data.errors) {
+          setPasswordErrors(data.errors);
+        }
+        setError(data.error || "Failed to set password");
       }
     } catch (err) {
-      console.error("Login error:", err);
-      setError("Failed to login. Please try again.");
+      console.error("Set password error:", err);
+      setError("Failed to set password. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!mounted) return null;
+  if (!name) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex flex-col items-center justify-center overflow-hidden">
@@ -91,9 +109,9 @@ export default function Home() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-5xl md:text-6xl font-bold text-white mb-2 text-center"
+          className="text-4xl md:text-5xl font-bold text-white mb-2 text-center"
         >
-          GYM BROS
+          Welcome, {name}!
         </motion.h1>
 
         <motion.p
@@ -102,7 +120,7 @@ export default function Home() {
           transition={{ delay: 0.5 }}
           className="text-white/80 text-lg mb-8 text-center"
         >
-          Login to continue
+          Set up your login credentials
         </motion.p>
 
         <motion.div
@@ -111,7 +129,7 @@ export default function Home() {
           transition={{ delay: 0.7 }}
           className="bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8"
         >
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSetPassword} className="space-y-6">
             <div>
               <label
                 htmlFor="username"
@@ -127,7 +145,7 @@ export default function Home() {
                   setFormData({ ...formData, username: e.target.value })
                 }
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent"
-                placeholder="Enter your username"
+                placeholder="Choose a username"
                 required
                 disabled={loading}
               />
@@ -148,10 +166,45 @@ export default function Home() {
                   setFormData({ ...formData, password: e.target.value })
                 }
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent"
-                placeholder="Enter your password"
+                placeholder="Create a password"
                 required
                 disabled={loading}
               />
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-white text-sm font-medium mb-2"
+              >
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    confirmPassword: e.target.value,
+                  })
+                }
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent"
+                placeholder="Confirm your password"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className="bg-blue-500/20 border border-blue-500/40 rounded-lg p-3 text-white text-sm">
+              <p className="font-medium mb-1">Password requirements:</p>
+              <ul className="list-disc list-inside space-y-1 text-xs">
+                <li>At least 8 characters long</li>
+                <li>One uppercase letter</li>
+                <li>One lowercase letter</li>
+                <li>One number</li>
+                <li>One special character</li>
+              </ul>
             </div>
 
             {error && (
@@ -161,6 +214,20 @@ export default function Home() {
                 className="bg-red-500/20 border border-red-500/40 rounded-lg p-3 text-white text-sm"
               >
                 {error}
+              </motion.div>
+            )}
+
+            {passwordErrors.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-yellow-500/20 border border-yellow-500/40 rounded-lg p-3 text-white text-sm"
+              >
+                <ul className="list-disc list-inside space-y-1">
+                  {passwordErrors.map((err, i) => (
+                    <li key={i}>{err}</li>
+                  ))}
+                </ul>
               </motion.div>
             )}
 
@@ -184,24 +251,30 @@ export default function Home() {
                 </motion.div>
               ) : (
                 <>
-                  <LogIn className="w-5 h-5" />
-                  Login
+                  <Lock className="w-5 h-5" />
+                  Set Password
                 </>
               )}
             </motion.button>
-
-            <div className="text-center">
-              <Link
-                href="/signup"
-                className="text-white/80 hover:text-white transition-colors text-sm flex items-center justify-center gap-2"
-              >
-                <UserPlus className="w-4 h-4" />
-                Create a new account
-              </Link>
-            </div>
           </form>
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function SetupPasswordPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SetupPasswordContent />
+    </Suspense>
   );
 }
