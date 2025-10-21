@@ -3,7 +3,7 @@
  * Run with: npx tsx scripts/fix-devlin-now.ts
  */
 
-import { PrismaClient } from "../src/generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { createRehabExercises } from "../src/lib/demo-data";
 
 const prisma = new PrismaClient();
