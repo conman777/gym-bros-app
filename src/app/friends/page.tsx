@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, TrendingUp, UserPlus, Activity } from 'lucide-react';
+import { Users, TrendingUp, UserPlus, Activity, LogOut } from 'lucide-react';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
 import { useQuery } from '@tanstack/react-query';
@@ -42,6 +42,23 @@ export default function FriendsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('feed');
   const [selectedFriend, setSelectedFriend] = useState<string | null>(null);
+  const [user, setUser] = useState<{ name: string } | null>(null);
+
+  // Fetch user data
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/dashboard');
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   // Fetch friends list
   const { data: friendsData, refetch: refetchFriends } = useQuery({
@@ -77,6 +94,15 @@ export default function FriendsPage() {
     refetchInterval: 60000,
   });
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   const friends: Friend[] = friendsData?.friends || [];
   const activities: FriendActivity[] = feedData?.activities || [];
   const pendingRequests = requestsData?.received || [];
@@ -91,37 +117,53 @@ export default function FriendsPage() {
     <>
       <AnimatedBackground />
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900 relative">
-        <PageNav />
-
-        <div className="container mx-auto px-4 py-8 pb-24">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between">
+        {/* Global Header */}
+        <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
+          <div className="max-w-4xl mx-auto px-4 py-4">
+            <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
-                  <Users className="w-10 h-10" />
-                  Friends
+                <h1 className="text-2xl font-bold text-white">
+                  Hey, {user?.name || 'Loading...'}! 💪
                 </h1>
-                <p className="text-white/60 text-lg">
-                  {friends.length} {friends.length === 1 ? 'friend' : 'friends'}
+                <p className="text-sm text-white/80">
+                  {new Date().toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
                 </p>
               </div>
-              {pendingRequests.length > 0 && (
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                  className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold"
-                >
-                  {pendingRequests.length} pending{' '}
-                  {pendingRequests.length === 1 ? 'request' : 'requests'}
-                </motion.div>
-              )}
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label="Logout"
+              >
+                <LogOut className="w-5 h-5 text-white/80" />
+              </button>
             </div>
-          </motion.div>
+
+            <PageNav />
+          </div>
+        </header>
+
+        <div className="container mx-auto px-4 py-8 pb-24">
+          {/* Friends Section Header with Request Badge */}
+          {pendingRequests.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 flex justify-end"
+            >
+              <motion.div
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm"
+              >
+                {pendingRequests.length} pending{' '}
+                {pendingRequests.length === 1 ? 'request' : 'requests'}
+              </motion.div>
+            </motion.div>
+          )}
 
           {/* Tabs */}
           <div className="mb-6">
