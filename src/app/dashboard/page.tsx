@@ -21,6 +21,7 @@ import type { RehabExercise } from '@/lib/types';
 import { SetupProgressHandler } from './SetupProgressHandler';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
+import { HabitTrackingCard } from '@/components/HabitTrackingCard';
 
 interface User {
   id: string;
@@ -175,26 +176,30 @@ export default function Dashboard() {
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-white">Hey, {user.name}! 💪</h1>
-              <p className="text-sm text-white/80">
-                {new Date().toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </p>
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-white">Hey, {user.name}! 💪</h1>
+                <p className="text-xs text-white/60">
+                  {new Date().toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </p>
+              </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-              aria-label="Switch user"
-            >
-              <LogOut className="w-5 h-5 text-white/80" />
-            </button>
-          </div>
 
-          <PageNav />
+            <div className="flex items-center gap-6">
+              <PageNav />
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
+                aria-label="Switch user"
+              >
+                <LogOut className="w-5 h-5 text-white/80" />
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -344,6 +349,9 @@ export default function Dashboard() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Habit Tracking Card */}
+        <HabitTrackingCard />
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">

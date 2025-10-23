@@ -21,6 +21,7 @@ model User {
   receivedRequests Friendship[]      @relation("ReceivedRequests")
   privacySettings  PrivacySettings?
   activities       FriendActivity[]
+  habitLogs        HabitLog[]
 }
 
 model Workout {
@@ -149,4 +150,14 @@ model FriendActivity {
 
   @@index([userId, createdAt])
   @@index([createdAt])
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, timestamp])
 }

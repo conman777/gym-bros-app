@@ -20,6 +20,13 @@ A comprehensive fitness tracking application for managing workouts and rehabilit
 - **Progress Tracking**: Mark exercises complete and track completion dates
 - **Side-Specific Exercises**: Support for left/right side-specific exercises
 
+### Habit Tracking
+
+- **Quick Logging**: One-tap logging for smoking and nicotine pouch usage
+- **Daily & Weekly Stats**: Track today's count and this week's total for each habit
+- **Undo Functionality**: Remove accidental entries with one click
+- **Visual Dashboard**: Clean, intuitive interface integrated into main dashboard
+
 ### Analytics & Progress
 
 - **Statistics Dashboard**: View total sets completed, exercise count, and last workout date
@@ -195,6 +202,7 @@ The application uses PostgreSQL with Prisma ORM. Key models:
 - **Set**: Individual sets (reps, weight, completion)
 - **Stats**: Aggregated user statistics
 - **RehabExercise**: Rehabilitation exercise prescriptions
+- **HabitLog**: Habit tracking (smoking, nicotine pouches)
 - **ActivityLog**: System activity tracking
 
 See [`docs/architecture/DATABASE_SCHEMA.md`](docs/architecture/DATABASE_SCHEMA.md) for detailed schema documentation.
@@ -207,6 +215,7 @@ RESTful API endpoints organized by resource:
 - `/api/workouts/*` - Workout CRUD operations
 - `/api/sets/*` - Set updates
 - `/api/rehab/*` - Rehab exercise management
+- `/api/habits/*` - Habit tracking (log, stats, undo)
 - `/api/stats` - User statistics
 - `/api/calendar` - Calendar data
 - `/api/dashboard` - Dashboard data

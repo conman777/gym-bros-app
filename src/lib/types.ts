@@ -5,6 +5,7 @@ export type WorkoutId = Brand<string, 'WorkoutId'>;
 export type ExerciseId = Brand<string, 'ExerciseId'>;
 export type SetId = Brand<string, 'SetId'>;
 export type RehabExerciseId = Brand<string, 'RehabExerciseId'>;
+export type HabitLogId = Brand<string, 'HabitLogId'>;
 
 export type UserName = 'Conor' | 'Devlin';
 
@@ -35,4 +36,23 @@ export interface RehabExercise {
   completed: boolean;
   completedDate: Date | null;
   orderIndex: number;
+}
+
+export type HabitType = 'SMOKING' | 'NICOTINE_POUCH';
+
+export interface HabitLog {
+  id: string;
+  userId: string;
+  type: HabitType;
+  timestamp: Date;
+}
+
+export interface HabitCounts {
+  smoking: number;
+  nicotinePouches: number;
+}
+
+export interface HabitStats {
+  today: HabitCounts;
+  thisWeek: HabitCounts;
 }

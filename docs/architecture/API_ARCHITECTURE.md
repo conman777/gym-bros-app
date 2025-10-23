@@ -824,6 +824,168 @@ Update user settings.
 
 ---
 
+### Habit Tracking Endpoints
+
+#### POST /api/habits
+
+Log a habit occurrence (smoking or nicotine pouch use).
+
+**Authentication:** Required
+
+**Request Body:**
+
+```typescript
+{
+  type: 'SMOKING' | 'NICOTINE_POUCH';
+}
+```
+
+**Response (201):**
+
+```typescript
+{
+  id: string,
+  userId: string,
+  type: string,
+  timestamp: string  // ISO 8601
+}
+```
+
+**Errors:**
+
+- 401: Not authenticated
+- 400: Invalid habit type
+- 500: Server error
+
+**Business Logic:**
+
+```typescript
+// Create habit log with current timestamp
+const habitLog = await prisma.habitLog.create({
+  data: {
+    userId: auth.userId,
+    type,
+  },
+});
+```
+
+---
+
+#### GET /api/habits
+
+Get aggregated habit statistics for today and this week.
+
+**Authentication:** Required
+
+**Response (200):**
+
+```typescript
+{
+  today: {
+    smoking: number,
+    nicotinePouches: number
+  },
+  thisWeek: {
+    smoking: number,
+    nicotinePouches: number
+  }
+}
+```
+
+**Errors:**
+
+- 401: Not authenticated
+- 500: Server error
+
+**Business Logic:**
+
+```typescript
+// Calculate start of today
+const startOfToday = new Date();
+startOfToday.setHours(0, 0, 0, 0);
+
+// Calculate start of week (Sunday)
+const startOfWeek = new Date();
+startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+startOfWeek.setHours(0, 0, 0, 0);
+
+// Fetch logs and aggregate counts by type
+const todayLogs = await prisma.habitLog.findMany({
+  where: {
+    userId: auth.userId,
+    timestamp: { gte: startOfToday },
+  },
+});
+
+const weekLogs = await prisma.habitLog.findMany({
+  where: {
+    userId: auth.userId,
+    timestamp: { gte: startOfWeek },
+  },
+});
+
+// Count occurrences by type
+const stats = {
+  today: {
+    smoking: todayLogs.filter((log) => log.type === 'SMOKING').length,
+    nicotinePouches: todayLogs.filter((log) => log.type === 'NICOTINE_POUCH').length,
+  },
+  thisWeek: {
+    smoking: weekLogs.filter((log) => log.type === 'SMOKING').length,
+    nicotinePouches: weekLogs.filter((log) => log.type === 'NICOTINE_POUCH').length,
+  },
+};
+```
+
+---
+
+#### DELETE /api/habits/undo
+
+Delete the most recent habit log from today (undo last entry).
+
+**Authentication:** Required
+
+**Response (200):**
+
+```typescript
+{
+  success: true;
+}
+```
+
+**Errors:**
+
+- 401: Not authenticated
+- 404: No habit logs found for today
+- 500: Server error
+
+**Business Logic:**
+
+```typescript
+// Find most recent log from today
+const startOfToday = new Date();
+startOfToday.setHours(0, 0, 0, 0);
+
+const mostRecentLog = await prisma.habitLog.findFirst({
+  where: {
+    userId: auth.userId,
+    timestamp: { gte: startOfToday },
+  },
+  orderBy: { timestamp: 'desc' },
+});
+
+if (!mostRecentLog) {
+  return NextResponse.json({ error: 'No habit logs found for today' }, { status: 404 });
+}
+
+// Delete the log
+await prisma.habitLog.delete({
+  where: { id: mostRecentLog.id },
+});
+```
+
+---
+
 ## Request/Response Patterns
 
 ### Standard GET Request

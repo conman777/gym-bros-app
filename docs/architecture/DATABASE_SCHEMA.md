@@ -13,14 +13,14 @@ The application uses PostgreSQL in production and supports SQLite for local deve
 │    User     │
 └──────┬──────┘
        │
-       ├─────────────────┬──────────────────┬─────────────┐
-       │                 │                  │             │
-       │ 1:N             │ 1:N              │ 1:1         │ 1:N
-       │                 │                  │             │
-   ┌───▼────┐      ┌─────▼──────┐      ┌───▼───┐    ┌───▼────────────┐
-   │Workout │      │RehabExercise│      │ Stats │    │  ActivityLog   │
-   └───┬────┘      └─────────────┘      └───────┘    │  (no relation) │
-       │                                              └────────────────┘
+       ├─────────────────┬──────────────────┬─────────────┬─────────────┐
+       │                 │                  │             │             │
+       │ 1:N             │ 1:N              │ 1:1         │ 1:N         │ 1:N
+       │                 │                  │             │             │
+   ┌───▼────┐      ┌─────▼──────┐      ┌───▼───┐    ┌───▼────────┐ ┌──▼────────────┐
+   │Workout │      │RehabExercise│      │ Stats │    │ HabitLog   │ │  ActivityLog  │
+   └───┬────┘      └─────────────┘      └───────┘    └────────────┘ │ (no relation) │
+       │                                                              └───────────────┘
        │ 1:N
        │
    ┌───▼────────┐
@@ -501,21 +501,105 @@ await prisma.activityLog.create({
 
 ---
 
+### HabitLog
+
+Tracks user habits such as smoking and nicotine pouch usage.
+
+```prisma
+model HabitLog {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, timestamp])
+}
+```
+
+**Fields:**
+
+| Field       | Type     | Constraints           | Description                                   |
+| ----------- | -------- | --------------------- | --------------------------------------------- |
+| `id`        | String   | Primary Key, CUID     | Unique identifier                             |
+| `userId`    | String   | Foreign Key → User.id | User who logged this habit                    |
+| `type`      | String   | Required              | Type of habit ("SMOKING" or "NICOTINE_POUCH") |
+| `timestamp` | DateTime | Default: now()        | When the habit occurrence was logged          |
+
+**Relationships:**
+
+- Belongs to one `User` (via `userId`)
+
+**Indexes:**
+
+- Composite index on `(userId, timestamp)` for efficient user-specific time-range queries
+
+**Cascade Behavior:**
+
+- `onDelete: Cascade` - Deleting a user deletes all their habit logs
+
+**Business Rules:**
+
+- `type` field stores the habit type as a string (validated in application layer)
+- Each log represents a single occurrence of the habit
+- Logs are ordered by timestamp for tracking trends
+- Used for daily and weekly aggregation of habit counts
+
+**Common Queries:**
+
+```typescript
+// Log a habit occurrence
+await prisma.habitLog.create({
+  data: {
+    userId,
+    type: 'SMOKING',
+  },
+});
+
+// Get today's habit logs
+const startOfToday = new Date();
+startOfToday.setHours(0, 0, 0, 0);
+
+const todayLogs = await prisma.habitLog.findMany({
+  where: {
+    userId,
+    timestamp: {
+      gte: startOfToday,
+    },
+  },
+});
+
+// Delete most recent log (undo)
+const mostRecent = await prisma.habitLog.findFirst({
+  where: { userId },
+  orderBy: { timestamp: 'desc' },
+});
+
+if (mostRecent) {
+  await prisma.habitLog.delete({
+    where: { id: mostRecent.id },
+  });
+}
+```
+
+---
+
 ## Indexes Summary
 
 ### Performance Indexes
 
-| Table         | Index            | Type        | Purpose                         |
-| ------------- | ---------------- | ----------- | ------------------------------- |
-| User          | `name`           | Unique      | Fast login lookups              |
-| User          | `email`          | Unique      | Email uniqueness constraint     |
-| Workout       | `(userId, date)` | Composite   | Query workouts by user and date |
-| Exercise      | `workoutId`      | Foreign Key | Join exercises to workouts      |
-| Set           | `exerciseId`     | Foreign Key | Join sets to exercises          |
-| RehabExercise | `userId`         | Foreign Key | Query user's rehab exercises    |
-| ActivityLog   | `timestamp`      | Standard    | Time-range queries              |
-| ActivityLog   | `category`       | Standard    | Filter by category              |
-| ActivityLog   | `status`         | Standard    | Find errors quickly             |
+| Table         | Index                 | Type        | Purpose                         |
+| ------------- | --------------------- | ----------- | ------------------------------- |
+| User          | `name`                | Unique      | Fast login lookups              |
+| User          | `email`               | Unique      | Email uniqueness constraint     |
+| Workout       | `(userId, date)`      | Composite   | Query workouts by user and date |
+| Exercise      | `workoutId`           | Foreign Key | Join exercises to workouts      |
+| Set           | `exerciseId`          | Foreign Key | Join sets to exercises          |
+| RehabExercise | `userId`              | Foreign Key | Query user's rehab exercises    |
+| ActivityLog   | `timestamp`           | Standard    | Time-range queries              |
+| ActivityLog   | `category`            | Standard    | Filter by category              |
+| ActivityLog   | `status`              | Standard    | Find errors quickly             |
+| HabitLog      | `(userId, timestamp)` | Composite   | Query user's habit logs by date |
 
 ### Missing Indexes (Consider Adding)
 
@@ -536,6 +620,7 @@ User deleted
   │     │     └─> All Sets deleted
   │     └─> (cascade through relationships)
   ├─> All RehabExercises deleted
+  ├─> All HabitLogs deleted
   └─> Stats deleted
 ```
 
