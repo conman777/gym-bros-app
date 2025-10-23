@@ -1,22 +1,42 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import { useMemo } from 'react'
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 export function AnimatedBackground() {
-  // Generate static circle configs once
-  const circles = useMemo(() => {
-    return Array.from({ length: 5 }, (_, i) => ({
-      id: i,
-      width: Math.random() * 300 + 100,
-      height: Math.random() * 300 + 100,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      x: Math.random() * 100 - 50,
-      y: Math.random() * 100 - 50,
-      duration: Math.random() * 20 + 10,
-    }))
-  }, [])
+  const [circles, setCircles] = useState<
+    Array<{
+      id: number;
+      width: number;
+      height: number;
+      left: string;
+      top: string;
+      x: number;
+      y: number;
+      duration: number;
+    }>
+  >([]);
+
+  // Generate circles only on client side to avoid hydration mismatch
+  useEffect(() => {
+    setCircles(
+      Array.from({ length: 5 }, (_, i) => ({
+        id: i,
+        width: Math.random() * 300 + 100,
+        height: Math.random() * 300 + 100,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        x: Math.random() * 100 - 50,
+        y: Math.random() * 100 - 50,
+        duration: Math.random() * 20 + 10,
+      }))
+    );
+  }, []);
+
+  // Don't render circles until client-side mount
+  if (circles.length === 0) {
+    return <div className="absolute inset-0 pointer-events-none" />;
+  }
 
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -37,11 +57,11 @@ export function AnimatedBackground() {
           transition={{
             duration: circle.duration,
             repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
+            repeatType: 'reverse',
+            ease: 'easeInOut',
           }}
         />
       ))}
     </div>
-  )
+  );
 }
