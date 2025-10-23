@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,35 +8,39 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  name           String          @unique
-  email          String?         @unique
-  passwordHash   String?
-  rehabEnabled   Boolean         @default(false)
-  setupComplete  Boolean         @default(false)
-  workouts       Workout[]
-  stats          Stats?
-  rehabExercises RehabExercise[]
+  id               String            @id @default(cuid())
+  name             String            @unique
+  setupComplete    Boolean           @default(false)
+  email            String?           @unique
+  passwordHash     String?
+  rehabEnabled     Boolean           @default(false)
+  rehabExercises   RehabExercise[]
+  stats            Stats?
+  workouts         Workout[]
+  sentRequests     Friendship[]      @relation("SentRequests")
+  receivedRequests Friendship[]      @relation("ReceivedRequests")
+  privacySettings  PrivacySettings?
+  activities       FriendActivity[]
 }
 
 model Workout {
-  id         String     @id @default(cuid())
-  userId     String
-  date       DateTime
-  completed  Boolean    @default(false)
-  exercises  Exercise[]
-  user       User       @relation(fields: [userId], references: [id])
+  id        String     @id @default(cuid())
+  userId    String
+  date      DateTime
+  completed Boolean    @default(false)
+  exercises Exercise[]
+  user      User       @relation(fields: [userId], references: [id])
 
   @@index([userId, date])
 }
 
 model Exercise {
-  id         String   @id @default(cuid())
+  id         String  @id @default(cuid())
   workoutId  String
   name       String
   orderIndex Int
+  workout    Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
   sets       Set[]
-  workout    Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 
   @@index([workoutId])
 }
@@ -57,12 +58,12 @@ model Set {
 }
 
 model Stats {
-  id                String   @id @default(cuid())
-  userId            String   @unique
-  totalSetsCompleted Int     @default(0)
-  totalExercises    Int     @default(0)
-  lastWorkoutDate   DateTime?
-  user              User     @relation(fields: [userId], references: [id])
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+  totalSetsCompleted Int       @default(0)
+  totalExercises     Int       @default(0)
+  lastWorkoutDate    DateTime?
+  user               User      @relation(fields: [userId], references: [id])
 }
 
 model RehabExercise {
@@ -70,16 +71,16 @@ model RehabExercise {
   userId        String
   name          String
   description   String?
-  category      String?   // e.g., "Warm-up", "Mobility & Stretching", "Band / Dumbbell / Machine Strength"
-  setsLeft      Int?      // Number of sets for left side
-  setsRight     Int?      // Number of sets for right side
-  sets          Int?      // Number of sets (when not side-specific)
-  reps          Int?      // Number of repetitions
-  hold          Int?      // Hold time in seconds
-  load          String?   // Load/weight (e.g., "2 kg", "7.5 kg")
-  bandColor     String?   // Resistance band color
-  time          String?   // Time duration (e.g., "3-5 min")
-  cues          String?   // Exercise cues and instructions
+  category      String?
+  setsLeft      Int?
+  setsRight     Int?
+  sets          Int?
+  reps          Int?
+  hold          Int?
+  load          String?
+  bandColor     String?
+  time          String?
+  cues          String?
   completed     Boolean   @default(false)
   completedDate DateTime?
   orderIndex    Int
@@ -91,13 +92,61 @@ model RehabExercise {
 model ActivityLog {
   id        String   @id @default(cuid())
   timestamp DateTime @default(now())
-  category  String   // e.g., "PRICE_UPDATE", "PREDICTION", "API_CALL"
+  category  String
   operation String
   message   String
-  status    String   // "SUCCESS", "ERROR", "IN_PROGRESS"
+  status    String
   details   Json?
 
   @@index([timestamp])
   @@index([category])
   @@index([status])
+}
+
+model Friendship {
+  id          String           @id @default(cuid())
+  requesterId String
+  addresseeId String
+  status      FriendshipStatus @default(PENDING)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  requester User @relation("SentRequests", fields: [requesterId], references: [id], onDelete: Cascade)
+  addressee User @relation("ReceivedRequests", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, addresseeId])
+  @@index([requesterId])
+  @@index([addresseeId])
+  @@index([status])
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  BLOCKED
+}
+
+model PrivacySettings {
+  id                    String  @id @default(cuid())
+  userId                String  @unique
+  showWorkoutDetails    Boolean @default(true)
+  showExerciseNames     Boolean @default(true)
+  showPerformanceTrends Boolean @default(true)
+  showWorkoutSchedule   Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FriendActivity {
+  id           String   @id @default(cuid())
+  userId       String
+  activityType String
+  data         Json
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
 }

@@ -3,6 +3,9 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "setupComplete" BOOLEAN NOT NULL DEFAULT false,
+    "email" TEXT,
+    "passwordHash" TEXT,
+    "rehabEnabled" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -75,6 +78,9 @@ CREATE TABLE "RehabExercise" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE INDEX "Workout_userId_date_idx" ON "Workout"("userId", "date");

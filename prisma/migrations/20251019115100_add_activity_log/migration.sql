@@ -1,12 +1,14 @@
 -- CreateTable
 CREATE TABLE "ActivityLog" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "id" TEXT NOT NULL,
+    "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "category" TEXT NOT NULL,
     "operation" TEXT NOT NULL,
     "message" TEXT NOT NULL,
     "status" TEXT NOT NULL,
-    "details" TEXT
+    "details" JSONB,
+
+    CONSTRAINT "ActivityLog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
