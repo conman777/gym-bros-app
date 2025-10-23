@@ -6,7 +6,7 @@ import { FriendshipStatus } from '@prisma/client';
 // PATCH accept or decline friend request
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { friendshipId: string } }
+  { params }: { params: Promise<{ friendshipId: string }> }
 ) {
   try {
     const auth = await getUserFromCookies();
@@ -15,7 +15,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { friendshipId } = params;
+    const { friendshipId } = await params;
     const body = await request.json();
     const { action } = body; // "accept" or "decline"
 
@@ -116,7 +116,7 @@ export async function PATCH(
 // DELETE remove friend or cancel request
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { friendshipId: string } }
+  { params }: { params: Promise<{ friendshipId: string }> }
 ) {
   try {
     const auth = await getUserFromCookies();
@@ -125,7 +125,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { friendshipId } = params;
+    const { friendshipId } = await params;
 
     // Find the friendship
     const friendship = await prisma.friendship.findUnique({
