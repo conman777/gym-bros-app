@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import type { UserName } from "@/lib/types";
+import { prisma } from '@/lib/prisma';
+import type { UserName } from '@/lib/types';
 
 type ExercisePlan = {
   name: string;
@@ -15,138 +15,138 @@ type WorkoutPlan = {
 
 const CONOR_PROGRAM: Record<number, WorkoutPlan> = {
   1: {
-    name: "Upper Body",
+    name: 'Upper Body',
     exercises: [
-      { name: "Bench Press", sets: 3, reps: 10, weight: 43 },
-      { name: "Dumbbell Rows", sets: 3, reps: 10, weight: 14 },
-      { name: "Overhead Press", sets: 3, reps: 8, weight: 30 },
-      { name: "Bicep Curls", sets: 3, reps: 12, weight: 9 },
-      { name: "Tricep Extensions", sets: 3, reps: 12, weight: 7 },
+      { name: 'Bench Press', sets: 3, reps: 10, weight: 43 },
+      { name: 'Dumbbell Rows', sets: 3, reps: 10, weight: 14 },
+      { name: 'Overhead Press', sets: 3, reps: 8, weight: 30 },
+      { name: 'Bicep Curls', sets: 3, reps: 12, weight: 9 },
+      { name: 'Tricep Extensions', sets: 3, reps: 12, weight: 7 },
     ],
   },
   3: {
-    name: "Lower Body",
+    name: 'Lower Body',
     exercises: [
-      { name: "Squats", sets: 3, reps: 10, weight: 43 },
-      { name: "Walking Lunges", sets: 3, reps: 10, weight: 0 },
-      { name: "Leg Press", sets: 3, reps: 12, weight: 82 },
-      { name: "Calf Raises", sets: 3, reps: 15, weight: 45 },
-      { name: "Leg Curls", sets: 3, reps: 12, weight: 23 },
+      { name: 'Squats', sets: 3, reps: 10, weight: 43 },
+      { name: 'Walking Lunges', sets: 3, reps: 10, weight: 0 },
+      { name: 'Leg Press', sets: 3, reps: 12, weight: 82 },
+      { name: 'Calf Raises', sets: 3, reps: 15, weight: 45 },
+      { name: 'Leg Curls', sets: 3, reps: 12, weight: 23 },
     ],
   },
   5: {
-    name: "Full Body",
+    name: 'Full Body',
     exercises: [
-      { name: "Deadlifts", sets: 3, reps: 5, weight: 61 },
-      { name: "Pull-ups", sets: 3, reps: 5, weight: 0 },
-      { name: "Dumbbell Press", sets: 3, reps: 10, weight: 18 },
-      { name: "Plank", sets: 3, reps: 30, weight: 0 },
-      { name: "Face Pulls", sets: 3, reps: 15, weight: 9 },
+      { name: 'Deadlifts', sets: 3, reps: 5, weight: 61 },
+      { name: 'Pull-ups', sets: 3, reps: 5, weight: 0 },
+      { name: 'Dumbbell Press', sets: 3, reps: 10, weight: 18 },
+      { name: 'Plank', sets: 3, reps: 30, weight: 0 },
+      { name: 'Face Pulls', sets: 3, reps: 15, weight: 9 },
     ],
   },
 };
 
 const DEVLIN_REHAB_SESSION: WorkoutPlan = {
-  name: "Shoulder Rehab Session",
+  name: 'Shoulder Rehab Session',
   exercises: [
-    { name: "Warm-up | Rowing (3-5 min)", sets: 1, reps: 300, weight: 0 },
-    { name: "Sleeper Stretch (Left - hold 20s)", sets: 1, reps: 20, weight: 0 },
+    { name: 'Warm-up | Rowing (3-5 min)', sets: 1, reps: 300, weight: 0 },
+    { name: 'Sleeper Stretch (Left - hold 20s)', sets: 1, reps: 20, weight: 0 },
     {
-      name: "Sleeper Stretch (Right - hold 20s)",
+      name: 'Sleeper Stretch (Right - hold 20s)',
       sets: 2,
       reps: 20,
       weight: 0,
     },
     {
-      name: "Lat Dorsi Stretch on Bench (hold 20s)",
+      name: 'Lat Dorsi Stretch on Bench (hold 20s)',
       sets: 2,
       reps: 20,
       weight: 0,
     },
     {
-      name: "Pec Stretch Doorway (Left - hold 20s)",
+      name: 'Pec Stretch Doorway (Left - hold 20s)',
       sets: 1,
       reps: 20,
       weight: 0,
     },
     {
-      name: "Pec Stretch Doorway (Right - hold 20s)",
+      name: 'Pec Stretch Doorway (Right - hold 20s)',
       sets: 2,
       reps: 20,
       weight: 0,
     },
     {
-      name: "Shoulder Internal Rotation | Towel (Left - hold 20s)",
+      name: 'Shoulder Internal Rotation | Towel (Left - hold 20s)',
       sets: 1,
       reps: 20,
       weight: 0,
     },
     {
-      name: "Shoulder Internal Rotation | Towel (Right - hold 20s)",
+      name: 'Shoulder Internal Rotation | Towel (Right - hold 20s)',
       sets: 2,
       reps: 20,
       weight: 0,
     },
     {
-      name: "External Rotation | Band (Seated on Ball, hold 2s)",
+      name: 'External Rotation | Band (Seated on Ball, hold 2s)',
       sets: 1,
       reps: 10,
       weight: 0,
     },
     {
-      name: "External Rotation | Band (Left - hold 2s)",
+      name: 'External Rotation | Band (Left - hold 2s)',
       sets: 2,
       reps: 8,
       weight: 0,
     },
     {
-      name: "External Rotation | Band (Right - hold 2s)",
+      name: 'External Rotation | Band (Right - hold 2s)',
       sets: 1,
       reps: 8,
       weight: 0,
     },
     {
-      name: "Abduction in Scapular Plane (Left)",
+      name: 'Abduction in Scapular Plane (Left)',
       sets: 2,
       reps: 10,
       weight: 2,
     },
     {
-      name: "Abduction in Scapular Plane (Right)",
+      name: 'Abduction in Scapular Plane (Right)',
       sets: 1,
       reps: 10,
       weight: 2,
     },
     {
-      name: "External Rotation | Dumbbell (Left)",
+      name: 'External Rotation | Dumbbell (Left)',
       sets: 2,
       reps: 10,
       weight: 2,
     },
     {
-      name: "External Rotation | Dumbbell (Right)",
+      name: 'External Rotation | Dumbbell (Right)',
       sets: 1,
       reps: 10,
       weight: 2,
     },
     {
-      name: "Horizontal Extension Prone | Dumbbell (Left)",
+      name: 'Horizontal Extension Prone | Dumbbell (Left)',
       sets: 2,
       reps: 10,
       weight: 2,
     },
     {
-      name: "Horizontal Extension Prone | Dumbbell (Right)",
+      name: 'Horizontal Extension Prone | Dumbbell (Right)',
       sets: 1,
       reps: 10,
       weight: 2,
     },
-    { name: "Supported Bent-over Row (Left)", sets: 2, reps: 8, weight: 7.5 },
-    { name: "Supported Bent-over Row (Right)", sets: 1, reps: 8, weight: 7.5 },
-    { name: "Seated Low Row (Neutral Grip)", sets: 2, reps: 10, weight: 35 },
-    { name: "Dumbbell Hammer Curls", sets: 2, reps: 10, weight: 7.5 },
+    { name: 'Supported Bent-over Row (Left)', sets: 2, reps: 8, weight: 7.5 },
+    { name: 'Supported Bent-over Row (Right)', sets: 1, reps: 8, weight: 7.5 },
+    { name: 'Seated Low Row (Neutral Grip)', sets: 2, reps: 10, weight: 35 },
+    { name: 'Dumbbell Hammer Curls', sets: 2, reps: 10, weight: 7.5 },
     {
-      name: "Triceps Cable Pulldown (Standing)",
+      name: 'Triceps Cable Pulldown (Standing)',
       sets: 2,
       reps: 10,
       weight: 17.5,
@@ -175,9 +175,10 @@ export async function createDemoWorkouts(userId: string, userName: string) {
   today.setHours(0, 0, 0, 0);
 
   // Use Conor's program as default for any unknown username
-  const programKey = (userName === "Conor" || userName === "Devlin") ? userName as UserName : "Conor";
+  const programKey =
+    userName === 'Conor' || userName === 'Devlin' ? (userName as UserName) : 'Conor';
   const program = PROGRAMS[programKey];
-  const baseCompletionRate = userName === "Devlin" ? 0.95 : 0.85;
+  const baseCompletionRate = userName === 'Devlin' ? 0.95 : 0.85;
 
   const workoutsToCreate: Array<{
     date: Date;
@@ -230,23 +231,20 @@ export async function createDemoWorkouts(userId: string, userName: string) {
   const workoutDataWithStats = workoutsToCreate.map(
     ({ date, workout, completed, completionRate }) => {
       const exercises = workout.exercises.map((exercise, index) => {
-        const setsData = Array.from(
-          { length: exercise.sets },
-          (_, setIndex) => {
-            const isCompleted = completed && Math.random() < completionRate;
+        const setsData = Array.from({ length: exercise.sets }, (_, setIndex) => {
+          const isCompleted = completed && Math.random() < completionRate;
 
-            if (isCompleted) {
-              totalSetsCompleted++;
-            }
+          if (isCompleted) {
+            totalSetsCompleted++;
+          }
 
-            return {
-              reps: exercise.reps,
-              weight: exercise.weight,
-              orderIndex: setIndex,
-              completed: isCompleted,
-            };
-          },
-        );
+          return {
+            reps: exercise.reps,
+            weight: exercise.weight,
+            orderIndex: setIndex,
+            completed: isCompleted,
+          };
+        });
 
         if (setsData.length > 0 && setsData.every((set) => set.completed)) {
           totalExercisesCompleted++;
@@ -266,7 +264,7 @@ export async function createDemoWorkouts(userId: string, userName: string) {
         completed,
         exercises,
       };
-    },
+    }
   );
 
   // Create all workouts in parallel
@@ -281,8 +279,8 @@ export async function createDemoWorkouts(userId: string, userName: string) {
             create: workoutData.exercises,
           },
         },
-      }),
-    ),
+      })
+    )
   );
 
   const statsUpdate: {
@@ -293,9 +291,7 @@ export async function createDemoWorkouts(userId: string, userName: string) {
 
   if (totalSetsCompleted > 0) {
     statsUpdate.totalSetsCompleted = { increment: totalSetsCompleted };
-    statsUpdate.lastWorkoutDate = new Date(
-      today.getTime() - 2 * 24 * 60 * 60 * 1000,
-    );
+    statsUpdate.lastWorkoutDate = new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000);
   }
 
   if (totalExercisesCompleted > 0) {
@@ -315,124 +311,124 @@ export async function createDemoWorkouts(userId: string, userName: string) {
 const DEVLIN_REHAB_EXERCISES = [
   // Warm-up
   {
-    name: "Rowing",
-    category: "Warm-up",
-    time: "3-5 min",
-    cues: "Long spine, shoulders level, initiate with legs → back → arms; return arms → body → legs.",
+    name: 'Rowing',
+    category: 'Warm-up',
+    time: '3-5 min',
+    cues: 'Long spine, shoulders level, initiate with legs → back → arms; return arms → body → legs.',
   },
 
   // Mobility & Stretching
   {
-    name: "Sleeper Stretch",
-    category: "Mobility & Stretching",
+    name: 'Sleeper Stretch',
+    category: 'Mobility & Stretching',
     setsLeft: 1,
     setsRight: 2,
     hold: 20,
-    cues: "Side-lying, shoulder & elbow at 90°, gently lower palm toward floor without lifting shoulder blade.",
+    cues: 'Side-lying, shoulder & elbow at 90°, gently lower palm toward floor without lifting shoulder blade.',
   },
   {
-    name: "Lat Dorsi Stretch on Bench",
-    category: "Mobility & Stretching",
+    name: 'Lat Dorsi Stretch on Bench',
+    category: 'Mobility & Stretching',
     sets: 2,
     hold: 20,
-    cues: "Kneel, elbows on bench, lower chest maintaining neutral spine.",
+    cues: 'Kneel, elbows on bench, lower chest maintaining neutral spine.',
   },
   {
-    name: "Pec Stretch (Doorway/Frame)",
-    category: "Mobility & Stretching",
+    name: 'Pec Stretch (Doorway/Frame)',
+    category: 'Mobility & Stretching',
     setsLeft: 1,
     setsRight: 2,
     hold: 20,
-    cues: "Forearm vertical on frame, step forward to feel chest stretch.",
+    cues: 'Forearm vertical on frame, step forward to feel chest stretch.',
   },
   {
-    name: "Shoulder Internal Rotation (Towel Behind Back)",
-    category: "Mobility & Stretching",
+    name: 'Shoulder Internal Rotation (Towel Behind Back)',
+    category: 'Mobility & Stretching',
     setsLeft: 1,
     setsRight: 2,
     hold: 20,
-    cues: "One hand over shoulder, other behind back holding towel; gently pull to stretch lower hand shoulder.",
+    cues: 'One hand over shoulder, other behind back holding towel; gently pull to stretch lower hand shoulder.',
   },
 
   // Band / Dumbbell / Machine Strength
   {
-    name: "Shoulder External Rotation w/ Resistance Band",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Shoulder External Rotation w/ Resistance Band',
+    category: 'Band / Dumbbell / Machine Strength',
     sets: 1,
     reps: 10,
     hold: 2,
-    bandColor: "Green",
-    cues: "Seated on gym ball, elbows tucked at sides, rotate out then control back.",
+    bandColor: 'Green',
+    cues: 'Seated on gym ball, elbows tucked at sides, rotate out then control back.',
   },
   {
-    name: "External Shoulder Rotation w/ Resistance Band",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'External Shoulder Rotation w/ Resistance Band',
+    category: 'Band / Dumbbell / Machine Strength',
     setsLeft: 2,
     setsRight: 1,
     reps: 8,
     hold: 2,
-    bandColor: "Green",
-    cues: "Arm bent, elbow close to side, turn forearm outward, return across body with control.",
+    bandColor: 'Green',
+    cues: 'Arm bent, elbow close to side, turn forearm outward, return across body with control.',
   },
   {
-    name: "Abduction in Plane of Scapula",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Abduction in Plane of Scapula',
+    category: 'Band / Dumbbell / Machine Strength',
     setsLeft: 2,
     setsRight: 1,
     reps: 10,
-    load: "2 kg",
-    cues: "Thumb up, raise arm ~20-30° anterior to frontal plane to shoulder height; lower slowly.",
+    load: '2 kg',
+    cues: 'Thumb up, raise arm ~20-30° anterior to frontal plane to shoulder height; lower slowly.',
   },
   {
-    name: "Shoulder External Rotation w/ Dumbbell",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Shoulder External Rotation w/ Dumbbell',
+    category: 'Band / Dumbbell / Machine Strength',
     setsLeft: 2,
     setsRight: 1,
     reps: 10,
-    load: "2 kg",
-    cues: "Side-lying, elbow tucked, rotate to raise hand, lower with control.",
+    load: '2 kg',
+    cues: 'Side-lying, elbow tucked, rotate to raise hand, lower with control.',
   },
   {
-    name: "Horizontal Extension (Prone) w/ Dumbbell",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Horizontal Extension (Prone) w/ Dumbbell',
+    category: 'Band / Dumbbell / Machine Strength',
     setsLeft: 2,
     setsRight: 1,
     reps: 10,
-    load: "2 kg",
-    cues: "Prone, arm hangs off bed, raise out to side, lower down.",
+    load: '2 kg',
+    cues: 'Prone, arm hangs off bed, raise out to side, lower down.',
   },
   {
-    name: "Supported Bent-Over Row",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Supported Bent-Over Row',
+    category: 'Band / Dumbbell / Machine Strength',
     setsLeft: 2,
     setsRight: 1,
     reps: 8,
-    load: "7.5 kg",
-    cues: "One hand braced on bench, row dumbbell to side, squeeze shoulder blade, lower slowly.",
+    load: '7.5 kg',
+    cues: 'One hand braced on bench, row dumbbell to side, squeeze shoulder blade, lower slowly.',
   },
   {
-    name: "Seated Low Row (Neutral Grip)",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Seated Low Row (Neutral Grip)',
+    category: 'Band / Dumbbell / Machine Strength',
     sets: 2,
     reps: 10,
-    load: "35 kg",
-    cues: "Shoulders down/back, pull handles to sides, control return.",
+    load: '35 kg',
+    cues: 'Shoulders down/back, pull handles to sides, control return.',
   },
   {
-    name: "Dumbbell Hammer Curls",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Dumbbell Hammer Curls',
+    category: 'Band / Dumbbell / Machine Strength',
     sets: 2,
     reps: 10,
-    load: "7.5 kg",
-    cues: "Palms facing in, elbows close to body, curl then lower.",
+    load: '7.5 kg',
+    cues: 'Palms facing in, elbows close to body, curl then lower.',
   },
   {
-    name: "Triceps Cable Pulldown (Standing)",
-    category: "Band / Dumbbell / Machine Strength",
+    name: 'Triceps Cable Pulldown (Standing)',
+    category: 'Band / Dumbbell / Machine Strength',
     sets: 2,
     reps: 10,
-    load: "17.5 kg",
-    cues: "Tall posture, start elbows ~90°, extend fully to sides, return to ~90°.",
+    load: '17.5 kg',
+    cues: 'Tall posture, start elbows ~90°, extend fully to sides, return to ~90°.',
   },
 ];
 

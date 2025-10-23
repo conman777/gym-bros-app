@@ -1,85 +1,94 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { ChevronLeft, Trophy, Flame, TrendingUp, Target, Award, Activity, Calendar as CalendarIcon } from 'lucide-react'
-import { AnimatedBackground } from '@/components/AnimatedBackground'
-import { PageNav } from '@/components/PageNav'
+import { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import {
+  ChevronLeft,
+  Trophy,
+  Flame,
+  TrendingUp,
+  Target,
+  Award,
+  Activity,
+  Calendar as CalendarIcon,
+} from 'lucide-react';
+import { AnimatedBackground } from '@/components/AnimatedBackground';
+import { PageNav } from '@/components/PageNav';
 
 interface StatsData {
   user: {
-    name: string
+    name: string;
     stats: {
-      totalSetsCompleted: number
-      totalExercises: number
-      lastWorkoutDate?: string
-    } | null
-    workouts: Array<{ date: string; completed: boolean }>
-  }
-  monthlySets: number
-  topExercise: [string, number] | null
-  currentStreak: number
+      totalSetsCompleted: number;
+      totalExercises: number;
+      lastWorkoutDate?: string;
+    } | null;
+    workouts: Array<{ date: string; completed: boolean }>;
+  };
+  monthlySets: number;
+  topExercise: [string, number] | null;
+  currentStreak: number;
 }
 
 export default function StatsPage() {
-  const router = useRouter()
-  const [stats, setStats] = useState<StatsData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const router = useRouter();
+  const [stats, setStats] = useState<StatsData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchStats()
-  }, [])
+    fetchStats();
+  }, []);
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/stats')
+      const response = await fetch('/api/stats');
       if (!response.ok) {
         if (response.status === 401 || response.status === 404) {
-          router.push('/')
-          return
+          router.push('/');
+          return;
         }
-        throw new Error('Failed to fetch stats')
+        throw new Error('Failed to fetch stats');
       }
 
-      const data = await response.json()
-      setStats(data)
+      const data = await response.json();
+      setStats(data);
     } catch (error) {
-      console.error('Stats error:', error)
+      console.error('Stats error:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Memoize expensive calculations (must be before early returns - Rules of Hooks)
-  const totalSets = useMemo(() => stats?.user.stats?.totalSetsCompleted || 0, [stats?.user.stats])
-  const totalExercises = useMemo(() => stats?.user.stats?.totalExercises || 0, [stats?.user.stats])
-  const activeDays = useMemo(() => stats?.user.workouts.length || 0, [stats?.user.workouts])
-  const weekStreak = useMemo(() => (totalSets ? Math.floor(totalSets / 7) : 0), [totalSets])
+  const totalSets = useMemo(() => stats?.user.stats?.totalSetsCompleted || 0, [stats?.user.stats]);
+  const totalExercises = useMemo(() => stats?.user.stats?.totalExercises || 0, [stats?.user.stats]);
+  const activeDays = useMemo(() => stats?.user.workouts.length || 0, [stats?.user.workouts]);
+  const weekStreak = useMemo(() => (totalSets ? Math.floor(totalSets / 7) : 0), [totalSets]);
 
-  const monthlyGoal = 100 // Example goal
+  const monthlyGoal = 100; // Example goal
   const monthlyProgress = useMemo(
     () => Math.min(((stats?.monthlySets || 0) / monthlyGoal) * 100, 100),
     [stats?.monthlySets, monthlyGoal]
-  )
+  );
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         >
           <Activity className="w-8 h-8 text-white" />
         </motion.div>
       </div>
-    )
+    );
   }
 
-  if (!stats) return null
+  if (!stats) return null;
 
-  const { user, monthlySets, topExercise, currentStreak } = stats
+  const { user, monthlySets, topExercise, currentStreak } = stats;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
@@ -95,7 +104,9 @@ export default function StatsPage() {
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
-            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Progress & Stats</h1>
+            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">
+              Progress & Stats
+            </h1>
           </div>
 
           <PageNav />
@@ -116,25 +127,25 @@ export default function StatsPage() {
             </div>
             <Trophy className="w-12 h-12 text-white/40" />
           </div>
-          
+
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <motion.div 
+              <motion.div
                 className="text-4xl font-bold mb-1"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.2 }}
+                transition={{ type: 'spring', delay: 0.2 }}
               >
                 {totalSets}
               </motion.div>
               <p className="text-white/80">Total Sets</p>
             </div>
             <div>
-              <motion.div 
+              <motion.div
                 className="text-4xl font-bold mb-1"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.3 }}
+                transition={{ type: 'spring', delay: 0.3 }}
               >
                 {activeDays}
               </motion.div>
@@ -159,14 +170,16 @@ export default function StatsPage() {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-white/70">Sets completed</span>
-                <span className="font-semibold text-white">{monthlySets}/{monthlyGoal}</span>
+                <span className="font-semibold text-white">
+                  {monthlySets}/{monthlyGoal}
+                </span>
               </div>
               <div className="bg-white/20 rounded-full h-3 overflow-hidden">
                 <motion.div
                   className="bg-gradient-to-r from-white to-white/80 h-full rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${monthlyProgress}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
+                  transition={{ duration: 1, ease: 'easeOut' }}
                 />
               </div>
             </div>
@@ -197,7 +210,7 @@ export default function StatsPage() {
                 className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.3 }}
+                transition={{ type: 'spring', delay: 0.3 }}
               >
                 {currentStreak}
               </motion.span>
@@ -218,7 +231,7 @@ export default function StatsPage() {
                 className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.4 }}
+                transition={{ type: 'spring', delay: 0.4 }}
               >
                 {weekStreak}
               </motion.span>
@@ -239,7 +252,7 @@ export default function StatsPage() {
                 className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.5 }}
+                transition={{ type: 'spring', delay: 0.5 }}
               >
                 {totalExercises}
               </motion.span>
@@ -259,7 +272,7 @@ export default function StatsPage() {
                 className="text-3xl font-bold text-white"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.6 }}
+                transition={{ type: 'spring', delay: 0.6 }}
               >
                 {Math.round(totalSets / Math.max(activeDays, 1))}
               </motion.span>
@@ -282,12 +295,12 @@ export default function StatsPage() {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
-                day: 'numeric'
+                day: 'numeric',
               })}
             </p>
           </motion.div>
         )}
       </main>
     </div>
-  )
+  );
 }

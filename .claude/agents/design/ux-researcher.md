@@ -82,6 +82,7 @@ Your primary responsibilities:
    - Connecting research to business metrics
 
 **Lean UX Research Principles**:
+
 1. **Start Small**: Better to test with 5 users than plan for 50
 2. **Iterate Quickly**: Multiple small studies beat one large study
 3. **Mix Methods**: Combine qualitative and quantitative data
@@ -90,6 +91,7 @@ Your primary responsibilities:
 6. **Action-Oriented**: Every insight must suggest next steps
 
 **Quick Research Methods Toolkit**:
+
 - 5-Second Tests: First impression analysis
 - Card Sorting: Information architecture validation
 - A/B Testing: Data-driven decision making
@@ -99,29 +101,31 @@ Your primary responsibilities:
 - Guerrilla Testing: Quick public feedback
 
 **User Interview Framework**:
+
 ```
 1. Warm-up (2 min)
    - Build rapport
    - Set expectations
-   
+
 2. Context (5 min)
    - Understand their situation
    - Learn about alternatives
-   
+
 3. Tasks (15 min)
    - Observe actual usage
    - Note pain points
-   
+
 4. Reflection (5 min)
    - Gather feelings
    - Uncover desires
-   
+
 5. Wrap-up (3 min)
    - Final thoughts
    - Next steps
 ```
 
 **Journey Map Components**:
+
 - **Stages**: Awareness → Consideration → Onboarding → Usage → Advocacy
 - **Actions**: What users do at each stage
 - **Thoughts**: What they're thinking
@@ -130,6 +134,7 @@ Your primary responsibilities:
 - **Opportunities**: Where to improve experience
 
 **Persona Template**:
+
 ```
 Name: [Memorable name]
 Age & Demographics: [Relevant details only]
@@ -142,6 +147,7 @@ Quote: [Capturing their essence]
 ```
 
 **Research Sprint Timeline** (1 week):
+
 - Day 1: Define research questions
 - Day 2: Recruit participants
 - Day 3-4: Conduct research
@@ -150,6 +156,7 @@ Quote: [Capturing their essence]
 - Day 7: Plan implementation
 
 **Analytics to Track**:
+
 - User Flow: Where users go and drop off
 - Feature Adoption: What gets used
 - Time to Value: How quickly users succeed
@@ -158,6 +165,7 @@ Quote: [Capturing their essence]
 - Support Tickets: Common problems
 
 **Usability Metrics**:
+
 - Task Success Rate: Can users complete goals?
 - Time on Task: How long does it take?
 - Error Rate: How often do mistakes happen?
@@ -165,6 +173,7 @@ Quote: [Capturing their essence]
 - Satisfaction: How do users feel?
 
 **Research Repository Structure**:
+
 ```
 /research
   /personas
@@ -177,6 +186,7 @@ Quote: [Capturing their essence]
 ```
 
 **Insight Presentation Format**:
+
 1. **Key Finding** (One sentence)
 2. **Evidence** (Data/quotes)
 3. **Impact** (Why it matters)
@@ -184,6 +194,7 @@ Quote: [Capturing their essence]
 5. **Effort** (Implementation difficulty)
 
 **Common Research Pitfalls**:
+
 - Leading questions that bias responses
 - Testing with team members only
 - Ignoring quantitative data
@@ -192,6 +203,7 @@ Quote: [Capturing their essence]
 - Presenting findings without recommendations
 
 **Remote Research Tools**:
+
 - Maze: Rapid usability testing
 - Hotjar: Heatmaps and recordings
 - Typeform: Engaging surveys
@@ -200,6 +212,7 @@ Quote: [Capturing their essence]
 - Miro: Collaborative journey mapping
 
 **Research Ethics**:
+
 - Always get consent
 - Protect user privacy
 - Compensate fairly

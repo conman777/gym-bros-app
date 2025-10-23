@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { createRehabExercises } from "@/lib/demo-data";
-import { requireDevlinUser } from "@/lib/auth-helpers";
-import { groupExercisesByCategory } from "@/lib/rehab-helpers";
-import type { RehabExercise } from "@/lib/types";
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { createRehabExercises } from '@/lib/demo-data';
+import { requireDevlinUser } from '@/lib/auth-helpers';
+import { groupExercisesByCategory } from '@/lib/rehab-helpers';
+import type { RehabExercise } from '@/lib/types';
 
 /**
  * API endpoint to fix missing rehab exercises for Devlin
@@ -18,7 +18,7 @@ export async function POST() {
       return auth.response;
     }
 
-    console.log("[FIX-REHAB] Checking for existing exercises...");
+    console.log('[FIX-REHAB] Checking for existing exercises...');
 
     const devlinUser = await prisma.user.findUnique({
       where: { id: auth.userId },
@@ -30,8 +30,8 @@ export async function POST() {
     if (!devlinUser) {
       return NextResponse.json(
         {
-          status: "ERROR",
-          message: "User data not found",
+          status: 'ERROR',
+          message: 'User data not found',
         },
         { status: 404 }
       );
@@ -43,7 +43,7 @@ export async function POST() {
 
     // Delete existing rehab exercises if any
     if (devlinUser.rehabExercises.length > 0) {
-      console.log("[FIX-REHAB] Deleting existing rehab exercises...");
+      console.log('[FIX-REHAB] Deleting existing rehab exercises...');
       const deleteResult = await prisma.rehabExercise.deleteMany({
         where: { userId: devlinUser.id },
       });
@@ -54,13 +54,11 @@ export async function POST() {
         );
       }
 
-      console.log(
-        `[FIX-REHAB] Deleted ${deleteResult.count} existing exercises`
-      );
+      console.log(`[FIX-REHAB] Deleted ${deleteResult.count} existing exercises`);
     }
 
     // Create new rehab exercises
-    console.log("[FIX-REHAB] Creating fresh set of rehab exercises...");
+    console.log('[FIX-REHAB] Creating fresh set of rehab exercises...');
     await createRehabExercises(devlinUser.id);
 
     // Verify creation
@@ -68,17 +66,17 @@ export async function POST() {
       where: { id: devlinUser.id },
       include: {
         rehabExercises: {
-          orderBy: { orderIndex: "asc" },
+          orderBy: { orderIndex: 'asc' },
         },
       },
     });
 
     if (!updatedUser || updatedUser.rehabExercises.length === 0) {
-      console.error("[FIX-REHAB] Failed to create rehab exercises");
+      console.error('[FIX-REHAB] Failed to create rehab exercises');
       return NextResponse.json(
         {
-          status: "ERROR",
-          message: "Failed to create rehab exercises",
+          status: 'ERROR',
+          message: 'Failed to create rehab exercises',
         },
         { status: 500 }
       );
@@ -89,12 +87,10 @@ export async function POST() {
     );
 
     // Group by category using helper
-    const categories = groupExercisesByCategory(
-      updatedUser.rehabExercises as RehabExercise[]
-    );
+    const categories = groupExercisesByCategory(updatedUser.rehabExercises as RehabExercise[]);
 
     return NextResponse.json({
-      status: "SUCCESS",
+      status: 'SUCCESS',
       message: `Successfully created ${updatedUser.rehabExercises.length} rehab exercises for Devlin`,
       data: {
         userId: devlinUser.id,
@@ -103,10 +99,10 @@ export async function POST() {
       },
     });
   } catch (error) {
-    console.error("[FIX-REHAB] Error:", error);
+    console.error('[FIX-REHAB] Error:', error);
     return NextResponse.json(
       {
-        status: "ERROR",
+        status: 'ERROR',
         error: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }

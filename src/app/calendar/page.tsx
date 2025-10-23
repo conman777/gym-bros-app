@@ -1,122 +1,134 @@
-'use client'
+'use client';
 
-import { useState, useEffect, Suspense, useMemo } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell } from 'lucide-react'
-import { formatDateForUrl } from '@/lib/date-utils'
-import { AnimatedBackground } from '@/components/AnimatedBackground'
-import { PageNav } from '@/components/PageNav'
+import { useState, useEffect, Suspense, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell } from 'lucide-react';
+import { formatDateForUrl } from '@/lib/date-utils';
+import { AnimatedBackground } from '@/components/AnimatedBackground';
+import { PageNav } from '@/components/PageNav';
 
 interface WorkoutDay {
-  id: string
-  date: Date
-  completed: boolean
+  id: string;
+  date: Date;
+  completed: boolean;
   exercises: Array<{
-    id: string
-    name: string
-    sets: Array<{ id: string }>
-  }>
+    id: string;
+    name: string;
+    sets: Array<{ id: string }>;
+  }>;
 }
 
 function CalendarContent() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [workouts, setWorkouts] = useState<WorkoutDay[]>([])
-  const [loading, setLoading] = useState(true)
-  
-  const now = new Date()
-  const monthParam = searchParams?.get('month')
-  const yearParam = searchParams?.get('year')
-  const [month, setMonth] = useState(monthParam ? parseInt(monthParam) : now.getMonth())
-  const [year, setYear] = useState(yearParam ? parseInt(yearParam) : now.getFullYear())
-  
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [workouts, setWorkouts] = useState<WorkoutDay[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const now = new Date();
+  const monthParam = searchParams?.get('month');
+  const yearParam = searchParams?.get('year');
+  const [month, setMonth] = useState(monthParam ? parseInt(monthParam) : now.getMonth());
+  const [year, setYear] = useState(yearParam ? parseInt(yearParam) : now.getFullYear());
+
   useEffect(() => {
-    fetchWorkouts()
-  }, [month, year])
+    fetchWorkouts();
+  }, [month, year]);
 
   const fetchWorkouts = async () => {
     try {
-      const response = await fetch(`/api/calendar?month=${month}&year=${year}`)
+      const response = await fetch(`/api/calendar?month=${month}&year=${year}`);
       if (!response.ok) {
         if (response.status === 401 || response.status === 404) {
-          router.push('/')
-          return
+          router.push('/');
+          return;
         }
-        throw new Error('Failed to fetch workouts')
+        throw new Error('Failed to fetch workouts');
       }
 
-      const data = await response.json()
-      setWorkouts(data.workouts.map((w: any) => ({
-        ...w,
-        date: new Date(w.date)
-      })))
+      const data = await response.json();
+      setWorkouts(
+        data.workouts.map((w: any) => ({
+          ...w,
+          date: new Date(w.date),
+        }))
+      );
     } catch (error) {
-      console.error('Calendar error:', error)
+      console.error('Calendar error:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Memoize workout map to avoid recreating on every render
   const workoutMap = useMemo(() => {
-    const map = new Map<string, WorkoutDay>()
-    workouts.forEach(workout => {
-      const dateKey = `${year}-${month}-${workout.date.getDate()}`
-      map.set(dateKey, workout)
-    })
-    return map
-  }, [workouts, year, month])
-  
+    const map = new Map<string, WorkoutDay>();
+    workouts.forEach((workout) => {
+      const dateKey = `${year}-${month}-${workout.date.getDate()}`;
+      map.set(dateKey, workout);
+    });
+    return map;
+  }, [workouts, year, month]);
+
   // Get first day of month and number of days
-  const firstDay = new Date(year, month, 1).getDay()
-  const daysInMonth = new Date(year, month + 1, 0).getDate()
-  
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-    'July', 'August', 'September', 'October', 'November', 'December']
-  
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
   // Navigation functions
   const navigateMonth = (direction: 'prev' | 'next') => {
     if (direction === 'prev') {
       if (month === 0) {
-        setMonth(11)
-        setYear(year - 1)
+        setMonth(11);
+        setYear(year - 1);
       } else {
-        setMonth(month - 1)
+        setMonth(month - 1);
       }
     } else {
       if (month === 11) {
-        setMonth(0)
-        setYear(year + 1)
+        setMonth(0);
+        setYear(year + 1);
       } else {
-        setMonth(month + 1)
+        setMonth(month + 1);
       }
     }
-    
-    const newMonth = direction === 'prev' 
-      ? (month === 0 ? 11 : month - 1)
-      : (month === 11 ? 0 : month + 1)
-    const newYear = direction === 'prev'
-      ? (month === 0 ? year - 1 : year)
-      : (month === 11 ? year + 1 : year)
-    
-    router.push(`/calendar?month=${newMonth}&year=${newYear}`)
-  }
+
+    const newMonth =
+      direction === 'prev' ? (month === 0 ? 11 : month - 1) : month === 11 ? 0 : month + 1;
+    const newYear =
+      direction === 'prev' ? (month === 0 ? year - 1 : year) : month === 11 ? year + 1 : year;
+
+    router.push(`/calendar?month=${newMonth}&year=${newYear}`);
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         >
           <CalendarIcon className="w-8 h-8 text-white" />
         </motion.div>
       </div>
-    )
+    );
   }
 
   return (
@@ -139,7 +151,9 @@ function CalendarContent() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
             >
-              <h1 className="text-xl font-bold text-white">{monthNames[month]} {year}</h1>
+              <h1 className="text-xl font-bold text-white">
+                {monthNames[month]} {year}
+              </h1>
             </motion.div>
             <div className="w-10"></div>
           </div>
@@ -164,10 +178,10 @@ function CalendarContent() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
-              const today = new Date()
-              setMonth(today.getMonth())
-              setYear(today.getFullYear())
-              router.push('/calendar')
+              const today = new Date();
+              setMonth(today.getMonth());
+              setYear(today.getFullYear());
+              router.push('/calendar');
             }}
             className="px-6 py-2 bg-white text-[var(--primary)] rounded-xl font-medium hover:bg-white/90 transition-colors shadow-lg"
           >
@@ -192,32 +206,33 @@ function CalendarContent() {
         >
           {/* Day Headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {dayNames.map(day => (
+            {dayNames.map((day) => (
               <div key={day} className="text-center py-2">
-                <span className="text-sm font-semibold text-white/70">
-                  {day}
-                </span>
+                <span className="text-sm font-semibold text-white/70">{day}</span>
               </div>
             ))}
           </div>
-          
+
           {/* Calendar Days */}
           <div className="grid grid-cols-7 gap-1">
             {/* Empty cells for first week */}
             {Array.from({ length: firstDay }).map((_, i) => (
               <div key={`empty-${i}`} className="aspect-square"></div>
             ))}
-            
+
             {/* Days of month */}
             <AnimatePresence mode="popLayout">
-              {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
-                const dateKey = `${year}-${month}-${day}`
-                const workout = workoutMap.get(dateKey)
-                const isToday = year === now.getFullYear() && month === now.getMonth() && day === now.getDate()
-                const isCompleted = workout?.completed
-                const hasSets = workout?.exercises.some(e => e.sets.length > 0)
-                const isPast = new Date(year, month, day) < new Date(now.getFullYear(), now.getMonth(), now.getDate())
-                
+              {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
+                const dateKey = `${year}-${month}-${day}`;
+                const workout = workoutMap.get(dateKey);
+                const isToday =
+                  year === now.getFullYear() && month === now.getMonth() && day === now.getDate();
+                const isCompleted = workout?.completed;
+                const hasSets = workout?.exercises.some((e) => e.sets.length > 0);
+                const isPast =
+                  new Date(year, month, day) <
+                  new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
                 return (
                   <motion.div
                     key={`${year}-${month}-${day}`}
@@ -226,17 +241,12 @@ function CalendarContent() {
                     transition={{ delay: day * 0.01 }}
                   >
                     {workout && hasSets ? (
-                      <Link
-                        href={`/workout/${formatDateForUrl(workout.date)}`}
-                        className="block"
-                      >
+                      <Link href={`/workout/${formatDateForUrl(workout.date)}`} className="block">
                         <motion.div
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           className={`aspect-square rounded-xl p-2 flex flex-col items-center justify-center transition-all cursor-pointer relative ${
-                            isToday
-                              ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent'
-                              : ''
+                            isToday ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent' : ''
                           } ${
                             isCompleted
                               ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-md'
@@ -260,22 +270,20 @@ function CalendarContent() {
                         </motion.div>
                       </Link>
                     ) : (
-                      <div className={`aspect-square rounded-xl p-2 flex items-center justify-center transition-colors ${
-                        isToday
-                          ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent bg-white/10'
-                          : isPast
-                            ? 'bg-transparent text-white/30'
-                            : 'bg-transparent hover:bg-white/10 text-white/70'
-                      }`}>
-                        <span className={`font-semibold text-lg ${
-                          isPast ? '' : ''
-                        }`}>
-                          {day}
-                        </span>
+                      <div
+                        className={`aspect-square rounded-xl p-2 flex items-center justify-center transition-colors ${
+                          isToday
+                            ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent bg-white/10'
+                            : isPast
+                              ? 'bg-transparent text-white/30'
+                              : 'bg-transparent hover:bg-white/10 text-white/70'
+                        }`}
+                      >
+                        <span className={`font-semibold text-lg ${isPast ? '' : ''}`}>{day}</span>
                       </div>
                     )}
                   </motion.div>
-                )
+                );
               })}
             </AnimatePresence>
           </div>
@@ -304,13 +312,13 @@ function CalendarContent() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-3xl font-bold text-white">
-                {workouts.filter(w => w.completed).length}
+                {workouts.filter((w) => w.completed).length}
               </p>
               <p className="text-sm text-white/70">Workouts completed</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-white">
-                {workouts.filter(w => w.exercises.some(e => e.sets.length > 0)).length}
+                {workouts.filter((w) => w.exercises.some((e) => e.sets.length > 0)).length}
               </p>
               <p className="text-sm text-white/70">Total scheduled</p>
             </div>
@@ -318,22 +326,24 @@ function CalendarContent() {
         </motion.div>
       </main>
     </div>
-  )
+  );
 }
 
 export default function CalendarPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        >
-          <CalendarIcon className="w-8 h-8 text-white" />
-        </motion.div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          >
+            <CalendarIcon className="w-8 h-8 text-white" />
+          </motion.div>
+        </div>
+      }
+    >
       <CalendarContent />
     </Suspense>
-  )
+  );
 }

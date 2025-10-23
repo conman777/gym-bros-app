@@ -1,6 +1,6 @@
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 interface AuthResult {
   userId: string;
@@ -17,7 +17,7 @@ interface AuthResult {
 export async function getUserFromCookies(): Promise<AuthResult | null> {
   try {
     const cookieStore = await cookies();
-    const userId = cookieStore.get("userId")?.value;
+    const userId = cookieStore.get('userId')?.value;
 
     if (!userId) {
       return null;
@@ -34,7 +34,7 @@ export async function getUserFromCookies(): Promise<AuthResult | null> {
 
     return { userId, user };
   } catch (error) {
-    console.error("Error getting user from cookies:", error);
+    console.error('Error getting user from cookies:', error);
     return null;
   }
 }
@@ -53,10 +53,7 @@ export async function requireRehabUser(): Promise<
   if (!auth) {
     return {
       authorized: false,
-      response: NextResponse.json(
-        { error: "Unauthorized. Please log in." },
-        { status: 401 }
-      ),
+      response: NextResponse.json({ error: 'Unauthorized. Please log in.' }, { status: 401 }),
     };
   }
 
@@ -70,7 +67,10 @@ export async function requireRehabUser(): Promise<
     return {
       authorized: false,
       response: NextResponse.json(
-        { error: "Forbidden. This endpoint is only accessible to users with rehab features enabled." },
+        {
+          error:
+            'Forbidden. This endpoint is only accessible to users with rehab features enabled.',
+        },
         { status: 403 }
       ),
     };

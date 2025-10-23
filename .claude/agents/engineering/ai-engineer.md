@@ -58,6 +58,7 @@ Your primary responsibilities:
    - Building anomaly detection systems
 
 **AI/ML Stack Expertise**:
+
 - LLMs: OpenAI, Anthropic, Llama, Mistral
 - Frameworks: PyTorch, TensorFlow, Transformers
 - ML Ops: MLflow, Weights & Biases, DVC
@@ -66,6 +67,7 @@ Your primary responsibilities:
 - Deployment: TorchServe, TensorFlow Serving, ONNX
 
 **Integration Patterns**:
+
 - RAG (Retrieval Augmented Generation)
 - Semantic search with embeddings
 - Multi-modal AI applications
@@ -74,6 +76,7 @@ Your primary responsibilities:
 - Online learning systems
 
 **Cost Optimization Strategies**:
+
 - Model quantization for efficiency
 - Caching frequent predictions
 - Batch processing when possible
@@ -82,6 +85,7 @@ Your primary responsibilities:
 - Monitoring and optimizing API costs
 
 **Ethical AI Considerations**:
+
 - Bias detection and mitigation
 - Explainable AI implementations
 - Privacy-preserving techniques
@@ -90,6 +94,7 @@ Your primary responsibilities:
 - User consent and control
 
 **Performance Metrics**:
+
 - Inference latency < 200ms
 - Model accuracy targets by use case
 - API success rate > 99.9%

@@ -1,107 +1,107 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Plus, Trash2, Save, Edit3, GripVertical } from 'lucide-react'
-import type { RehabExercise } from '@/lib/types'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, Plus, Trash2, Save, Edit3, GripVertical } from 'lucide-react';
+import type { RehabExercise } from '@/lib/types';
 
 export default function ManageRehabPage() {
-  const router = useRouter()
-  const [exercises, setExercises] = useState<RehabExercise[]>([])
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [newExercise, setNewExercise] = useState({ name: '', description: '' })
-  const [showAddForm, setShowAddForm] = useState(false)
+  const router = useRouter();
+  const [exercises, setExercises] = useState<RehabExercise[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [newExercise, setNewExercise] = useState({ name: '', description: '' });
+  const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
-    fetchExercises()
-  }, [])
+    fetchExercises();
+  }, []);
 
   const fetchExercises = async () => {
     try {
-      const response = await fetch('/api/rehab')
+      const response = await fetch('/api/rehab');
       if (response.ok) {
-        const data = await response.json()
-        setExercises(data)
+        const data = await response.json();
+        setExercises(data);
       }
     } catch (error) {
-      console.error('Failed to fetch exercises:', error)
+      console.error('Failed to fetch exercises:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleAddExercise = async () => {
-    if (!newExercise.name.trim()) return
+    if (!newExercise.name.trim()) return;
 
-    setSaving(true)
+    setSaving(true);
     try {
       const response = await fetch('/api/rehab', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newExercise),
-      })
+      });
 
       if (response.ok) {
-        await fetchExercises()
-        setNewExercise({ name: '', description: '' })
-        setShowAddForm(false)
+        await fetchExercises();
+        setNewExercise({ name: '', description: '' });
+        setShowAddForm(false);
       }
     } catch (error) {
-      console.error('Failed to add exercise:', error)
+      console.error('Failed to add exercise:', error);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const handleUpdateExercise = async (id: string, updates: Partial<RehabExercise>) => {
-    setSaving(true)
+    setSaving(true);
     try {
       const response = await fetch(`/api/rehab/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
-      })
+      });
 
       if (response.ok) {
-        await fetchExercises()
-        setEditingId(null)
+        await fetchExercises();
+        setEditingId(null);
       }
     } catch (error) {
-      console.error('Failed to update exercise:', error)
+      console.error('Failed to update exercise:', error);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const handleDeleteExercise = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this exercise?')) return
+    if (!confirm('Are you sure you want to delete this exercise?')) return;
 
-    setSaving(true)
+    setSaving(true);
     try {
       const response = await fetch(`/api/rehab/${id}`, {
         method: 'DELETE',
-      })
+      });
 
       if (response.ok) {
-        await fetchExercises()
+        await fetchExercises();
       }
     } catch (error) {
-      console.error('Failed to delete exercise:', error)
+      console.error('Failed to delete exercise:', error);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
         <div className="animate-pulse text-[var(--foreground-muted)]">Loading...</div>
       </div>
-    )
+    );
   }
 
   return (
@@ -170,8 +170,8 @@ export default function ManageRehabPage() {
                   </button>
                   <button
                     onClick={() => {
-                      setShowAddForm(false)
-                      setNewExercise({ name: '', description: '' })
+                      setShowAddForm(false);
+                      setNewExercise({ name: '', description: '' });
                     }}
                     className="px-6 py-3 bg-[var(--border)] rounded-lg font-semibold hover:bg-[var(--surface-hover)] transition-colors"
                   >
@@ -187,7 +187,9 @@ export default function ManageRehabPage() {
         {exercises.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-[var(--foreground-muted)] mb-4">No exercises yet</p>
-            <p className="text-sm text-[var(--foreground-muted)]">Add your first rehab exercise above</p>
+            <p className="text-sm text-[var(--foreground-muted)]">
+              Add your first rehab exercise above
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -209,7 +211,9 @@ export default function ManageRehabPage() {
                     />
                     <textarea
                       defaultValue={exercise.description || ''}
-                      onBlur={(e) => handleUpdateExercise(exercise.id, { description: e.target.value })}
+                      onBlur={(e) =>
+                        handleUpdateExercise(exercise.id, { description: e.target.value })
+                      }
                       className="w-full px-3 py-2 bg-[var(--background)] border-2 border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
                       rows={2}
                     />
@@ -225,7 +229,9 @@ export default function ManageRehabPage() {
                     <div className="flex-1">
                       <h3 className="font-semibold mb-1">{exercise.name}</h3>
                       {exercise.description && (
-                        <p className="text-sm text-[var(--foreground-muted)]">{exercise.description}</p>
+                        <p className="text-sm text-[var(--foreground-muted)]">
+                          {exercise.description}
+                        </p>
                       )}
                     </div>
                     <div className="flex gap-2">
@@ -252,5 +258,5 @@ export default function ManageRehabPage() {
         )}
       </main>
     </div>
-  )
+  );
 }

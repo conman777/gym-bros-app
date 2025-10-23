@@ -1,21 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
-import { createDemoWorkouts } from "@/lib/demo-data";
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
+import { createDemoWorkouts } from '@/lib/demo-data';
 import {
   createJob,
   startJob,
   updateJobProgress,
   completeJob,
   failJob,
-} from "@/lib/background-jobs";
+} from '@/lib/background-jobs';
 
 // Background job function (runs async, doesn't block response)
-async function setupNewUserData(
-  userId: string,
-  userName: string,
-  jobId: string,
-) {
+async function setupNewUserData(userId: string, userName: string, jobId: string) {
   try {
     startJob(jobId);
 
@@ -32,7 +28,7 @@ async function setupNewUserData(
 
     completeJob(jobId);
   } catch (error) {
-    console.error("Setup job failed:", error);
+    console.error('Setup job failed:', error);
     failJob(jobId, String(error));
   }
 }
@@ -44,14 +40,14 @@ export async function POST(request: NextRequest) {
     // Validation
     if (!name || !email || !password) {
       return NextResponse.json(
-        { error: "Name, email, and password are required" },
+        { error: 'Name, email, and password are required' },
         { status: 400 }
       );
     }
 
     if (password.length < 6) {
       return NextResponse.json(
-        { error: "Password must be at least 6 characters" },
+        { error: 'Password must be at least 6 characters' },
         { status: 400 }
       );
     }
@@ -62,10 +58,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "Email already registered" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
     }
 
     // Check if name already exists
@@ -74,10 +67,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingName) {
-      return NextResponse.json(
-        { error: "Name already taken" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: 'Name already taken' }, { status: 409 });
     }
 
     // Hash password
@@ -100,7 +90,7 @@ export async function POST(request: NextRequest) {
     // Trigger background job for demo data (don't await it)
     const jobId = createJob(user.id);
     setupNewUserData(user.id, user.name, jobId).catch((error) => {
-      console.error("Unhandled setup error:", error);
+      console.error('Unhandled setup error:', error);
     });
 
     // Set cookie and return immediately
@@ -112,19 +102,16 @@ export async function POST(request: NextRequest) {
       setupJobId: jobId,
     });
 
-    response.cookies.set("userId", user.id, {
+    response.cookies.set('userId', user.id, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
 
     return response;
   } catch (error) {
-    console.error("Registration error:", error);
-    return NextResponse.json(
-      { error: "Failed to create account" },
-      { status: 500 }
-    );
+    console.error('Registration error:', error);
+    return NextResponse.json({ error: 'Failed to create account' }, { status: 500 });
   }
 }

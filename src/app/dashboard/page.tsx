@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState, Suspense, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { formatDateForUrl } from "@/lib/date-utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState, Suspense, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { formatDateForUrl } from '@/lib/date-utils';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronRight,
   Dumbbell,
@@ -15,12 +15,12 @@ import {
   Settings,
   FileText,
   Info,
-} from "lucide-react";
-import * as Progress from "@radix-ui/react-progress";
-import type { RehabExercise } from "@/lib/types";
-import { SetupProgressHandler } from "./SetupProgressHandler";
-import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { PageNav } from "@/components/PageNav";
+} from 'lucide-react';
+import * as Progress from '@radix-ui/react-progress';
+import type { RehabExercise } from '@/lib/types';
+import { SetupProgressHandler } from './SetupProgressHandler';
+import { AnimatedBackground } from '@/components/AnimatedBackground';
+import { PageNav } from '@/components/PageNav';
 
 interface User {
   id: string;
@@ -61,13 +61,13 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch("/api/dashboard");
+      const response = await fetch('/api/dashboard');
       if (!response.ok) {
         if (response.status === 401 || response.status === 404) {
-          router.push("/");
+          router.push('/');
           return;
         }
-        throw new Error("Failed to fetch dashboard data");
+        throw new Error('Failed to fetch dashboard data');
       }
 
       const data = await response.json();
@@ -75,27 +75,24 @@ export default function Dashboard() {
       setTodayWorkout(data.todayWorkout);
 
       if (data.user?.rehabEnabled) {
-        const rehabResponse = await fetch("/api/rehab");
+        const rehabResponse = await fetch('/api/rehab');
         if (rehabResponse.ok) {
           const rehabData = await rehabResponse.json();
           setRehabExercises(rehabData);
         }
       }
     } catch (error) {
-      console.error("Dashboard error:", error);
+      console.error('Dashboard error:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const toggleRehabExercise = async (
-    exerciseId: string,
-    completed: boolean,
-  ) => {
+  const toggleRehabExercise = async (exerciseId: string, completed: boolean) => {
     try {
       const response = await fetch(`/api/rehab/${exerciseId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ completed }),
       });
 
@@ -108,40 +105,35 @@ export default function Dashboard() {
                   completed,
                   completedDate: completed ? new Date() : null,
                 }
-              : ex,
-          ),
+              : ex
+          )
         );
       }
     } catch (error) {
-      console.error("Failed to toggle rehab exercise:", error);
+      console.error('Failed to toggle rehab exercise:', error);
     }
   };
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      router.push("/");
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/');
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     }
   };
 
   // Memoize expensive calculations (must be before early returns - Rules of Hooks)
   const totalSetsToday = useMemo(
-    () =>
-      todayWorkout?.exercises.reduce(
-        (acc, exercise) => acc + exercise.sets.length,
-        0,
-      ) || 0,
+    () => todayWorkout?.exercises.reduce((acc, exercise) => acc + exercise.sets.length, 0) || 0,
     [todayWorkout]
   );
 
   const completedSetsToday = useMemo(
     () =>
       todayWorkout?.exercises.reduce(
-        (acc, exercise) =>
-          acc + exercise.sets.filter((set) => set.completed).length,
-        0,
+        (acc, exercise) => acc + exercise.sets.filter((set) => set.completed).length,
+        0
       ) || 0,
     [todayWorkout]
   );
@@ -156,7 +148,7 @@ export default function Dashboard() {
       <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         >
           <Dumbbell className="w-8 h-8 text-white" />
         </motion.div>
@@ -184,14 +176,12 @@ export default function Dashboard() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-white">
-                Hey, {user.name}! 💪
-              </h1>
+              <h1 className="text-2xl font-bold text-white">Hey, {user.name}! 💪</h1>
               <p className="text-sm text-white/80">
-                {new Date().toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
+                {new Date().toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'long',
+                  day: 'numeric',
                 })}
               </p>
             </div>
@@ -227,7 +217,7 @@ export default function Dashboard() {
               <div className="text-center">
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                   className="inline-block mb-6"
                 >
                   <Dumbbell className="w-12 h-12 text-[var(--primary)]" />
@@ -249,9 +239,7 @@ export default function Dashboard() {
                     }}
                   />
                 </Progress.Root>
-                <p className="text-sm text-[var(--foreground-muted)] mt-4">
-                  {setupProgress}%
-                </p>
+                <p className="text-sm text-[var(--foreground-muted)] mt-4">{setupProgress}%</p>
               </div>
             </motion.div>
           </motion.div>
@@ -271,9 +259,7 @@ export default function Dashboard() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-xl font-bold mb-1">Today's Workout</h2>
-                  <p className="opacity-90">
-                    {todayWorkout.exercises.length} exercises ready
-                  </p>
+                  <p className="opacity-90">{todayWorkout.exercises.length} exercises ready</p>
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold">
@@ -302,26 +288,21 @@ export default function Dashboard() {
                       className={`w-5 h-5 rounded-full mr-3 flex items-center justify-center text-xs
                       ${
                         exercise.sets.every((s) => s.completed)
-                          ? "bg-white text-[var(--primary)]"
-                          : "bg-white/20"
+                          ? 'bg-white text-[var(--primary)]'
+                          : 'bg-white/20'
                       }`}
                     >
-                      {exercise.sets.every((s) => s.completed)
-                        ? "✓"
-                        : index + 1}
+                      {exercise.sets.every((s) => s.completed) ? '✓' : index + 1}
                     </div>
                     <span
                       className={
-                        exercise.sets.every((s) => s.completed)
-                          ? "line-through opacity-70"
-                          : ""
+                        exercise.sets.every((s) => s.completed) ? 'line-through opacity-70' : ''
                       }
                     >
                       {exercise.name}
                     </span>
                     <span className="ml-auto opacity-70">
-                      {exercise.sets.filter((s) => s.completed).length}/
-                      {exercise.sets.length}
+                      {exercise.sets.filter((s) => s.completed).length}/{exercise.sets.length}
                     </span>
                   </div>
                 ))}
@@ -336,7 +317,7 @@ export default function Dashboard() {
                 href={`/workout/${formatDateForUrl(new Date(todayWorkout.date))}`}
                 className="flex items-center justify-center w-full bg-white text-[var(--primary)] py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
               >
-                {completedSetsToday > 0 ? "Continue Workout" : "Start Workout"}
+                {completedSetsToday > 0 ? 'Continue Workout' : 'Start Workout'}
                 <ChevronRight className="w-5 h-5 ml-1" />
               </Link>
             </motion.div>
@@ -351,9 +332,7 @@ export default function Dashboard() {
               <div className="text-center py-8">
                 <Dumbbell className="w-16 h-16 text-white/60 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-white mb-2">No Workout Today</h2>
-                <p className="text-white/70 mb-6">
-                  Import a workout plan to get started
-                </p>
+                <p className="text-white/70 mb-6">Import a workout plan to get started</p>
                 <Link
                   href="/import"
                   className="inline-flex items-center bg-white text-[var(--primary)] px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
@@ -392,14 +371,10 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-2">
               <Flame className="w-8 h-8 text-orange-400" />
               <span className="text-2xl font-bold text-white">
-                {user.stats?.totalSetsCompleted
-                  ? Math.floor(user.stats.totalSetsCompleted / 7)
-                  : 0}
+                {user.stats?.totalSetsCompleted ? Math.floor(user.stats.totalSetsCompleted / 7) : 0}
               </span>
             </div>
-            <p className="text-sm text-white/70">
-              Week Streak
-            </p>
+            <p className="text-sm text-white/70">Week Streak</p>
           </motion.div>
         </div>
 
@@ -451,17 +426,13 @@ export default function Dashboard() {
               <>
                 <div className="mb-4">
                   <div className="flex justify-between text-sm opacity-90 mb-2">
-                    <span>
-                      {rehabExercises.filter((ex) => ex.completed).length}{" "}
-                      completed
-                    </span>
+                    <span>{rehabExercises.filter((ex) => ex.completed).length} completed</span>
                     <span>{rehabExercises.length} total</span>
                   </div>
                   <Progress.Root
                     className="relative overflow-hidden bg-white/20 rounded-full w-full h-2"
                     value={
-                      (rehabExercises.filter((ex) => ex.completed).length /
-                        rehabExercises.length) *
+                      (rehabExercises.filter((ex) => ex.completed).length / rehabExercises.length) *
                       100
                     }
                   >
@@ -482,18 +453,15 @@ export default function Dashboard() {
                     const prescription = [];
                     if (exercise.setsLeft || exercise.setsRight) {
                       prescription.push(
-                        `L: ${exercise.setsLeft || 0} / R: ${exercise.setsRight || 0} sets`,
+                        `L: ${exercise.setsLeft || 0} / R: ${exercise.setsRight || 0} sets`
                       );
                     } else if (exercise.sets) {
                       prescription.push(`${exercise.sets} sets`);
                     }
-                    if (exercise.reps)
-                      prescription.push(`${exercise.reps} reps`);
-                    if (exercise.hold)
-                      prescription.push(`hold ${exercise.hold}s`);
+                    if (exercise.reps) prescription.push(`${exercise.reps} reps`);
+                    if (exercise.hold) prescription.push(`hold ${exercise.hold}s`);
                     if (exercise.load) prescription.push(exercise.load);
-                    if (exercise.bandColor)
-                      prescription.push(`${exercise.bandColor} band`);
+                    if (exercise.bandColor) prescription.push(`${exercise.bandColor} band`);
                     if (exercise.time) prescription.push(exercise.time);
 
                     return (
@@ -504,16 +472,11 @@ export default function Dashboard() {
                       >
                         <div
                           className="flex items-start gap-3 p-3 cursor-pointer hover:bg-white/5 transition-colors"
-                          onClick={() =>
-                            toggleRehabExercise(
-                              exercise.id,
-                              !exercise.completed,
-                            )
-                          }
+                          onClick={() => toggleRehabExercise(exercise.id, !exercise.completed)}
                         >
                           <div
                             className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-                              exercise.completed ? "bg-white" : "bg-transparent"
+                              exercise.completed ? 'bg-white' : 'bg-transparent'
                             }`}
                           >
                             {exercise.completed && (
@@ -534,22 +497,20 @@ export default function Dashboard() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p
-                              className={`font-medium ${exercise.completed ? "line-through opacity-70" : ""}`}
+                              className={`font-medium ${exercise.completed ? 'line-through opacity-70' : ''}`}
                             >
                               {exercise.name}
                             </p>
                             {prescription.length > 0 && (
                               <p className="text-sm opacity-90 mt-0.5">
-                                {prescription.join(" • ")}
+                                {prescription.join(' • ')}
                               </p>
                             )}
                           </div>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              setExpandedExercise(
-                                isExpanded ? null : exercise.id,
-                              );
+                              setExpandedExercise(isExpanded ? null : exercise.id);
                             }}
                             className="p-1 rounded hover:bg-white/10 transition-colors flex-shrink-0"
                           >
@@ -561,15 +522,13 @@ export default function Dashboard() {
                           {isExpanded && exercise.cues && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
+                              animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
                               className="overflow-hidden"
                             >
                               <div className="px-3 pb-3 pt-1 border-t border-white/10">
-                                <p className="text-xs opacity-75 font-medium mb-1">
-                                  Cues:
-                                </p>
+                                <p className="text-xs opacity-75 font-medium mb-1">Cues:</p>
                                 <p className="text-sm opacity-90 leading-relaxed">
                                   {exercise.cues}
                                 </p>
@@ -593,7 +552,6 @@ export default function Dashboard() {
             )}
           </motion.div>
         )}
-
       </main>
     </div>
   );

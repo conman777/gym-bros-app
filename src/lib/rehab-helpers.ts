@@ -1,4 +1,4 @@
-import type { RehabExercise } from "@/lib/types";
+import type { RehabExercise } from '@/lib/types';
 
 /**
  * Summary of a rehab exercise for API responses
@@ -27,11 +27,9 @@ export type ExercisesByCategory = Record<string, ExerciseSummary[]>;
  * Group rehab exercises by category
  * Used for diagnostic endpoints and reports
  */
-export function groupExercisesByCategory(
-  exercises: RehabExercise[]
-): ExercisesByCategory {
+export function groupExercisesByCategory(exercises: RehabExercise[]): ExercisesByCategory {
   return exercises.reduce((acc, ex) => {
-    const category = ex.category || "Uncategorized";
+    const category = ex.category || 'Uncategorized';
 
     if (!acc[category]) {
       acc[category] = [];

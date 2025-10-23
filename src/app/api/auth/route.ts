@@ -1,21 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { createDemoWorkouts, createRehabExercises } from "@/lib/demo-data";
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { createDemoWorkouts, createRehabExercises } from '@/lib/demo-data';
 import {
   createJob,
   startJob,
   updateJobProgress,
   completeJob,
   failJob,
-} from "@/lib/background-jobs";
-import type { UserName } from "@/lib/types";
+} from '@/lib/background-jobs';
+import type { UserName } from '@/lib/types';
 
 // Background job function (runs async, doesn't block response)
-async function setupNewUserData(
-  userId: string,
-  userName: UserName,
-  jobId: string,
-) {
+async function setupNewUserData(userId: string, userName: UserName, jobId: string) {
   try {
     startJob(jobId);
 
@@ -25,7 +21,7 @@ async function setupNewUserData(
     updateJobProgress(jobId, 60);
 
     // Create rehab exercises for Devlin
-    if (userName === "Devlin") {
+    if (userName === 'Devlin') {
       await createRehabExercises(userId);
     }
 
@@ -39,7 +35,7 @@ async function setupNewUserData(
 
     completeJob(jobId);
   } catch (error) {
-    console.error("Setup job failed:", error);
+    console.error('Setup job failed:', error);
     failJob(jobId, String(error));
   }
 }
@@ -48,8 +44,8 @@ export async function POST(request: NextRequest) {
   try {
     const { userName } = (await request.json()) as { userName?: UserName };
 
-    if (!userName || (userName !== "Conor" && userName !== "Devlin")) {
-      return NextResponse.json({ error: "Invalid user" }, { status: 400 });
+    if (!userName || (userName !== 'Conor' && userName !== 'Devlin')) {
+      return NextResponse.json({ error: 'Invalid user' }, { status: 400 });
     }
 
     // Find or create user
@@ -91,7 +87,7 @@ export async function POST(request: NextRequest) {
       jobId = createJob(user.id);
       // Fire and forget - don't await
       setupNewUserData(user.id, userName, jobId).catch((error) => {
-        console.error("Unhandled setup error:", error);
+        console.error('Unhandled setup error:', error);
       });
     }
 
@@ -102,30 +98,27 @@ export async function POST(request: NextRequest) {
       isNewUser,
       setupJobId: jobId,
     });
-    response.cookies.set("userId", user.id, {
+    response.cookies.set('userId', user.id, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
     return response;
   } catch (error) {
-    console.error("Auth error:", error);
-    console.error(
-      "Error stack:",
-      error instanceof Error ? error.stack : "No stack",
-    );
-    console.error("Environment check:", {
+    console.error('Auth error:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
+    console.error('Environment check:', {
       hasTursoUrl: !!process.env.DATABASE_TURSO_DATABASE_URL,
       hasTursoToken: !!process.env.DATABASE_TURSO_AUTH_TOKEN,
       nodeEnv: process.env.NODE_ENV,
     });
     return NextResponse.json(
       {
-        error: "Failed to authenticate",
+        error: 'Failed to authenticate',
         detail: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

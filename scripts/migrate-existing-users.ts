@@ -10,11 +10,8 @@ async function migrateExistingUsers() {
     // Find users without email/password
     const usersToMigrate = await prisma.user.findMany({
       where: {
-        OR: [
-          { email: null },
-          { passwordHash: null }
-        ]
-      }
+        OR: [{ email: null }, { passwordHash: null }],
+      },
     });
 
     if (usersToMigrate.length === 0) {
@@ -39,8 +36,8 @@ async function migrateExistingUsers() {
           email: defaultEmail,
           passwordHash: passwordHash,
           // Enable rehab for Devlin by default
-          rehabEnabled: user.name === 'Devlin' ? true : false
-        }
+          rehabEnabled: user.name === 'Devlin' ? true : false,
+        },
       });
 
       console.log(`✅ Migrated: ${user.name}`);
@@ -54,7 +51,6 @@ async function migrateExistingUsers() {
     console.log('1. Users can now login with their email and temporary password');
     console.log('2. Users should change their password in Settings page');
     console.log('3. Devlin has rehab features enabled by default\n');
-
   } catch (error) {
     console.error('❌ Migration failed:', error);
     throw error;

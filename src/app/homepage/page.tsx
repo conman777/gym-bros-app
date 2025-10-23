@@ -1,30 +1,28 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Dumbbell, User, Zap } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Dumbbell, User, Zap } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<"Conor" | "Devlin" | null>(
-    null,
-  );
+  const [selectedUser, setSelectedUser] = useState<'Conor' | 'Devlin' | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const selectUser = async (userName: "Conor" | "Devlin") => {
+  const selectUser = async (userName: 'Conor' | 'Devlin') => {
     setSelectedUser(userName);
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userName }),
       });
 
@@ -34,11 +32,11 @@ export default function Home() {
         if (data.isNewUser && data.setupJobId) {
           router.push(`/dashboard?setupJobId=${data.setupJobId}`);
         } else {
-          router.push("/dashboard");
+          router.push('/dashboard');
         }
       }
     } catch (error) {
-      console.error("Failed to select user:", error);
+      console.error('Failed to select user:', error);
       setLoading(false);
       setSelectedUser(null);
     }
@@ -67,8 +65,8 @@ export default function Home() {
             transition={{
               duration: Math.random() * 20 + 10,
               repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
+              repeatType: 'reverse',
+              ease: 'easeInOut',
             }}
           />
         ))}
@@ -78,7 +76,7 @@ export default function Home() {
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", duration: 0.8 }}
+          transition={{ type: 'spring', duration: 0.8 }}
           className="mb-8"
         >
           <Dumbbell className="w-24 h-24 text-white mx-auto" />
@@ -111,23 +109,23 @@ export default function Home() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => selectUser("Conor")}
+            onClick={() => selectUser('Conor')}
             disabled={loading}
             className={`relative group bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all ${
-              selectedUser === "Conor" ? "scale-105 border-white/60" : ""
-            } ${loading && selectedUser !== "Conor" ? "opacity-50" : ""}`}
+              selectedUser === 'Conor' ? 'scale-105 border-white/60' : ''
+            } ${loading && selectedUser !== 'Conor' ? 'opacity-50' : ''}`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
             <div className="relative">
               <div className="w-20 h-20 bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-full mx-auto mb-4 flex items-center justify-center">
-                {loading && selectedUser === "Conor" ? (
+                {loading && selectedUser === 'Conor' ? (
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{
                       duration: 1,
                       repeat: Infinity,
-                      ease: "linear",
+                      ease: 'linear',
                     }}
                   >
                     <Dumbbell className="w-10 h-10 text-white" />
@@ -145,7 +143,7 @@ export default function Home() {
             </div>
 
             <AnimatePresence>
-              {selectedUser === "Conor" && (
+              {selectedUser === 'Conor' && (
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -159,23 +157,23 @@ export default function Home() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => selectUser("Devlin")}
+            onClick={() => selectUser('Devlin')}
             disabled={loading}
             className={`relative group bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all ${
-              selectedUser === "Devlin" ? "scale-105 border-white/60" : ""
-            } ${loading && selectedUser !== "Devlin" ? "opacity-50" : ""}`}
+              selectedUser === 'Devlin' ? 'scale-105 border-white/60' : ''
+            } ${loading && selectedUser !== 'Devlin' ? 'opacity-50' : ''}`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
             <div className="relative">
               <div className="w-20 h-20 bg-gradient-to-br from-[var(--secondary)] to-[var(--secondary-dark)] rounded-full mx-auto mb-4 flex items-center justify-center">
-                {loading && selectedUser === "Devlin" ? (
+                {loading && selectedUser === 'Devlin' ? (
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{
                       duration: 1,
                       repeat: Infinity,
-                      ease: "linear",
+                      ease: 'linear',
                     }}
                   >
                     <Dumbbell className="w-10 h-10 text-white" />
@@ -193,7 +191,7 @@ export default function Home() {
             </div>
 
             <AnimatePresence>
-              {selectedUser === "Devlin" && (
+              {selectedUser === 'Devlin' && (
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}

@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { requireDevlinUser } from "@/lib/auth-helpers";
-import { groupExercisesByCategory } from "@/lib/rehab-helpers";
-import type { RehabExercise } from "@/lib/types";
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { requireDevlinUser } from '@/lib/auth-helpers';
+import { groupExercisesByCategory } from '@/lib/rehab-helpers';
+import type { RehabExercise } from '@/lib/types';
 
 /**
  * Diagnostic API to check Devlin user and rehab exercises
@@ -22,7 +22,7 @@ export async function GET() {
       where: { id: auth.userId },
       include: {
         rehabExercises: {
-          orderBy: { orderIndex: "asc" },
+          orderBy: { orderIndex: 'asc' },
         },
         stats: true,
       },
@@ -31,24 +31,20 @@ export async function GET() {
     if (!devlinUser) {
       return NextResponse.json(
         {
-          status: "ERROR",
-          message: "User data not found",
+          status: 'ERROR',
+          message: 'User data not found',
         },
         { status: 404 }
       );
     }
 
     // Group exercises by category using helper
-    const categories = groupExercisesByCategory(
-      devlinUser.rehabExercises as RehabExercise[]
-    );
+    const categories = groupExercisesByCategory(devlinUser.rehabExercises as RehabExercise[]);
 
-    const completedCount = devlinUser.rehabExercises.filter(
-      (ex) => ex.completed
-    ).length;
+    const completedCount = devlinUser.rehabExercises.filter((ex) => ex.completed).length;
 
     return NextResponse.json({
-      status: "SUCCESS",
+      status: 'SUCCESS',
       devlinUser: {
         id: devlinUser.id,
         name: devlinUser.name,
@@ -57,9 +53,7 @@ export async function GET() {
         rehabExercisesCount: devlinUser.rehabExercises.length,
         rehabExercisesCompleted: completedCount,
         progressPercentage: devlinUser.rehabExercises.length
-          ? Math.round(
-              (completedCount / devlinUser.rehabExercises.length) * 100
-            )
+          ? Math.round((completedCount / devlinUser.rehabExercises.length) * 100)
           : 0,
       },
       rehabExercises: {
@@ -69,10 +63,10 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("[DIAGNOSTIC] Error:", error);
+    console.error('[DIAGNOSTIC] Error:', error);
     return NextResponse.json(
       {
-        status: "ERROR",
+        status: 'ERROR',
         error: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }

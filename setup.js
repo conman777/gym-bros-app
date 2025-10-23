@@ -6,8 +6,10 @@ const fs = require('fs');
 
 // Detect platform
 const platform = os.platform();
-const isWSL = platform === 'linux' && fs.existsSync('/proc/version') &&
-              fs.readFileSync('/proc/version', 'utf8').toLowerCase().includes('microsoft');
+const isWSL =
+  platform === 'linux' &&
+  fs.existsSync('/proc/version') &&
+  fs.readFileSync('/proc/version', 'utf8').toLowerCase().includes('microsoft');
 
 console.log('🏋️ Gym Bros App Setup');
 console.log('======================\n');
@@ -76,7 +78,7 @@ if (!fs.existsSync(prismaDir)) {
 const steps = [
   { cmd: 'npm install', desc: 'Installing dependencies' },
   { cmd: 'npx prisma generate', desc: 'Generating Prisma client' },
-  { cmd: 'npx prisma db push', desc: 'Setting up database' }
+  { cmd: 'npx prisma db push', desc: 'Setting up database' },
 ];
 
 let allSuccessful = true;

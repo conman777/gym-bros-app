@@ -1,7 +1,7 @@
 // Simple in-memory background job queue
 // Stores job status so frontend can poll for progress
 
-type JobStatus = "pending" | "in_progress" | "completed" | "failed";
+type JobStatus = 'pending' | 'in_progress' | 'completed' | 'failed';
 
 interface Job {
   id: string;
@@ -35,7 +35,7 @@ export function createJob(userId: string): string {
   jobs.set(jobId, {
     id: jobId,
     userId,
-    status: "pending",
+    status: 'pending',
     progress: 0,
     startedAt: Date.now(),
   });
@@ -49,14 +49,14 @@ export function getJob(jobId: string): Job | undefined {
 export function startJob(jobId: string): void {
   const job = jobs.get(jobId);
   if (job) {
-    job.status = "in_progress";
+    job.status = 'in_progress';
     job.progress = 5; // Start at 5%
   }
 }
 
 export function updateJobProgress(jobId: string, progress: number): void {
   const job = jobs.get(jobId);
-  if (job && job.status === "in_progress") {
+  if (job && job.status === 'in_progress') {
     job.progress = Math.min(progress, 95); // Cap at 95% until completion
   }
 }
@@ -64,7 +64,7 @@ export function updateJobProgress(jobId: string, progress: number): void {
 export function completeJob(jobId: string): void {
   const job = jobs.get(jobId);
   if (job) {
-    job.status = "completed";
+    job.status = 'completed';
     job.progress = 100;
     job.completedAt = Date.now();
   }
@@ -73,7 +73,7 @@ export function completeJob(jobId: string): void {
 export function failJob(jobId: string, error: string): void {
   const job = jobs.get(jobId);
   if (job) {
-    job.status = "failed";
+    job.status = 'failed';
     job.error = error;
     job.completedAt = Date.now();
   }

@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import { prisma } from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 
-type ActivityStatus = "SUCCESS" | "ERROR" | "IN_PROGRESS";
-type ActivityCategory = "PRICE_UPDATE" | "PREDICTION" | "API_CALL" | "SYSTEM";
+type ActivityStatus = 'SUCCESS' | 'ERROR' | 'IN_PROGRESS';
+type ActivityCategory = 'PRICE_UPDATE' | 'PREDICTION' | 'API_CALL' | 'SYSTEM';
 
 interface LogActivityParams {
   category: ActivityCategory;
@@ -33,7 +33,7 @@ export async function logActivity({
       },
     });
   } catch (error) {
-    console.error("Failed to log activity:", error);
+    console.error('Failed to log activity:', error);
     // Don't throw - logging failures shouldn't break the app
   }
 }

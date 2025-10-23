@@ -1,56 +1,56 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Dumbbell, Mail, Lock, User, AlertCircle } from "lucide-react";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Dumbbell, Mail, Lock, User, AlertCircle } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     // Validation
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError('Password must be at least 6 characters');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Registration failed");
+        setError(data.error || 'Registration failed');
         setLoading(false);
         return;
       }
 
       // Redirect to dashboard on success
-      router.push("/dashboard");
+      router.push('/dashboard');
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError('An error occurred. Please try again.');
       setLoading(false);
     }
   };
@@ -76,8 +76,8 @@ export default function RegisterPage() {
             transition={{
               duration: Math.random() * 20 + 10,
               repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut",
+              repeatType: 'reverse',
+              ease: 'easeInOut',
             }}
           />
         ))}
@@ -92,7 +92,7 @@ export default function RegisterPage() {
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", duration: 0.8 }}
+          transition={{ type: 'spring', duration: 0.8 }}
           className="text-center mb-8"
         >
           <Dumbbell className="w-16 h-16 text-white mx-auto mb-4" />
@@ -158,10 +158,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-white mb-2 text-sm"
-              >
+              <label htmlFor="password" className="block text-white mb-2 text-sm">
                 Password
               </label>
               <div className="relative">
@@ -180,10 +177,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-white mb-2 text-sm"
-              >
+              <label htmlFor="confirmPassword" className="block text-white mb-2 text-sm">
                 Confirm Password
               </label>
               <div className="relative">
@@ -214,7 +208,7 @@ export default function RegisterPage() {
                     transition={{
                       duration: 1,
                       repeat: Infinity,
-                      ease: "linear",
+                      ease: 'linear',
                     }}
                   >
                     <Dumbbell className="w-5 h-5" />
@@ -222,18 +216,15 @@ export default function RegisterPage() {
                   Creating account...
                 </span>
               ) : (
-                "Create Account"
+                'Create Account'
               )}
             </motion.button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-white/60 text-sm">
-              Already have an account?{" "}
-              <Link
-                href="/login"
-                className="text-white font-semibold hover:underline"
-              >
+              Already have an account?{' '}
+              <Link href="/login" className="text-white font-semibold hover:underline">
                 Login
               </Link>
             </p>

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 interface SetupProgressHandlerProps {
   onProgressUpdate: (progress: number) => void;
@@ -18,7 +18,7 @@ export function SetupProgressHandler({
 
   useEffect(() => {
     if (!searchParams) return;
-    const setupJobId = searchParams.get("setupJobId");
+    const setupJobId = searchParams.get('setupJobId');
     if (!setupJobId) return;
 
     const pollSetupStatus = async () => {
@@ -28,20 +28,20 @@ export function SetupProgressHandler({
           const data = await response.json();
           onProgressUpdate(data.progress);
 
-          if (data.status === "completed") {
+          if (data.status === 'completed') {
             onSetupComplete(true);
             // Refresh data after a short delay to ensure DB is updated
             setTimeout(() => {
               onRefreshData();
               onProgressUpdate(0);
             }, 500);
-          } else if (data.status === "failed") {
-            console.error("Setup failed:", data.error);
+          } else if (data.status === 'failed') {
+            console.error('Setup failed:', data.error);
             onProgressUpdate(0);
           }
         }
       } catch (error) {
-        console.error("Failed to poll setup status:", error);
+        console.error('Failed to poll setup status:', error);
       }
     };
 

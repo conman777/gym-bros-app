@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
 type Activity = {
   id: string;
@@ -6,7 +6,7 @@ type Activity = {
   category: string;
   operation: string;
   message: string;
-  status: "SUCCESS" | "ERROR" | "IN_PROGRESS";
+  status: 'SUCCESS' | 'ERROR' | 'IN_PROGRESS';
   details?: Record<string, unknown>;
 };
 
@@ -16,14 +16,14 @@ type ActivityLogResponse = {
 
 export const useActivityLog = (category?: string, limit = 50) => {
   return useQuery<Activity[]>({
-    queryKey: ["activity-log", category, limit],
+    queryKey: ['activity-log', category, limit],
     queryFn: async () => {
       const params = new URLSearchParams();
-      if (category) params.append("category", category);
-      params.append("limit", String(limit));
+      if (category) params.append('category', category);
+      params.append('limit', String(limit));
 
       const response = await fetch(`/api/get-activity-log?${params}`);
-      if (!response.ok) throw new Error("Failed to fetch activity log");
+      if (!response.ok) throw new Error('Failed to fetch activity log');
       const data: ActivityLogResponse = await response.json();
       return data.activities;
     },

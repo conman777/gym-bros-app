@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { useActivityLog } from "@/hooks/useActivityLog";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo } from 'react';
+import { useActivityLog } from '@/hooks/useActivityLog';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
   AlertCircle,
@@ -14,21 +14,21 @@ import {
   ChevronUp,
   Heart,
   User,
-} from "lucide-react";
+} from 'lucide-react';
 
-type ActivityCategory = "PRICE_UPDATE" | "PREDICTION" | "API_CALL" | undefined;
+type ActivityCategory = 'PRICE_UPDATE' | 'PREDICTION' | 'API_CALL' | undefined;
 
 const CATEGORY_OPTIONS: { value: ActivityCategory; label: string }[] = [
-  { value: undefined, label: "All" },
-  { value: "PRICE_UPDATE", label: "Price Update" },
-  { value: "PREDICTION", label: "Prediction" },
-  { value: "API_CALL", label: "API Call" },
+  { value: undefined, label: 'All' },
+  { value: 'PRICE_UPDATE', label: 'Price Update' },
+  { value: 'PREDICTION', label: 'Prediction' },
+  { value: 'API_CALL', label: 'API Call' },
 ];
 
 const STATUS_COLORS = {
-  SUCCESS: "text-green-500 bg-green-500/10 border-green-500/20",
-  ERROR: "text-red-500 bg-red-500/10 border-red-500/20",
-  IN_PROGRESS: "text-yellow-500 bg-yellow-500/10 border-yellow-500/20",
+  SUCCESS: 'text-green-500 bg-green-500/10 border-green-500/20',
+  ERROR: 'text-red-500 bg-red-500/10 border-red-500/20',
+  IN_PROGRESS: 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20',
 };
 
 const STATUS_ICONS = {
@@ -46,13 +46,10 @@ function formatRelativeTime(timestamp: string): string {
   const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
 
-  if (diffSeconds < 60)
-    return `${diffSeconds} second${diffSeconds !== 1 ? "s" : ""} ago`;
-  if (diffMinutes < 60)
-    return `${diffMinutes} minute${diffMinutes !== 1 ? "s" : ""} ago`;
-  if (diffHours < 24)
-    return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
-  return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
+  if (diffSeconds < 60) return `${diffSeconds} second${diffSeconds !== 1 ? 's' : ''} ago`;
+  if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''} ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+  return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
 }
 
 interface DevlinDiagnostic {
@@ -77,8 +74,7 @@ interface DevlinDiagnostic {
 }
 
 export default function Testing() {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ActivityCategory>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState<ActivityCategory>(undefined);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [devlinData, setDevlinData] = useState<DevlinDiagnostic | null>(null);
   const [devlinLoading, setDevlinLoading] = useState(false);
@@ -97,12 +93,12 @@ export default function Testing() {
     setDevlinLoading(true);
     setFixMessage(null);
     try {
-      const response = await fetch("/api/diagnostic/devlin");
+      const response = await fetch('/api/diagnostic/devlin');
       const data = await response.json();
       setDevlinData(data);
       setShowDevlinDiagnostic(true);
     } catch (error) {
-      console.error("Failed to check Devlin rehab:", error);
+      console.error('Failed to check Devlin rehab:', error);
     } finally {
       setDevlinLoading(false);
     }
@@ -112,30 +108,28 @@ export default function Testing() {
     setFixLoading(true);
     setFixMessage(null);
     try {
-      const response = await fetch("/api/diagnostic/fix-devlin-rehab", {
-        method: "POST",
+      const response = await fetch('/api/diagnostic/fix-devlin-rehab', {
+        method: 'POST',
       });
       const data = await response.json();
 
-      if (data.status === "SUCCESS") {
-        setFixMessage(
-          `✅ ${data.message}. Refresh the dashboard to see the exercises!`
-        );
+      if (data.status === 'SUCCESS') {
+        setFixMessage(`✅ ${data.message}. Refresh the dashboard to see the exercises!`);
         // Re-check status after fix
         await checkDevlinRehab();
       } else {
-        setFixMessage(`❌ ${data.message || "Failed to create exercises"}`);
+        setFixMessage(`❌ ${data.message || 'Failed to create exercises'}`);
       }
     } catch (error) {
-      console.error("Failed to fix Devlin rehab:", error);
-      setFixMessage("❌ Error creating rehab exercises");
+      console.error('Failed to fix Devlin rehab:', error);
+      setFixMessage('❌ Error creating rehab exercises');
     } finally {
       setFixLoading(false);
     }
   };
 
   const lastUpdated = useMemo(() => {
-    if (!dataUpdatedAt) return "Never";
+    if (!dataUpdatedAt) return 'Never';
     return formatRelativeTime(new Date(dataUpdatedAt).toISOString());
   }, [dataUpdatedAt]);
 
@@ -155,9 +149,7 @@ export default function Testing() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <Activity className="w-8 h-8 text-blue-400" />
-              <h1 className="text-4xl font-bold text-white">
-                System Testing Dashboard
-              </h1>
+              <h1 className="text-4xl font-bold text-white">System Testing Dashboard</h1>
             </div>
             <div className="flex items-center gap-2 text-gray-400 text-sm">
               <RefreshCw className="w-4 h-4 animate-spin" />
@@ -181,9 +173,7 @@ export default function Testing() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <Heart className="w-6 h-6 text-teal-400" />
-                <h2 className="text-xl font-bold text-white">
-                  Devlin Rehab Diagnostic
-                </h2>
+                <h2 className="text-xl font-bold text-white">Devlin Rehab Diagnostic</h2>
               </div>
               <div className="flex gap-2">
                 <button
@@ -229,9 +219,9 @@ export default function Testing() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`mb-4 p-3 rounded-lg ${
-                  fixMessage.startsWith("✅")
-                    ? "bg-green-500/10 border border-green-500/30 text-green-400"
-                    : "bg-red-500/10 border border-red-500/30 text-red-400"
+                  fixMessage.startsWith('✅')
+                    ? 'bg-green-500/10 border border-green-500/30 text-green-400'
+                    : 'bg-red-500/10 border border-red-500/30 text-red-400'
                 }`}
               >
                 {fixMessage}
@@ -242,23 +232,20 @@ export default function Testing() {
               {showDevlinDiagnostic && devlinData && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
+                  animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-4"
                 >
-                  {devlinData.status === "ERROR" ? (
+                  {devlinData.status === 'ERROR' ? (
                     <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
                       <p className="text-red-400 font-medium mb-2">
                         {devlinData.message || devlinData.error}
                       </p>
                       {devlinData.solution && (
-                        <p className="text-gray-400 text-sm">
-                          {devlinData.solution}
-                        </p>
+                        <p className="text-gray-400 text-sm">{devlinData.solution}</p>
                       )}
                     </div>
-                  ) : devlinData.status === "SUCCESS" &&
-                    devlinData.devlinUser ? (
+                  ) : devlinData.status === 'SUCCESS' && devlinData.devlinUser ? (
                     <div className="space-y-4">
                       {/* User Info */}
                       <div className="bg-gray-800/50 rounded-lg p-4">
@@ -269,32 +256,22 @@ export default function Testing() {
                         <div className="grid grid-cols-2 gap-3 text-sm">
                           <div>
                             <span className="text-gray-400">Name:</span>
+                            <span className="text-white ml-2">{devlinData.devlinUser.name}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Setup Complete:</span>
                             <span className="text-white ml-2">
-                              {devlinData.devlinUser.name}
+                              {devlinData.devlinUser.setupComplete ? '✅ Yes' : '❌ No'}
                             </span>
                           </div>
                           <div>
-                            <span className="text-gray-400">
-                              Setup Complete:
-                            </span>
-                            <span className="text-white ml-2">
-                              {devlinData.devlinUser.setupComplete
-                                ? "✅ Yes"
-                                : "❌ No"}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-gray-400">
-                              Total Sets:
-                            </span>
+                            <span className="text-gray-400">Total Sets:</span>
                             <span className="text-white ml-2">
                               {devlinData.devlinUser.totalSetsCompleted}
                             </span>
                           </div>
                           <div>
-                            <span className="text-gray-400">
-                              Rehab Progress:
-                            </span>
+                            <span className="text-gray-400">Rehab Progress:</span>
                             <span className="text-white ml-2">
                               {devlinData.devlinUser.rehabExercisesCompleted}/
                               {devlinData.devlinUser.rehabExercisesCount} (
@@ -305,17 +282,14 @@ export default function Testing() {
                       </div>
 
                       {/* Rehab Exercises */}
-                      {devlinData.rehabExercises &&
-                        devlinData.rehabExercises.total > 0 && (
-                          <div className="bg-gray-800/50 rounded-lg p-4">
-                            <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                              <Heart className="w-5 h-5" />
-                              Rehab Exercises (
-                              {devlinData.rehabExercises.total})
-                            </h3>
-                            {Object.entries(
-                              devlinData.rehabExercises.byCategory,
-                            ).map(([category, exercises]) => (
+                      {devlinData.rehabExercises && devlinData.rehabExercises.total > 0 && (
+                        <div className="bg-gray-800/50 rounded-lg p-4">
+                          <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                            <Heart className="w-5 h-5" />
+                            Rehab Exercises ({devlinData.rehabExercises.total})
+                          </h3>
+                          {Object.entries(devlinData.rehabExercises.byCategory).map(
+                            ([category, exercises]) => (
                               <div key={category} className="mb-4 last:mb-0">
                                 <h4 className="text-teal-400 font-medium text-sm mb-2">
                                   {category}
@@ -327,20 +301,15 @@ export default function Testing() {
                                       className="text-sm text-gray-300 flex items-start gap-2"
                                     >
                                       <span className="text-gray-500">
-                                        {ex.completed ? "✓" : "○"}
+                                        {ex.completed ? '✓' : '○'}
                                       </span>
                                       <span
-                                        className={
-                                          ex.completed
-                                            ? "line-through opacity-60"
-                                            : ""
-                                        }
+                                        className={ex.completed ? 'line-through opacity-60' : ''}
                                       >
                                         {ex.name}
                                         {(ex.setsLeft || ex.setsRight) && (
                                           <span className="text-gray-500 ml-2">
-                                            (L: {ex.setsLeft || 0} / R:{" "}
-                                            {ex.setsRight || 0})
+                                            (L: {ex.setsLeft || 0} / R: {ex.setsRight || 0})
                                           </span>
                                         )}
                                         {ex.sets && (
@@ -353,15 +322,14 @@ export default function Testing() {
                                   ))}
                                 </div>
                               </div>
-                            ))}
-                          </div>
-                        )}
+                            )
+                          )}
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-                      <p className="text-yellow-400">
-                        Unexpected response status
-                      </p>
+                      <p className="text-yellow-400">Unexpected response status</p>
                     </div>
                   )}
                 </motion.div>
@@ -379,9 +347,7 @@ export default function Testing() {
         >
           <div className="flex items-center gap-3 mb-3">
             <Filter className="w-5 h-5 text-gray-400" />
-            <span className="text-gray-300 font-medium">
-              Filter by Category
-            </span>
+            <span className="text-gray-300 font-medium">Filter by Category</span>
           </div>
           <div className="flex flex-wrap gap-3">
             {CATEGORY_OPTIONS.map(({ value, label }) => (
@@ -390,8 +356,8 @@ export default function Testing() {
                 onClick={() => setSelectedCategory(value)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   selectedCategory === value
-                    ? "bg-blue-500 text-white shadow-lg shadow-blue-500/50"
-                    : "bg-gray-700/50 text-gray-300 hover:bg-gray-700 border border-gray-600"
+                    ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
+                    : 'bg-gray-700/50 text-gray-300 hover:bg-gray-700 border border-gray-600'
                 }`}
               >
                 {label}
@@ -413,8 +379,7 @@ export default function Testing() {
               Activity Feed
               {activities.length > 0 && (
                 <span className="text-sm text-gray-400 ml-2">
-                  ({activities.length}{" "}
-                  {activities.length === 1 ? "item" : "items"})
+                  ({activities.length} {activities.length === 1 ? 'item' : 'items'})
                 </span>
               )}
             </h2>
@@ -433,9 +398,7 @@ export default function Testing() {
             <div className="p-12 text-center">
               <AlertCircle className="w-8 h-8 text-red-400 mx-auto mb-4" />
               <p className="text-red-400">Failed to load activities</p>
-              <p className="text-gray-500 text-sm mt-2">
-                {(error as Error).message}
-              </p>
+              <p className="text-gray-500 text-sm mt-2">{(error as Error).message}</p>
             </div>
           )}
 
@@ -447,7 +410,7 @@ export default function Testing() {
               <p className="text-gray-500 text-sm mt-2">
                 {selectedCategory
                   ? `No activities in category: ${selectedCategory}`
-                  : "Start using the system to see activity logs"}
+                  : 'Start using the system to see activity logs'}
               </p>
             </div>
           )}
@@ -469,10 +432,7 @@ export default function Testing() {
                       transition={{ delay: index * 0.02 }}
                       className="p-4 hover:bg-gray-700/30 transition-colors"
                     >
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => toggleExpanded(activity.id)}
-                      >
+                      <div className="cursor-pointer" onClick={() => toggleExpanded(activity.id)}>
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-start gap-3 flex-1">
                             {/* Status Icon */}
@@ -497,9 +457,7 @@ export default function Testing() {
                                   {formatRelativeTime(activity.timestamp)}
                                 </span>
                               </div>
-                              <h3 className="text-white font-medium mb-1">
-                                {activity.operation}
-                              </h3>
+                              <h3 className="text-white font-medium mb-1">{activity.operation}</h3>
                               <p className="text-gray-400 text-sm break-words">
                                 {activity.message}
                               </p>
@@ -523,15 +481,13 @@ export default function Testing() {
                           {isExpanded && activity.details && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
+                              animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
                               className="overflow-hidden"
                             >
                               <div className="mt-4 ml-11 p-4 bg-gray-900/50 rounded-lg border border-gray-700">
-                                <h4 className="text-gray-300 font-medium mb-2 text-sm">
-                                  Details:
-                                </h4>
+                                <h4 className="text-gray-300 font-medium mb-2 text-sm">Details:</h4>
                                 <pre className="text-xs text-gray-400 overflow-x-auto">
                                   {JSON.stringify(activity.details, null, 2)}
                                 </pre>
@@ -557,13 +513,9 @@ export default function Testing() {
             className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"
           >
             {Object.entries(STATUS_ICONS).map(([status, Icon]) => {
-              const count = activities.filter(
-                (a) => a.status === status,
-              ).length;
+              const count = activities.filter((a) => a.status === status).length;
               const percentage =
-                activities.length > 0
-                  ? Math.round((count / activities.length) * 100)
-                  : 0;
+                activities.length > 0 ? Math.round((count / activities.length) * 100) : 0;
 
               return (
                 <div
@@ -577,9 +529,7 @@ export default function Testing() {
                     </div>
                     <span className="text-2xl font-bold">{count}</span>
                   </div>
-                  <div className="text-sm opacity-75">
-                    {percentage}% of total
-                  </div>
+                  <div className="text-sm opacity-75">{percentage}% of total</div>
                 </div>
               );
             })}

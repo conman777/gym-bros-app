@@ -1,8 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "Read(//c/Users/conor/OneDrive/Personal/Documents/coding projects/coin-ai-spy/**)"
-    ],
+    "allow": ["Read(//c/Users/conor/OneDrive/Personal/Documents/coding projects/coin-ai-spy/**)"],
     "deny": [],
     "ask": []
   }

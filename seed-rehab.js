@@ -8,7 +8,7 @@ const DEVLIN_REHAB_EXERCISES = [
     name: 'Rowing',
     category: 'Warm-up',
     time: '3-5 min',
-    cues: 'Long spine, shoulders level, initiate with legs → back → arms; return arms → body → legs.'
+    cues: 'Long spine, shoulders level, initiate with legs → back → arms; return arms → body → legs.',
   },
 
   // Mobility & Stretching
@@ -18,14 +18,14 @@ const DEVLIN_REHAB_EXERCISES = [
     setsLeft: 1,
     setsRight: 2,
     hold: 20,
-    cues: 'Side-lying, shoulder & elbow at 90°, gently lower palm toward floor without lifting shoulder blade.'
+    cues: 'Side-lying, shoulder & elbow at 90°, gently lower palm toward floor without lifting shoulder blade.',
   },
   {
     name: 'Lat Dorsi Stretch on Bench',
     category: 'Mobility & Stretching',
     sets: 2,
     hold: 20,
-    cues: 'Kneel, elbows on bench, lower chest maintaining neutral spine.'
+    cues: 'Kneel, elbows on bench, lower chest maintaining neutral spine.',
   },
   {
     name: 'Pec Stretch (Doorway/Frame)',
@@ -33,7 +33,7 @@ const DEVLIN_REHAB_EXERCISES = [
     setsLeft: 1,
     setsRight: 2,
     hold: 20,
-    cues: 'Forearm vertical on frame, step forward to feel chest stretch.'
+    cues: 'Forearm vertical on frame, step forward to feel chest stretch.',
   },
   {
     name: 'Shoulder Internal Rotation (Towel Behind Back)',
@@ -41,7 +41,7 @@ const DEVLIN_REHAB_EXERCISES = [
     setsLeft: 1,
     setsRight: 2,
     hold: 20,
-    cues: 'One hand over shoulder, other behind back holding towel; gently pull to stretch lower hand shoulder.'
+    cues: 'One hand over shoulder, other behind back holding towel; gently pull to stretch lower hand shoulder.',
   },
 
   // Band / Dumbbell / Machine Strength
@@ -52,7 +52,7 @@ const DEVLIN_REHAB_EXERCISES = [
     reps: 10,
     hold: 2,
     bandColor: 'Green',
-    cues: 'Seated on gym ball, elbows tucked at sides, rotate out then control back.'
+    cues: 'Seated on gym ball, elbows tucked at sides, rotate out then control back.',
   },
   {
     name: 'External Shoulder Rotation w/ Resistance Band',
@@ -62,7 +62,7 @@ const DEVLIN_REHAB_EXERCISES = [
     reps: 8,
     hold: 2,
     bandColor: 'Green',
-    cues: 'Arm bent, elbow close to side, turn forearm outward, return across body with control.'
+    cues: 'Arm bent, elbow close to side, turn forearm outward, return across body with control.',
   },
   {
     name: 'Abduction in Plane of Scapula',
@@ -71,7 +71,7 @@ const DEVLIN_REHAB_EXERCISES = [
     setsRight: 1,
     reps: 10,
     load: '2 kg',
-    cues: 'Thumb up, raise arm ~20-30° anterior to frontal plane to shoulder height; lower slowly.'
+    cues: 'Thumb up, raise arm ~20-30° anterior to frontal plane to shoulder height; lower slowly.',
   },
   {
     name: 'Shoulder External Rotation w/ Dumbbell',
@@ -80,7 +80,7 @@ const DEVLIN_REHAB_EXERCISES = [
     setsRight: 1,
     reps: 10,
     load: '2 kg',
-    cues: 'Side-lying, elbow tucked, rotate to raise hand, lower with control.'
+    cues: 'Side-lying, elbow tucked, rotate to raise hand, lower with control.',
   },
   {
     name: 'Horizontal Extension (Prone) w/ Dumbbell',
@@ -89,7 +89,7 @@ const DEVLIN_REHAB_EXERCISES = [
     setsRight: 1,
     reps: 10,
     load: '2 kg',
-    cues: 'Prone, arm hangs off bed, raise out to side, lower down.'
+    cues: 'Prone, arm hangs off bed, raise out to side, lower down.',
   },
   {
     name: 'Supported Bent-Over Row',
@@ -98,7 +98,7 @@ const DEVLIN_REHAB_EXERCISES = [
     setsRight: 1,
     reps: 8,
     load: '7.5 kg',
-    cues: 'One hand braced on bench, row dumbbell to side, squeeze shoulder blade, lower slowly.'
+    cues: 'One hand braced on bench, row dumbbell to side, squeeze shoulder blade, lower slowly.',
   },
   {
     name: 'Seated Low Row (Neutral Grip)',
@@ -106,7 +106,7 @@ const DEVLIN_REHAB_EXERCISES = [
     sets: 2,
     reps: 10,
     load: '35 kg',
-    cues: 'Shoulders down/back, pull handles to sides, control return.'
+    cues: 'Shoulders down/back, pull handles to sides, control return.',
   },
   {
     name: 'Dumbbell Hammer Curls',
@@ -114,7 +114,7 @@ const DEVLIN_REHAB_EXERCISES = [
     sets: 2,
     reps: 10,
     load: '7.5 kg',
-    cues: 'Palms facing in, elbows close to body, curl then lower.'
+    cues: 'Palms facing in, elbows close to body, curl then lower.',
   },
   {
     name: 'Triceps Cable Pulldown (Standing)',
@@ -122,8 +122,8 @@ const DEVLIN_REHAB_EXERCISES = [
     sets: 2,
     reps: 10,
     load: '17.5 kg',
-    cues: 'Tall posture, start elbows ~90°, extend fully to sides, return to ~90°.'
-  }
+    cues: 'Tall posture, start elbows ~90°, extend fully to sides, return to ~90°.',
+  },
 ];
 
 async function main() {
@@ -155,8 +155,8 @@ async function main() {
         bandColor: exercise.bandColor || null,
         time: exercise.time || null,
         cues: exercise.cues || null,
-        orderIndex: i
-      }
+        orderIndex: i,
+      },
     });
     console.log(`  ✓ ${exercise.name}`);
   }

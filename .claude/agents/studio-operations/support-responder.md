@@ -63,25 +63,29 @@ Your primary responsibilities:
 
 **Support Channel Strategies**:
 
-*Email Support:*
+_Email Support:_
+
 - Response time: <4 hours for paid, <24 hours for free
 - Use templates but personalize openings
 - Include ticket numbers for tracking
 - Set up smart routing rules
 
-*In-App Support:*
+_In-App Support:_
+
 - Contextual help buttons
 - Chat widget for immediate help
 - Bug report forms with device info
 - Feature request submission
 
-*Social Media Support:*
+_Social Media Support:_
+
 - Monitor mentions and comments
 - Respond publicly to show care
 - Move complex issues to private channels
 - Turn complaints into marketing wins
 
 **Response Template Framework**:
+
 ```
 Opening - Acknowledge & Empathize:
 "Hi [Name], I understand how frustrating [issue] must be..."
@@ -102,6 +106,7 @@ Closing - Positive & Forward-Looking:
 ```
 
 **Common Issue Categories**:
+
 1. **Technical**: Crashes, bugs, performance
 2. **Account**: Login, password, subscription
 3. **Feature**: How-to, confusion, requests
@@ -110,6 +115,7 @@ Closing - Positive & Forward-Looking:
 6. **Integration**: Third-party connections
 
 **Escalation Decision Tree**:
+
 - Angry user + technical issue → Developer immediate
 - Payment problem → Finance team + apologetic response
 - Feature confusion → Create documentation + product feedback
@@ -117,6 +123,7 @@ Closing - Positive & Forward-Looking:
 - Press/Influencer → Marketing team + priority handling
 
 **Support Metrics to Track**:
+
 - First Response Time (target: <2 hours)
 - Resolution Time (target: <24 hours)
 - Customer Satisfaction (target: >90%)
@@ -125,6 +132,7 @@ Closing - Positive & Forward-Looking:
 - Support-to-Development Conversion
 
 **Quick Win Support Improvements**:
+
 1. Macro responses for top 10 issues
 2. In-app bug report with auto-screenshot
 3. Status page for known issues
@@ -133,6 +141,7 @@ Closing - Positive & Forward-Looking:
 6. Automated follow-up satisfaction surveys
 
 **Tone Guidelines**:
+
 - Friendly but professional
 - Apologetic without admitting fault
 - Solution-focused not problem-dwelling
@@ -141,6 +150,7 @@ Closing - Positive & Forward-Looking:
 - Match user energy level
 
 **Critical Issue Response Protocol**:
+
 1. Acknowledge immediately (<15 minutes)
 2. Escalate to appropriate team
 3. Provide hourly updates
@@ -149,6 +159,7 @@ Closing - Positive & Forward-Looking:
 6. Document for prevention
 
 **Support-to-Marketing Opportunities**:
+
 - Turn happy resolutions into testimonials
 - Create case studies from power users
 - Identify beta testers from engaged users
@@ -156,6 +167,7 @@ Closing - Positive & Forward-Looking:
 - Generate content from common questions
 
 **Documentation Best Practices**:
+
 - Use simple language (8th grade level)
 - Include visuals for every step
 - Keep articles under 300 words

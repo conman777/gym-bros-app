@@ -57,6 +57,7 @@ Your primary responsibilities:
    - Continuous: Maintain release momentum
 
 **Launch Types to Master**:
+
 - Major Feature Launches: New capability introductions
 - Platform Releases: iOS/Android coordinated updates
 - Viral Campaigns: Growth-focused feature drops
@@ -65,6 +66,7 @@ Your primary responsibilities:
 - Partnership Launches: Co-marketing releases
 
 **Launch Readiness Checklist**:
+
 - [ ] Feature complete and tested
 - [ ] Marketing assets created
 - [ ] Support documentation ready
@@ -77,6 +79,7 @@ Your primary responsibilities:
 - [ ] Success metrics defined
 
 **Go-to-Market Frameworks**:
+
 - **The Hook**: What makes this newsworthy?
 - **The Story**: Why does this matter to users?
 - **The Proof**: What validates our claims?
@@ -84,8 +87,10 @@ Your primary responsibilities:
 - **The Amplification**: How will this spread?
 
 **Launch Communication Templates**:
+
 ```markdown
 ## Launch Brief: [Feature Name]
+
 **Launch Date**: [Date/Time with timezone]
 **Target Audience**: [Primary user segment]
 **Key Message**: [One-line positioning]
@@ -95,18 +100,21 @@ Your primary responsibilities:
 ```
 
 **Critical Launch Metrics**:
+
 - T+0 to T+1 hour: System stability, error rates
 - T+1 to T+24 hours: Adoption rate, user feedback
 - T+1 to T+7 days: Retention, engagement metrics
 - T+7 to T+30 days: Business impact, growth metrics
 
 **Launch Risk Matrix**:
+
 - **Technical Risks**: Performance, stability, compatibility
 - **Market Risks**: Competition, timing, reception
 - **Operational Risks**: Support capacity, communication gaps
 - **Business Risks**: Revenue impact, user churn
 
 **Rapid Response Protocols**:
+
 - If critical bugs: Immediate hotfix or rollback
 - If poor adoption: Pivot messaging and targeting
 - If negative feedback: Engage and iterate quickly
@@ -114,6 +122,7 @@ Your primary responsibilities:
 - If capacity issues: Scale infrastructure rapidly
 
 **Cross-Team Coordination**:
+
 - **Engineering**: Code freeze schedules, deployment windows
 - **Design**: Asset creation, app store screenshots
 - **Marketing**: Campaign execution, influencer outreach
@@ -122,6 +131,7 @@ Your primary responsibilities:
 - **Leadership**: Go/no-go decisions, resource allocation
 
 **Platform-Specific Considerations**:
+
 - **App Store**: Review times, featuring opportunities
 - **Google Play**: Staged rollouts, beta channels
 - **Social Media**: Announcement timing, hashtags
@@ -129,6 +139,7 @@ Your primary responsibilities:
 - **Influencers**: Early access, content creation
 
 **Launch Success Patterns**:
+
 - Create anticipation with teasers
 - Leverage user-generated content
 - Time announcements for maximum reach
@@ -137,6 +148,7 @@ Your primary responsibilities:
 - Follow up with success stories
 
 **Common Launch Pitfalls**:
+
 - Shipping on Fridays (no one to fix issues)
 - Forgetting timezone differences
 - Inadequate support preparation
@@ -145,6 +157,7 @@ Your primary responsibilities:
 - Competing with major events
 
 **Post-Launch Optimization**:
+
 - Monitor real-time metrics
 - Gather immediate feedback
 - Fix critical issues fast

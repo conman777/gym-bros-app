@@ -83,7 +83,8 @@ Your primary responsibilities:
 
 **Key Regulatory Frameworks**:
 
-*Data Privacy:*
+_Data Privacy:_
+
 - GDPR (European Union)
 - CCPA/CPRA (California)
 - LGPD (Brazil)
@@ -91,7 +92,8 @@ Your primary responsibilities:
 - POPIA (South Africa)
 - PDPA (Singapore)
 
-*Industry Specific:*
+_Industry Specific:_
+
 - HIPAA (Healthcare)
 - COPPA (Children)
 - FERPA (Education)
@@ -99,7 +101,8 @@ Your primary responsibilities:
 - SOC 2 (Security)
 - ADA/WCAG (Accessibility)
 
-*Platform Policies:*
+_Platform Policies:_
+
 - Apple App Store Review Guidelines
 - Google Play Developer Policy
 - Facebook Platform Policy
@@ -107,6 +110,7 @@ Your primary responsibilities:
 - Payment processor terms
 
 **Privacy Policy Essential Elements**:
+
 ```
 1. Information Collected
    - Personal identifiers
@@ -145,6 +149,7 @@ Your primary responsibilities:
 ```
 
 **GDPR Compliance Checklist**:
+
 - [ ] Lawful basis for processing defined
 - [ ] Privacy policy updated and accessible
 - [ ] Consent mechanisms implemented
@@ -157,6 +162,7 @@ Your primary responsibilities:
 - [ ] Cross-border transfer mechanisms
 
 **Age Verification & Parental Consent**:
+
 1. **Under 13 (COPPA)**:
    - Verifiable parental consent required
    - Limited data collection
@@ -176,28 +182,30 @@ Your primary responsibilities:
 
 **Common Compliance Violations & Fixes**:
 
-*Issue: No privacy policy*
+_Issue: No privacy policy_
 Fix: Implement comprehensive policy before launch
 
-*Issue: Auto-renewing subscriptions unclear*
+_Issue: Auto-renewing subscriptions unclear_
 Fix: Add explicit consent and cancellation info
 
-*Issue: Third-party SDK data sharing*
+_Issue: Third-party SDK data sharing_
 Fix: Audit SDKs and update privacy policy
 
-*Issue: No data deletion mechanism*
+_Issue: No data deletion mechanism_
 Fix: Build user data management portal
 
-*Issue: Marketing to children*
+_Issue: Marketing to children_
 Fix: Implement age gates and parental controls
 
 **Accessibility Compliance (WCAG 2.1)**:
+
 - **Perceivable**: Alt text, captions, contrast ratios
 - **Operable**: Keyboard navigation, time limits
 - **Understandable**: Clear language, error handling
 - **Robust**: Assistive technology compatibility
 
 **Quick Compliance Wins**:
+
 1. Add privacy policy to app and website
 2. Implement cookie consent banner
 3. Create data deletion request form
@@ -207,7 +215,8 @@ Fix: Implement age gates and parental controls
 
 **Legal Document Templates Structure**:
 
-*Privacy Policy Sections:*
+_Privacy Policy Sections:_
+
 1. Introduction and contact
 2. Information we collect
 3. How we use information
@@ -219,7 +228,8 @@ Fix: Implement age gates and parental controls
 9. Changes to policy
 10. Contact information
 
-*Terms of Service Sections:*
+_Terms of Service Sections:_
+
 1. Acceptance of terms
 2. Service description
 3. User accounts
@@ -232,6 +242,7 @@ Fix: Implement age gates and parental controls
 10. Governing law
 
 **Compliance Monitoring Tools**:
+
 - OneTrust (Privacy management)
 - TrustArc (Compliance platform)
 - Usercentrics (Consent management)
@@ -240,7 +251,8 @@ Fix: Implement age gates and parental controls
 
 **Emergency Compliance Protocols**:
 
-*Data Breach Response:*
+_Data Breach Response:_
+
 1. Contain the breach
 2. Assess the scope
 3. Notify authorities (72 hours GDPR)
@@ -248,7 +260,8 @@ Fix: Implement age gates and parental controls
 5. Document everything
 6. Implement prevention
 
-*Regulatory Inquiry:*
+_Regulatory Inquiry:_
+
 1. Acknowledge receipt
 2. Assign response team
 3. Gather documentation

@@ -82,6 +82,7 @@ Your primary responsibilities:
    - Making guidelines searchable and accessible
 
 **Brand Strategy Framework**:
+
 1. **Purpose**: Why the brand exists
 2. **Vision**: Where the brand is going
 3. **Mission**: How the brand will get there
@@ -90,6 +91,7 @@ Your primary responsibilities:
 6. **Promise**: What the brand delivers
 
 **Visual Identity Components**:
+
 ```
 Logo System:
 - Primary logo
@@ -103,29 +105,18 @@ Logo System:
 ```
 
 **Color System Architecture**:
+
 ```css
 /* Primary Palette */
---brand-primary: #[hex] /* Hero color */
---brand-secondary: #[hex] /* Supporting */
---brand-accent: #[hex] /* Highlight */
-
-/* Functional Colors */
---success: #10B981
---warning: #F59E0B  
---error: #EF4444
---info: #3B82F6
-
-/* Neutrals */
---gray-50 through --gray-900
-
-/* Semantic Tokens */
---text-primary: var(--gray-900)
---text-secondary: var(--gray-600)
---background: var(--gray-50)
---surface: #FFFFFF
+--brand-primary: #[hex] /* Hero color */ --brand-secondary: #[hex] /* Supporting */
+  --brand-accent: #[hex] /* Highlight */ /* Functional Colors */ --success: #10b981
+  --warning: #f59e0b --error: #ef4444 --info: #3b82f6 /* Neutrals */ --gray-50 through --gray-900
+  /* Semantic Tokens */ --text-primary: var(--gray-900) --text-secondary: var(--gray-600)
+  --background: var(--gray-50) --surface: #ffffff;
 ```
 
 **Typography System**:
+
 ```
 Brand Font: [Primary choice]
 System Font Stack: -apple-system, BlinkMacSystemFont...
@@ -133,7 +124,7 @@ System Font Stack: -apple-system, BlinkMacSystemFont...
 Type Scale:
 - Display: 48-72px (Marketing only)
 - H1: 32-40px
-- H2: 24-32px  
+- H2: 24-32px
 - H3: 20-24px
 - Body: 16px
 - Small: 14px
@@ -147,6 +138,7 @@ Font Weights:
 ```
 
 **Brand Voice Principles**:
+
 1. **Tone Attributes**: [Friendly, Professional, Innovative, etc.]
 2. **Writing Style**: [Concise, Conversational, Technical, etc.]
 3. **Do's**: [Use active voice, Be inclusive, Stay positive]
@@ -154,6 +146,7 @@ Font Weights:
 5. **Example Phrases**: [Welcome messages, Error states, CTAs]
 
 **Component Brand Checklist**:
+
 - [ ] Uses correct color tokens
 - [ ] Follows spacing system
 - [ ] Applies proper typography
@@ -164,6 +157,7 @@ Font Weights:
 - [ ] Accessible contrast ratios
 
 **Asset Organization Structure**:
+
 ```
 /brand-assets
   /logos
@@ -188,6 +182,7 @@ Font Weights:
 ```
 
 **Quick Brand Audit Checklist**:
+
 1. Logo usage compliance
 2. Color accuracy
 3. Typography consistency
@@ -198,6 +193,7 @@ Font Weights:
 8. Voice and tone match
 
 **Platform-Specific Adaptations**:
+
 - **iOS**: Respect Apple's design language while maintaining brand
 - **Android**: Implement Material Design with brand personality
 - **Web**: Ensure responsive brand experience
@@ -206,6 +202,7 @@ Font Weights:
 - **Motion**: Consistent animation personality
 
 **Brand Implementation Tokens**:
+
 ```javascript
 // Design tokens for developers
 export const brand = {
@@ -216,33 +213,37 @@ export const brand = {
   },
   typography: {
     fontFamily: 'var(--font-brand)',
-    scale: { /* size tokens */ }
+    scale: {
+      /* size tokens */
+    },
   },
   spacing: {
     unit: 4, // Base unit in px
-    scale: [0, 4, 8, 12, 16, 24, 32, 48, 64]
+    scale: [0, 4, 8, 12, 16, 24, 32, 48, 64],
   },
   radius: {
     small: '4px',
     medium: '8px',
     large: '16px',
-    full: '9999px'
+    full: '9999px',
   },
   shadows: {
     small: '0 1px 3px rgba(0,0,0,0.12)',
     medium: '0 4px 6px rgba(0,0,0,0.16)',
-    large: '0 10px 20px rgba(0,0,0,0.20)'
-  }
-}
+    large: '0 10px 20px rgba(0,0,0,0.20)',
+  },
+};
 ```
 
 **Brand Evolution Stages**:
+
 1. **Refresh**: Minor updates (colors, typography)
 2. **Evolution**: Moderate changes (logo refinement, expanded palette)
 3. **Revolution**: Major overhaul (new identity)
 4. **Extension**: Adding sub-brands or products
 
 **Accessibility Standards**:
+
 - WCAG AA compliance minimum
 - Color contrast ratios: 4.5:1 (normal text), 3:1 (large text)
 - Don't rely on color alone
@@ -250,6 +251,7 @@ export const brand = {
 - Ensure readability across contexts
 
 **Brand Measurement Metrics**:
+
 - Recognition rate
 - Consistency score
 - Implementation speed
@@ -258,6 +260,7 @@ export const brand = {
 - Competitive differentiation
 
 **Common Brand Violations**:
+
 - Stretching or distorting logos
 - Using off-brand colors
 - Mixing typography styles
@@ -267,6 +270,7 @@ export const brand = {
 - Inaccessible color combinations
 
 **Developer Handoff Kit**:
+
 1. Brand guidelines PDF
 2. Figma/Sketch libraries
 3. Icon font package

@@ -40,8 +40,9 @@ async function applyMigrations() {
   try {
     // Find all migration files
     const migrationsDir = path.join(process.cwd(), 'prisma', 'migrations');
-    const migrationFolders = fs.readdirSync(migrationsDir)
-      .filter(f => f !== 'migration_lock.toml')
+    const migrationFolders = fs
+      .readdirSync(migrationsDir)
+      .filter((f) => f !== 'migration_lock.toml')
       .sort();
 
     console.log(`\n📋 Found ${migrationFolders.length} migration(s):`);
@@ -76,7 +77,7 @@ async function applyMigrations() {
       // Check if migration was already applied
       const existing = await client.execute({
         sql: 'SELECT migration_name FROM _prisma_migrations WHERE migration_name = ?',
-        args: [folder]
+        args: [folder],
       });
 
       if (existing.rows.length > 0) {
@@ -90,8 +91,8 @@ async function applyMigrations() {
       // Split into individual statements (simple approach - may need refinement)
       const statements = migrationSql
         .split(';')
-        .map(s => s.trim())
-        .filter(s => s.length > 0 && !s.startsWith('--'));
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0 && !s.startsWith('--'));
 
       let appliedSteps = 0;
       for (const statement of statements) {
@@ -117,8 +118,8 @@ async function applyMigrations() {
           folder.substring(0, 36), // Use first 36 chars as ID (timestamp part)
           folder, // Use folder name as checksum
           folder,
-          appliedSteps
-        ]
+          appliedSteps,
+        ],
       });
 
       console.log(`✅ ${folder} - applied ${appliedSteps} statement(s)`);
@@ -135,12 +136,11 @@ async function applyMigrations() {
     `);
 
     console.log(`\n✅ Found ${tables.rows.length} table(s):`);
-    tables.rows.forEach(row => {
+    tables.rows.forEach((row) => {
       console.log(`   - ${row.name}`);
     });
 
     console.log('\n✨ Migration complete! ✨\n');
-
   } catch (error) {
     console.error('\n❌ Migration failed:', error.message);
     console.error(error.stack);

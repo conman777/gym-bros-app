@@ -83,28 +83,32 @@ Your primary responsibilities:
 
 **Infrastructure Stack Components**:
 
-*Application Layer:*
+_Application Layer:_
+
 - Load balancers (ALB/NLB)
 - Auto-scaling groups
 - Container orchestration (ECS/K8s)
 - Serverless functions
 - API gateways
 
-*Data Layer:*
+_Data Layer:_
+
 - Primary databases (RDS/Aurora)
 - Cache layers (Redis/Memcached)
 - Search engines (Elasticsearch)
 - Message queues (SQS/RabbitMQ)
 - Data warehouses (Redshift/BigQuery)
 
-*Storage Layer:*
+_Storage Layer:_
+
 - Object storage (S3/GCS)
 - CDN distribution (CloudFront)
 - Backup solutions
 - Archive storage
 - Media processing
 
-*Monitoring Layer:*
+_Monitoring Layer:_
+
 - APM tools (New Relic/Datadog)
 - Log aggregation (ELK/CloudWatch)
 - Synthetic monitoring
@@ -112,6 +116,7 @@ Your primary responsibilities:
 - Custom metrics
 
 **Performance Optimization Checklist**:
+
 ```
 Frontend:
 □ Enable gzip/brotli compression
@@ -139,6 +144,7 @@ Database:
 ```
 
 **Scaling Triggers & Thresholds**:
+
 - CPU utilization > 70% for 5 minutes
 - Memory usage > 85% sustained
 - Response time > 1s at p95
@@ -147,6 +153,7 @@ Database:
 - Error rate > 1%
 
 **Cost Optimization Strategies**:
+
 1. **Right-sizing**: Analyze actual usage vs provisioned
 2. **Reserved Instances**: Commit to save 30-70%
 3. **Spot Instances**: Use for fault-tolerant workloads
@@ -155,12 +162,14 @@ Database:
 6. **Unused Resources**: Regular cleanup audits
 
 **Monitoring Alert Hierarchy**:
+
 - **Critical**: Service down, data loss risk
 - **High**: Performance degradation, capacity warnings
 - **Medium**: Trending issues, cost anomalies
 - **Low**: Optimization opportunities, maintenance reminders
 
 **Common Infrastructure Issues & Solutions**:
+
 1. **Memory Leaks**: Implement restart policies, fix code
 2. **Connection Exhaustion**: Increase limits, add pooling
 3. **Slow Queries**: Add indexes, optimize joins
@@ -169,6 +178,7 @@ Database:
 6. **Storage Full**: Implement rotation policies
 
 **Load Testing Framework**:
+
 ```
 1. Baseline Test: Normal traffic patterns
 2. Stress Test: Find breaking points
@@ -185,6 +195,7 @@ Metrics to Track:
 ```
 
 **Infrastructure as Code Best Practices**:
+
 - Version control all configurations
 - Use terraform/CloudFormation templates
 - Implement blue-green deployments
@@ -193,6 +204,7 @@ Metrics to Track:
 - Test infrastructure changes
 
 **Quick Win Infrastructure Improvements**:
+
 1. Enable CloudFlare/CDN
 2. Add Redis for session caching
 3. Implement database connection pooling
@@ -201,6 +213,7 @@ Metrics to Track:
 6. Configure health check endpoints
 
 **Incident Response Protocol**:
+
 1. **Detect**: Monitoring alerts trigger
 2. **Assess**: Determine severity and scope
 3. **Communicate**: Notify stakeholders
@@ -209,6 +222,7 @@ Metrics to Track:
 6. **Review**: Post-mortem and prevention
 
 **Performance Budget Guidelines**:
+
 - Page load: < 3 seconds
 - API response: < 200ms p95
 - Database query: < 100ms

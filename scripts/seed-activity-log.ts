@@ -1,78 +1,78 @@
-import { prisma } from "../src/lib/prisma";
+import { prisma } from '../src/lib/prisma';
 
 const SAMPLE_ACTIVITIES = [
   {
-    category: "PRICE_UPDATE",
-    operation: "Bitcoin Price Fetch",
-    message: "Successfully fetched BTC price: $68,234.12",
-    status: "SUCCESS",
+    category: 'PRICE_UPDATE',
+    operation: 'Bitcoin Price Fetch',
+    message: 'Successfully fetched BTC price: $68,234.12',
+    status: 'SUCCESS',
     details: {
       price: 68234.12,
-      currency: "USD",
-      source: "CoinGecko API",
+      currency: 'USD',
+      source: 'CoinGecko API',
     },
   },
   {
-    category: "PREDICTION",
-    operation: "Price Prediction - BTC",
-    message: "AI model predicts BTC to reach $70,000 in 24h",
-    status: "SUCCESS",
+    category: 'PREDICTION',
+    operation: 'Price Prediction - BTC',
+    message: 'AI model predicts BTC to reach $70,000 in 24h',
+    status: 'SUCCESS',
     details: {
       currentPrice: 68234.12,
       predictedPrice: 70000,
       confidence: 0.78,
-      timeframe: "24h",
+      timeframe: '24h',
     },
   },
   {
-    category: "API_CALL",
-    operation: "External API Request",
-    message: "CoinGecko API rate limit: 45/50 requests",
-    status: "IN_PROGRESS",
+    category: 'API_CALL',
+    operation: 'External API Request',
+    message: 'CoinGecko API rate limit: 45/50 requests',
+    status: 'IN_PROGRESS',
     details: {
-      endpoint: "/simple/price",
+      endpoint: '/simple/price',
       rateLimitRemaining: 45,
       rateLimitTotal: 50,
     },
   },
   {
-    category: "PRICE_UPDATE",
-    operation: "Ethereum Price Fetch",
-    message: "Failed to fetch ETH price - timeout",
-    status: "ERROR",
+    category: 'PRICE_UPDATE',
+    operation: 'Ethereum Price Fetch',
+    message: 'Failed to fetch ETH price - timeout',
+    status: 'ERROR',
     details: {
-      error: "Request timeout after 5000ms",
+      error: 'Request timeout after 5000ms',
       retryAttempt: 3,
       maxRetries: 3,
     },
   },
   {
-    category: "PREDICTION",
-    operation: "Market Analysis",
-    message: "Analyzing market trends for top 10 coins",
-    status: "IN_PROGRESS",
+    category: 'PREDICTION',
+    operation: 'Market Analysis',
+    message: 'Analyzing market trends for top 10 coins',
+    status: 'IN_PROGRESS',
     details: {
       coinsProcessed: 7,
       coinsTotal: 10,
-      estimatedTimeRemaining: "30s",
+      estimatedTimeRemaining: '30s',
     },
   },
   {
-    category: "API_CALL",
-    operation: "Cache Miss - BTC Price",
-    message: "Cache miss, fetching fresh data from API",
-    status: "SUCCESS",
+    category: 'API_CALL',
+    operation: 'Cache Miss - BTC Price',
+    message: 'Cache miss, fetching fresh data from API',
+    status: 'SUCCESS',
     details: {
-      cacheKey: "btc_price_usd",
+      cacheKey: 'btc_price_usd',
       ttl: 300,
       lastUpdate: new Date(Date.now() - 360000).toISOString(),
     },
   },
   {
-    category: "PRICE_UPDATE",
-    operation: "Solana Price Update",
-    message: "SOL price updated: $152.34 (+3.2%)",
-    status: "SUCCESS",
+    category: 'PRICE_UPDATE',
+    operation: 'Solana Price Update',
+    message: 'SOL price updated: $152.34 (+3.2%)',
+    status: 'SUCCESS',
     details: {
       price: 152.34,
       change24h: 3.2,
@@ -80,10 +80,10 @@ const SAMPLE_ACTIVITIES = [
     },
   },
   {
-    category: "PREDICTION",
-    operation: "Sentiment Analysis",
-    message: "Analyzing social sentiment for BTC",
-    status: "SUCCESS",
+    category: 'PREDICTION',
+    operation: 'Sentiment Analysis',
+    message: 'Analyzing social sentiment for BTC',
+    status: 'SUCCESS',
     details: {
       sentimentScore: 0.65,
       positiveRatio: 0.72,
@@ -94,7 +94,7 @@ const SAMPLE_ACTIVITIES = [
 ];
 
 async function seed() {
-  console.log("Seeding activity log data...");
+  console.log('Seeding activity log data...');
 
   // Create activities with staggered timestamps
   for (let i = 0; i < SAMPLE_ACTIVITIES.length; i++) {
@@ -112,8 +112,8 @@ async function seed() {
   }
 
   // Create some additional random activities
-  const categories = ["PRICE_UPDATE", "PREDICTION", "API_CALL", "SYSTEM"];
-  const statuses = ["SUCCESS", "ERROR", "IN_PROGRESS"];
+  const categories = ['PRICE_UPDATE', 'PREDICTION', 'API_CALL', 'SYSTEM'];
+  const statuses = ['SUCCESS', 'ERROR', 'IN_PROGRESS'];
 
   for (let i = 0; i < 20; i++) {
     const category = categories[Math.floor(Math.random() * categories.length)];
@@ -135,13 +135,13 @@ async function seed() {
     });
   }
 
-  console.log("✅ Activity log seeding complete!");
+  console.log('✅ Activity log seeding complete!');
   console.log(`Total activities created: ${SAMPLE_ACTIVITIES.length + 20}`);
 }
 
 seed()
   .catch((error) => {
-    console.error("Seeding failed:", error);
+    console.error('Seeding failed:', error);
     process.exit(1);
   })
   .finally(async () => {
