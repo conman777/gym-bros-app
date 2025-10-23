@@ -1,188 +1,325 @@
-# Gym Bros
+# Gym Bros App
 
-A simple gym tracking app for Conor and Devlin to track workouts and stay on schedule.
+A comprehensive fitness tracking application for managing workouts and rehabilitation exercises. Built with Next.js 15, React 19, and Prisma.
 
 ## Features
 
-- **User Profiles**: Separate tracking for Conor and Devlin
-- **Workout Templates**: Import workout plans via copy/paste
-- **Calendar View**: See all scheduled workouts at a glance
-- **Workout Tracking**: Check off sets as you complete them with weight tracking
-- **Auto-adjustment**: Missed workouts automatically shift forward
-- **Progress Stats**: Track total sets, exercises, and streaks
-- **Mobile-friendly**: Designed for use during workouts
+### Workout Tracking
 
-## Getting Started
+- **Daily Workout Management**: Create and track workouts for any date
+- **Exercise Organization**: Structure workouts with multiple exercises
+- **Set Tracking**: Record reps, weight, and completion status for each set
+- **Workout History**: View past workouts via interactive calendar
+- **Import Workouts**: Bulk import workouts from templates
 
-### Quick Setup (All Platforms)
+### Rehabilitation Management
 
-The easiest way to get started on any platform (Windows, Linux, macOS, WSL):
+- **Rehab Exercise Library**: Track prescribed rehabilitation exercises
+- **Category Organization**: Group exercises by type (warm-up, mobility, strength)
+- **Detailed Parameters**: Track sets, reps, hold times, resistance bands, and weights
+- **Progress Tracking**: Mark exercises complete and track completion dates
+- **Side-Specific Exercises**: Support for left/right side-specific exercises
 
-```bash
-npm run setup
-```
+### Analytics & Progress
 
-This will:
-- Install all dependencies
-- Generate the Prisma client
-- Set up the database
-- Configure environment variables
+- **Statistics Dashboard**: View total sets completed, exercise count, and last workout date
+- **Calendar View**: Visual representation of workout history
+- **Activity Logging**: System-level activity tracking for debugging and monitoring
 
-Then start the development server:
-```bash
-npm run dev
-```
-The app will run on http://localhost:8885
+## Tech Stack
 
-### Manual Setup (Alternative)
+### Frontend
 
-If you prefer to run commands manually:
+- **Next.js 15.5**: React framework with App Router
+- **React 19.1**: UI library with latest features
+- **TypeScript 5**: Type-safe JavaScript
+- **Tailwind CSS 4**: Utility-first CSS framework
+- **Framer Motion 12**: Animation library
+- **TanStack Query 5**: Server state management
+- **Radix UI**: Accessible component primitives
+- **Lucide React**: Icon library
 
-1. Install dependencies:
+### Backend
+
+- **Next.js API Routes**: Serverless API endpoints
+- **Prisma 6.17**: ORM for database access
+- **PostgreSQL**: Relational database
+- **bcryptjs**: Password hashing
+- **Cookie-based Auth**: Secure session management
+
+### Development
+
+- **Jest**: Testing framework
+- **React Testing Library**: Component testing
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- PostgreSQL database (local or remote)
+- Git
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd gym-bros-app
+   ```
+
+2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
-2. Generate Prisma client:
+3. **Set up environment variables**
+
+   Create `.env` file in the root directory:
+
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/gym_bros"
+   ```
+
+   For development with local file:
+
+   ```env
+   DATABASE_URL="file:./dev.db"
+   ```
+
+4. **Initialize the database**
+
    ```bash
+   npx prisma migrate dev
    npx prisma generate
    ```
 
-3. Set up the database:
+5. **Run the setup script** (optional, creates demo user)
+
    ```bash
-   npx prisma db push
+   npm run setup
    ```
 
-4. Start the development server:
+6. **Start the development server**
+
    ```bash
    npm run dev
    ```
 
-### Platform-Specific Notes
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-**Windows (Native PowerShell/CMD):**
-- All commands work natively
-- No WSL required
-- Database stored at `prisma/dev.db`
+## Available Scripts
 
-**Windows (WSL):**
-- Run all commands from within WSL terminal
-- Database stored in WSL filesystem at `prisma/dev.db`
+| Command                 | Description                           |
+| ----------------------- | ------------------------------------- |
+| `npm run dev`           | Start development server on port 3000 |
+| `npm run build`         | Build production bundle               |
+| `npm start`             | Start production server               |
+| `npm test`              | Run test suite                        |
+| `npm run test:watch`    | Run tests in watch mode               |
+| `npm run test:coverage` | Run tests with coverage report        |
+| `npm run setup`         | Initialize database with demo data    |
+| `npm run migrate:turso` | Run Turso-specific migrations         |
 
-**Linux/macOS:**
-- All commands work natively
-- Database stored at `prisma/dev.db`
+## Project Structure
 
-3. Select your profile (Conor or Devlin)
-
-4. Import a workout template:
-   ```
-   Monday - Chest & Triceps
-   Bench Press: 3x10 @ 135lbs
-   Incline Dumbbell Press: 3x12 @ 50lbs
-   Cable Flyes: 3x15 @ 30lbs
-   Tricep Pushdowns: 3x12 @ 40lbs
-   
-   Wednesday - Back & Biceps
-   Deadlifts: 3x5 @ 225lbs
-   Pull-ups: 3x8 @ bodyweight
-   Barbell Rows: 3x10 @ 95lbs
-   Bicep Curls: 3x12 @ 30lbs
-   
-   Friday - Legs
-   Squats: 3x8 @ 185lbs
-   Leg Press: 3x12 @ 270lbs
-   Leg Curls: 3x15 @ 60lbs
-   Calf Raises: 3x20 @ 100lbs
-   ```
-
-5. Start your workout and check off sets as you complete them
-
-## Tech Stack
-
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript
-- **Database**: SQLite with Prisma ORM
-- **Styling**: Tailwind CSS
-- **Port**: 8885
-
-## Database Management
-
-The app uses SQLite for local data storage. The database file is located at `prisma/dev.db`.
-
-To reset the database:
-```bash
-npx prisma db push --force-reset
+```
+gym-bros-app/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── api/               # API routes
+│   │   │   ├── auth/         # Authentication endpoints
+│   │   │   ├── workouts/     # Workout CRUD operations
+│   │   │   ├── rehab/        # Rehabilitation exercise management
+│   │   │   ├── sets/         # Set update operations
+│   │   │   ├── stats/        # Statistics endpoints
+│   │   │   └── calendar/     # Calendar data
+│   │   ├── dashboard/        # Main dashboard page
+│   │   ├── calendar/         # Calendar view
+│   │   ├── workout/[date]/   # Daily workout page
+│   │   ├── rehab/            # Rehab management
+│   │   ├── stats/            # Statistics page
+│   │   ├── settings/         # User settings
+│   │   └── layout.tsx        # Root layout
+│   ├── components/            # Reusable React components
+│   │   ├── BottomNav.tsx     # Mobile navigation
+│   │   ├── PageNav.tsx       # Desktop navigation
+│   │   └── AnimatedBackground.tsx
+│   ├── lib/                   # Utility functions and helpers
+│   │   ├── prisma.ts         # Prisma client singleton
+│   │   ├── auth-helpers.ts   # Authentication utilities
+│   │   ├── date-utils.ts     # Date formatting functions
+│   │   ├── rehab-helpers.ts  # Rehab data transformations
+│   │   ├── types.ts          # TypeScript type definitions
+│   │   └── demo-data.ts      # Demo data generator
+│   ├── hooks/                 # Custom React hooks
+│   │   └── useActivityLog.ts
+│   ├── providers/             # React context providers
+│   │   └── QueryProvider.tsx # TanStack Query provider
+│   └── middleware.ts          # Next.js middleware (auth)
+├── prisma/
+│   └── schema.prisma         # Database schema
+├── scripts/
+│   └── migrate-turso.js      # Database migration scripts
+├── docs/                      # Documentation
+│   ├── architecture/         # System architecture docs
+│   ├── development/          # Development guides
+│   ├── workflows/            # Team workflows
+│   └── troubleshooting/      # Common issues
+├── public/                    # Static assets
+├── CLAUDE.md                 # Development best practices
+├── README.md                 # This file
+└── package.json              # Dependencies and scripts
 ```
 
-To view the database:
-```bash
-npx prisma studio
-```
+## Authentication Flow
 
-## Troubleshooting
+1. User registers with username and optional email
+2. Password is hashed with bcryptjs (salt rounds: 10)
+3. On login, credentials are verified and userId is stored in HTTP-only cookie
+4. Middleware checks cookie on protected routes and redirects if missing
+5. API routes use `getUserFromCookies()` helper to authenticate requests
+6. Rehab endpoints use `requireRehabUser()` to enforce feature flags
 
-### Windows Issues
+## Database Schema
 
-**Problem: "NODE_ENV is not recognized"**
-- Solution: This is fixed in the latest version. Run `npm install` to get the updated dependencies
+The application uses PostgreSQL with Prisma ORM. Key models:
 
-**Problem: Database connection errors**
-- Solution: Ensure the `.env` file points to `file:./prisma/dev.db`
-- Check that the `prisma` directory exists
-- Run `npm run setup` to reconfigure
+- **User**: Authentication and profile data
+- **Workout**: Daily workout sessions
+- **Exercise**: Exercises within a workout
+- **Set**: Individual sets (reps, weight, completion)
+- **Stats**: Aggregated user statistics
+- **RehabExercise**: Rehabilitation exercise prescriptions
+- **ActivityLog**: System activity tracking
 
-**Problem: Prisma client errors**
-- Solution: Regenerate the Prisma client with `npx prisma generate`
-- The client is platform-specific, so regenerate after switching between Windows/WSL/Linux
+See [`docs/architecture/DATABASE_SCHEMA.md`](docs/architecture/DATABASE_SCHEMA.md) for detailed schema documentation.
 
-### WSL Issues
+## API Architecture
 
-**Problem: Permission errors**
-- Solution: Ensure you're running commands from within WSL, not Windows PowerShell
-- Check file permissions: `chmod +x setup.js`
+RESTful API endpoints organized by resource:
 
-**Problem: Database locked**
-- Solution: Close any open Prisma Studio windows or other connections to the database
+- `/api/auth/*` - Authentication (login, register, logout)
+- `/api/workouts/*` - Workout CRUD operations
+- `/api/sets/*` - Set updates
+- `/api/rehab/*` - Rehab exercise management
+- `/api/stats` - User statistics
+- `/api/calendar` - Calendar data
+- `/api/dashboard` - Dashboard data
+- `/api/settings` - User settings
 
-### General Issues
+All endpoints require authentication via cookie (except login/register).
 
-**Problem: Port 8885 already in use**
-- Solution: Change the port in `server.js` or kill the process using the port
-- Windows: `netstat -ano | findstr :8885` then `taskkill /PID <pid> /F`
-- Linux/macOS: `lsof -ti:8885 | xargs kill -9`
-
-## Legacy Scripts
-
-The following scripts are deprecated and kept for reference only:
-- `setup.ps1` - Old Windows PowerShell setup (use `npm run setup` instead)
-- `setup-wsl.sh` - Old WSL setup (use `npm run setup` instead)
-
-Use the unified `npm run setup` command for all platforms.
+See [`docs/architecture/API_ARCHITECTURE.md`](docs/architecture/API_ARCHITECTURE.md) for detailed API documentation.
 
 ## Development
 
-The app follows TDD principles and best practices as outlined in CLAUDE.md.
+### Running Tests
 
-### Project Structure
+```bash
+# Run all tests
+npm test
 
-```
-src/
-├── app/              # Next.js App Router pages
-│   ├── api/         # API routes
-│   ├── calendar/    # Calendar view
-│   ├── dashboard/   # Main dashboard
-│   ├── import/      # Template import
-│   ├── stats/       # Statistics page
-│   └── workout/     # Workout tracking
-├── lib/             # Utilities and types
-└── generated/       # Prisma client
+# Watch mode for development
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
 ```
 
-## Production Build
+### Code Quality
 
-To build for production:
+The project enforces code quality through:
+
+- **TypeScript**: Strict type checking
+- **ESLint**: Code linting rules
+- **Prettier**: Automatic code formatting
+- **Pre-commit hooks**: Automated checks before commits
+
+### Database Migrations
+
+```bash
+# Create a new migration
+npx prisma migrate dev --name your_migration_name
+
+# Apply migrations to production
+npx prisma migrate deploy
+
+# Reset database (dev only)
+npx prisma migrate reset
+```
+
+### Environment Variables
+
+| Variable       | Description                          | Required |
+| -------------- | ------------------------------------ | -------- |
+| `DATABASE_URL` | PostgreSQL connection string         | Yes      |
+| `NODE_ENV`     | Environment (development/production) | No       |
+
+## Deployment
+
+### Building for Production
+
 ```bash
 npm run build
 npm start
 ```
+
+### Vercel Deployment
+
+The app is optimized for Vercel deployment:
+
+1. Connect your Git repository to Vercel
+2. Set `DATABASE_URL` environment variable
+3. Deploy automatically on push to main branch
+
+Configuration in `vercel.json`:
+
+```json
+{
+  "buildCommand": "prisma generate && next build"
+}
+```
+
+## Contributing
+
+1. Follow the coding standards in [`CLAUDE.md`](CLAUDE.md)
+2. Write tests for all new features (TDD approach)
+3. Ensure all tests pass before committing
+4. Use Conventional Commits format for commit messages
+5. Update documentation for significant changes
+
+## Troubleshooting
+
+### Common Issues
+
+**Database Connection Failed**
+
+- Verify `DATABASE_URL` is correctly set
+- Ensure PostgreSQL is running
+- Check network connectivity to remote database
+
+**Prisma Client Not Generated**
+
+- Run `npx prisma generate`
+- Ensure `@prisma/client` is installed
+
+**Authentication Not Working**
+
+- Clear browser cookies and try again
+- Check that `userId` cookie is being set
+- Verify middleware is running on protected routes
+
+See [`docs/troubleshooting/COMMON_ISSUES.md`](docs/troubleshooting/COMMON_ISSUES.md) for more help.
+
+## License
+
+Private project. All rights reserved.
+
+## Support
+
+For issues, questions, or feature requests, please create an issue in the repository.

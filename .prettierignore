@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+.next
+out
+build
+dist
+
+# Generated files
+.vercel
+.turbo
+*.log
+*.tsbuildinfo
+
+# Prisma generated
+src/generated
+prisma/migrations
+
+# Config files that shouldn't be formatted
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Other
+.git
+.env*
+*.min.js
+*.min.css
