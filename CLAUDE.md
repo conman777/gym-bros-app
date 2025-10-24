@@ -8,6 +8,9 @@ This guide provides language-agnostic best practices for writing maintainable, t
 
 ---
 
+When you are trying to restart an app, stop, stopping all processes, you keep closing
+yourself
+
 ## 0 — Project-Specific Documentation
 
 This guide contains **universal** best practices. For **project-specific** information, always check project documentation.
