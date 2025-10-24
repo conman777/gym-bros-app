@@ -381,7 +381,7 @@ export default function Dashboard() {
 
         {/* Gym Plan Section */}
         {currentGymPlan ? (
-          <GymPlanCard plan={currentGymPlan} />
+          <GymPlanCard plan={currentGymPlan} onRegeneratePlan={() => setShowGymPlanModal(true)} />
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 20 }}

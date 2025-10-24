@@ -55,6 +55,17 @@ export async function POST(request: NextRequest) {
 
     console.log('Generating gym plan for user:', auth.userId);
 
+    // Archive any existing active plans before creating a new one
+    await prisma.gymPlan.updateMany({
+      where: {
+        userId: auth.userId,
+        status: 'active',
+      },
+      data: {
+        status: 'archived',
+      },
+    });
+
     const aiResponse = await generateGymPlan({
       fitnessGoal,
       fitnessLevel,

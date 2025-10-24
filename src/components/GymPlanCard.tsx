@@ -2,15 +2,16 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Dumbbell, ChevronDown, ChevronUp, Sparkles, Calendar } from 'lucide-react';
+import { Dumbbell, ChevronDown, ChevronUp, Sparkles, Calendar, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 
 interface GymPlanCardProps {
   plan: any;
   onViewDetails?: () => void;
+  onRegeneratePlan?: () => void;
 }
 
-export function GymPlanCard({ plan, onViewDetails }: GymPlanCardProps) {
+export function GymPlanCard({ plan, onViewDetails, onRegeneratePlan }: GymPlanCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   const planContent = plan.planContent;
@@ -131,6 +132,16 @@ export function GymPlanCard({ plan, onViewDetails }: GymPlanCardProps) {
           <Calendar className="w-4 h-4" />
           Import to Calendar
         </Link>
+        {onRegeneratePlan && (
+          <button
+            onClick={onRegeneratePlan}
+            className="flex items-center justify-center gap-2 bg-white/20 text-white py-3 px-4 rounded-xl font-semibold hover:bg-white/30 transition-colors"
+            title="Regenerate Plan"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Redo
+          </button>
+        )}
       </div>
     </motion.div>
   );
