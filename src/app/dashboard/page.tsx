@@ -22,6 +22,8 @@ import { SetupProgressHandler } from './SetupProgressHandler';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
 import { HabitTrackingCard } from '@/components/HabitTrackingCard';
+import { GymPlanGeneratorModal } from '@/components/GymPlanGeneratorModal';
+import { GymPlanCard } from '@/components/GymPlanCard';
 
 interface User {
   id: string;
@@ -55,9 +57,12 @@ export default function Dashboard() {
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
   const [setupProgress, setSetupProgress] = useState<number | null>(null);
   const [setupComplete, setSetupComplete] = useState(false);
+  const [showGymPlanModal, setShowGymPlanModal] = useState(false);
+  const [currentGymPlan, setCurrentGymPlan] = useState<any>(null);
 
   useEffect(() => {
     fetchDashboardData();
+    fetchGymPlan();
   }, []);
 
   const fetchDashboardData = async () => {
@@ -87,6 +92,24 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchGymPlan = async () => {
+    try {
+      const response = await fetch('/api/gym-plan?status=active');
+      if (response.ok) {
+        const plans = await response.json();
+        if (plans.length > 0) {
+          setCurrentGymPlan(plans[0]);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching gym plan:', error);
+    }
+  };
+
+  const handlePlanGenerated = (plan: any) => {
+    setCurrentGymPlan(plan);
   };
 
   const toggleRehabExercise = async (exerciseId: string, completed: boolean) => {
@@ -352,6 +375,39 @@ export default function Dashboard() {
 
         {/* Habit Tracking Card */}
         <HabitTrackingCard />
+
+        {/* Gym Plan Section */}
+        {currentGymPlan ? (
+          <GymPlanCard plan={currentGymPlan} />
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg"
+          >
+            <div className="text-center py-4">
+              <Dumbbell className="w-16 h-16 text-white/60 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold mb-2">Generate Your AI Gym Plan</h2>
+              <p className="text-white/80 mb-6">
+                Get a personalized workout plan tailored to your goals
+              </p>
+              <button
+                onClick={() => setShowGymPlanModal(true)}
+                className="inline-flex items-center bg-white text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
+              >
+                Generate Plan
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        <GymPlanGeneratorModal
+          open={showGymPlanModal}
+          onOpenChange={setShowGymPlanModal}
+          onPlanGenerated={handlePlanGenerated}
+        />
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">

@@ -22,6 +22,7 @@ model User {
   privacySettings  PrivacySettings?
   activities       FriendActivity[]
   habitLogs        HabitLog[]
+  gymPlans         GymPlan[]
 }
 
 model Workout {
@@ -160,4 +161,23 @@ model HabitLog {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, timestamp])
+}
+
+model GymPlan {
+  id              String   @id @default(cuid())
+  userId          String
+  createdAt       DateTime @default(now())
+
+  fitnessGoal     String
+  fitnessLevel    String
+  daysPerWeek     Int
+  equipmentAccess String
+
+  planContent     Json
+  weeklySchedule  Json
+  status          String   @default("active")
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
