@@ -61,15 +61,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
     }
 
-    // Check if name already exists
-    const existingName = await prisma.user.findUnique({
-      where: { name },
-    });
-
-    if (existingName) {
-      return NextResponse.json({ error: 'Name already taken' }, { status: 409 });
-    }
-
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
