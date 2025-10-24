@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { PageNav } from '@/components/PageNav';
+import BottomNav from '@/components/BottomNav';
 import {
   Dumbbell,
   Heart,
@@ -177,16 +179,21 @@ export default function SettingsPage() {
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <ChevronLeft className="w-6 h-6 text-white" />
-            </button>
-            <div>
-              <h1 className="text-2xl font-bold text-white">Settings</h1>
-              <p className="text-sm text-white/80">Manage your preferences</p>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-bold text-white">Settings</h1>
+                <p className="text-xs text-white/80">Manage your preferences</p>
+              </div>
+            </div>
+            <div className="hidden md:flex">
+              <PageNav />
             </div>
           </div>
         </div>
@@ -252,7 +259,7 @@ export default function SettingsPage() {
                 <Heart className="w-6 h-6 text-teal-300" />
                 <h2 className="text-xl font-bold text-white">Rehabilitation Features</h2>
               </div>
-              <p className="text-white/70 text-sm">
+              <p className="text-white/85 text-sm">
                 Enable rehab exercises and tracking for injury recovery and physical therapy
               </p>
             </div>
@@ -296,7 +303,7 @@ export default function SettingsPage() {
             <Shield className="w-6 h-6 text-blue-300" />
             <h2 className="text-xl font-bold text-white">Privacy Settings</h2>
           </div>
-          <p className="text-white/60 text-sm mb-6">
+          <p className="text-white/80 text-sm mb-6">
             Control what information friends can see about your workouts
           </p>
 
@@ -305,10 +312,10 @@ export default function SettingsPage() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <Eye className="w-5 h-5 text-white/70" />
+                  <Eye className="w-5 h-5 text-white/85" />
                   <h3 className="text-white font-medium">Workout Details</h3>
                 </div>
-                <p className="text-white/60 text-sm">
+                <p className="text-white/80 text-sm">
                   Show specific exercises, sets, reps, and weights to friends
                 </p>
               </div>
@@ -331,10 +338,10 @@ export default function SettingsPage() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <Eye className="w-5 h-5 text-white/70" />
+                  <Eye className="w-5 h-5 text-white/85" />
                   <h3 className="text-white font-medium">Exercise Names</h3>
                 </div>
-                <p className="text-white/60 text-sm">Show what exercises you're doing to friends</p>
+                <p className="text-white/80 text-sm">Show what exercises you're doing to friends</p>
               </div>
               <button
                 onClick={() => handlePrivacyToggle('showExerciseNames')}
@@ -355,10 +362,10 @@ export default function SettingsPage() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp className="w-5 h-5 text-white/70" />
+                  <TrendingUp className="w-5 h-5 text-white/85" />
                   <h3 className="text-white font-medium">Performance Trends</h3>
                 </div>
-                <p className="text-white/60 text-sm">
+                <p className="text-white/80 text-sm">
                   Show your progress over time, PRs, and strength gains
                 </p>
               </div>
@@ -381,10 +388,10 @@ export default function SettingsPage() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <Calendar className="w-5 h-5 text-white/70" />
+                  <Calendar className="w-5 h-5 text-white/85" />
                   <h3 className="text-white font-medium">Workout Schedule</h3>
                 </div>
-                <p className="text-white/60 text-sm">Show calendar view of when you work out</p>
+                <p className="text-white/80 text-sm">Show calendar view of when you work out</p>
               </div>
               <button
                 onClick={() => handlePrivacyToggle('showWorkoutSchedule')}
@@ -421,7 +428,7 @@ export default function SettingsPage() {
             <Lock className="w-6 h-6 text-white/80" />
             <h2 className="text-xl font-bold text-white">Change Password</h2>
           </div>
-          <p className="text-white/60 text-sm mb-4">
+          <p className="text-white/80 text-sm mb-4">
             Update your password to keep your account secure
           </p>
           <button className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors border border-white/20">
@@ -429,6 +436,8 @@ export default function SettingsPage() {
           </button>
         </motion.div>
       </main>
+
+      <BottomNav />
     </div>
   );
 }

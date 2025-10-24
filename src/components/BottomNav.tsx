@@ -16,7 +16,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden md:flex fixed bottom-0 left-0 right-0 bg-white/10 backdrop-blur-md border-t border-white/20 z-50">
+    <nav className="md:hidden flex fixed bottom-0 left-0 right-0 bg-white/10 backdrop-blur-md border-t border-white/20 z-50">
       <div className="flex justify-around items-center h-16 w-full">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -58,13 +58,13 @@ export default function BottomNav() {
                   <Icon
                     size={24}
                     className={`mb-1 transition-colors ${
-                      isActive ? 'text-white' : 'text-white/60 hover:text-white'
+                      isActive ? 'text-white' : 'text-white/80 hover:text-white'
                     }`}
                   />
                 </motion.div>
                 <motion.span
                   className={`text-xs transition-all ${
-                    isActive ? 'text-white font-medium' : 'text-white/60 hover:text-white'
+                    isActive ? 'text-white font-medium' : 'text-white/80 hover:text-white'
                   }`}
                   animate={
                     isActive

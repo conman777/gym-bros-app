@@ -18,21 +18,21 @@ function PageNavComponent() {
   const pathname = usePathname();
 
   return (
-    <div className="flex justify-around items-center mt-4 pt-4 border-t border-white/10">
+    <div className="flex items-center gap-6">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         const Icon = item.icon;
 
         return (
-          <Link key={item.href} href={item.href} className="relative flex flex-col items-center">
-            <motion.div className="flex flex-col items-center" whileTap={{ scale: 0.9 }}>
+          <Link key={item.href} href={item.href} className="relative flex items-center gap-2">
+            <motion.div className="flex items-center gap-2" whileTap={{ scale: 0.9 }}>
               <Icon
                 size={20}
-                className={`mb-1 transition-colors ${isActive ? 'text-white' : 'text-white/60'}`}
+                className={`transition-colors ${isActive ? 'text-white' : 'text-white/80'}`}
               />
               <span
-                className={`text-xs transition-all ${
-                  isActive ? 'text-white font-medium' : 'text-white/60'
+                className={`text-sm transition-all ${
+                  isActive ? 'text-white font-medium' : 'text-white/80'
                 }`}
               >
                 {item.label}
@@ -40,9 +40,9 @@ function PageNavComponent() {
               {isActive && (
                 <motion.div
                   layoutId="activeMobileTab"
-                  className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white rounded-full"
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white rounded-full"
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: 1, scaleX: 1 }}
                   transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                 />
               )}

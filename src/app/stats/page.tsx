@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
+import BottomNav from '@/components/BottomNav';
 
 interface StatsData {
   user: {
@@ -97,19 +98,18 @@ export default function StatsPage() {
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between gap-4">
             <Link
               href="/dashboard"
-              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
-            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">
-              Progress & Stats
-            </h1>
+            <h1 className="text-xl font-bold text-center text-white">Progress & Stats</h1>
+            <div className="hidden md:flex">
+              <PageNav />
+            </div>
           </div>
-
-          <PageNav />
         </div>
       </header>
 
@@ -125,7 +125,7 @@ export default function StatsPage() {
               <h2 className="text-2xl font-bold mb-1">Total Progress</h2>
               <p className="text-white/80">Keep up the great work!</p>
             </div>
-            <Trophy className="w-12 h-12 text-white/40" />
+            <Trophy className="w-12 h-12 text-white/75" />
           </div>
 
           <div className="grid grid-cols-2 gap-6">
@@ -163,13 +163,13 @@ export default function StatsPage() {
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">This Month</h3>
-            <CalendarIcon className="w-5 h-5 text-white/70" />
+            <CalendarIcon className="w-5 h-5 text-white/85" />
           </div>
 
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-2">
-                <span className="text-white/70">Sets completed</span>
+                <span className="text-white/85">Sets completed</span>
                 <span className="font-semibold text-white">
                   {monthlySets}/{monthlyGoal}
                 </span>
@@ -186,7 +186,7 @@ export default function StatsPage() {
 
             {topExercise && (
               <div className="pt-2">
-                <p className="text-white/70 mb-1">Most done exercise</p>
+                <p className="text-white/85 mb-1">Most done exercise</p>
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-white">{topExercise[0]}</span>
                   <span className="text-white/90">{topExercise[1]} sets</span>
@@ -215,7 +215,7 @@ export default function StatsPage() {
                 {currentStreak}
               </motion.span>
             </div>
-            <p className="text-sm text-white/70">Day Streak</p>
+            <p className="text-sm text-white/85">Day Streak</p>
             {currentStreak > 0 && <p className="text-xs text-white/90">Keep it up! 🔥</p>}
           </motion.div>
 
@@ -236,7 +236,7 @@ export default function StatsPage() {
                 {weekStreak}
               </motion.span>
             </div>
-            <p className="text-sm text-white/70">Week Streak</p>
+            <p className="text-sm text-white/85">Week Streak</p>
             <p className="text-xs text-white/90">Consistency pays off!</p>
           </motion.div>
 
@@ -257,7 +257,7 @@ export default function StatsPage() {
                 {totalExercises}
               </motion.span>
             </div>
-            <p className="text-sm text-white/70">Exercises Done</p>
+            <p className="text-sm text-white/85">Exercises Done</p>
           </motion.div>
 
           <motion.div
@@ -277,7 +277,7 @@ export default function StatsPage() {
                 {Math.round(totalSets / Math.max(activeDays, 1))}
               </motion.span>
             </div>
-            <p className="text-sm text-white/70">Avg Sets/Day</p>
+            <p className="text-sm text-white/85">Avg Sets/Day</p>
           </motion.div>
         </div>
 
@@ -290,7 +290,7 @@ export default function StatsPage() {
             className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
           >
             <h3 className="text-lg font-semibold text-white mb-3">Last Workout</h3>
-            <p className="text-white/70">
+            <p className="text-white/85">
               {new Date(user.stats.lastWorkoutDate).toLocaleDateString('en-US', {
                 weekday: 'long',
                 year: 'numeric',
@@ -301,6 +301,8 @@ export default function StatsPage() {
           </motion.div>
         )}
       </main>
+
+      <BottomNav />
     </div>
   );
 }

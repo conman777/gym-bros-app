@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell } 
 import { formatDateForUrl } from '@/lib/date-utils';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
+import BottomNav from '@/components/BottomNav';
 
 interface WorkoutDay {
   id: string;
@@ -138,10 +139,10 @@ function CalendarContent() {
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <Link
               href="/dashboard"
-              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
@@ -155,10 +156,10 @@ function CalendarContent() {
                 {monthNames[month]} {year}
               </h1>
             </motion.div>
-            <div className="w-10"></div>
+            <div className="hidden md:flex">
+              <PageNav />
+            </div>
           </div>
-
-          <PageNav />
         </div>
       </header>
 
@@ -208,7 +209,7 @@ function CalendarContent() {
           <div className="grid grid-cols-7 gap-1 mb-2">
             {dayNames.map((day) => (
               <div key={day} className="text-center py-2">
-                <span className="text-sm font-semibold text-white/70">{day}</span>
+                <span className="text-sm font-semibold text-white/85">{day}</span>
               </div>
             ))}
           </div>
@@ -249,7 +250,7 @@ function CalendarContent() {
                             isToday ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent' : ''
                           } ${
                             isCompleted
-                              ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-md'
+                              ? 'bg-gradient-to-br from-green-600 to-emerald-700 text-white shadow-md'
                               : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm'
                           }`}
                         >
@@ -276,7 +277,7 @@ function CalendarContent() {
                             ? 'ring-2 ring-white ring-offset-2 ring-offset-transparent bg-white/10'
                             : isPast
                               ? 'bg-transparent text-white/30'
-                              : 'bg-transparent hover:bg-white/10 text-white/70'
+                              : 'bg-transparent hover:bg-white/10 text-white/85'
                         }`}
                       >
                         <span className={`font-semibold text-lg ${isPast ? '' : ''}`}>{day}</span>
@@ -292,11 +293,11 @@ function CalendarContent() {
           <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-white/10">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded bg-white/20" />
-              <span className="text-sm text-white/70">Scheduled</span>
+              <span className="text-sm text-white/85">Scheduled</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded bg-gradient-to-br from-green-400 to-emerald-500" />
-              <span className="text-sm text-white/70">Completed</span>
+              <span className="text-sm text-white/85">Completed</span>
             </div>
           </div>
         </motion.div>
@@ -314,17 +315,19 @@ function CalendarContent() {
               <p className="text-3xl font-bold text-white">
                 {workouts.filter((w) => w.completed).length}
               </p>
-              <p className="text-sm text-white/70">Workouts completed</p>
+              <p className="text-sm text-white/85">Workouts completed</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-white">
                 {workouts.filter((w) => w.exercises.some((e) => e.sets.length > 0)).length}
               </p>
-              <p className="text-sm text-white/70">Total scheduled</p>
+              <p className="text-sm text-white/85">Total scheduled</p>
             </div>
           </div>
         </motion.div>
       </main>
+
+      <BottomNav />
     </div>
   );
 }

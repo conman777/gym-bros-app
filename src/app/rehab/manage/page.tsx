@@ -108,15 +108,15 @@ export default function ManageRehabPage() {
     <div className="min-h-screen bg-[var(--background)] pb-20">
       <header className="bg-[var(--surface)] shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <Link
               href="/dashboard"
-              className="p-2 -ml-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+              className="p-2 -ml-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors flex-shrink-0"
             >
               <ChevronLeft className="w-6 h-6" />
             </Link>
             <h1 className="text-xl font-bold">Manage Rehab Exercises</h1>
-            <div className="w-10"></div>
+            <div />
           </div>
         </div>
       </header>
@@ -131,7 +131,7 @@ export default function ManageRehabPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               onClick={() => setShowAddForm(true)}
-              className="w-full bg-gradient-to-r from-teal-500 to-cyan-600 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:from-teal-600 hover:to-cyan-700 transition-all shadow-lg"
+              className="w-full bg-gradient-to-r from-teal-600 to-cyan-700 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:from-teal-700 hover:to-cyan-800 transition-all shadow-lg"
             >
               <Plus className="w-5 h-5" />
               Add New Exercise

@@ -22,6 +22,7 @@ import { SetupProgressHandler } from './SetupProgressHandler';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
 import { HabitTrackingCard } from '@/components/HabitTrackingCard';
+import BottomNav from '@/components/BottomNav';
 
 interface User {
   id: string;
@@ -179,7 +180,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-white">Hey, {user.name}! 💪</h1>
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-white/85">
                   {new Date().toLocaleDateString('en-US', {
                     weekday: 'short',
                     month: 'short',
@@ -190,13 +191,15 @@ export default function Dashboard() {
             </div>
 
             <div className="flex items-center gap-6">
-              <PageNav />
+              <div className="hidden md:flex">
+                <PageNav />
+              </div>
               <button
                 onClick={handleLogout}
                 className="p-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
                 aria-label="Switch user"
               >
-                <LogOut className="w-5 h-5 text-white/80" />
+                <LogOut className="w-5 h-5 text-white/85" />
               </button>
             </div>
           </div>
@@ -335,9 +338,9 @@ export default function Dashboard() {
               className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
             >
               <div className="text-center py-8">
-                <Dumbbell className="w-16 h-16 text-white/60 mx-auto mb-4" />
+                <Dumbbell className="w-16 h-16 text-white/85 mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-white mb-2">No Workout Today</h2>
-                <p className="text-white/70 mb-6">Import a workout plan to get started</p>
+                <p className="text-white/85 mb-6">Import a workout plan to get started</p>
                 <Link
                   href="/import"
                   className="inline-flex items-center bg-white text-[var(--primary)] px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
@@ -367,7 +370,7 @@ export default function Dashboard() {
                 {user.stats?.totalSetsCompleted || 0}
               </span>
             </div>
-            <p className="text-sm text-white/70">Total Sets</p>
+            <p className="text-sm text-white/85">Total Sets</p>
           </motion.div>
 
           <motion.div
@@ -382,7 +385,7 @@ export default function Dashboard() {
                 {user.stats?.totalSetsCompleted ? Math.floor(user.stats.totalSetsCompleted / 7) : 0}
               </span>
             </div>
-            <p className="text-sm text-white/70">Week Streak</p>
+            <p className="text-sm text-white/85">Week Streak</p>
           </motion.div>
         </div>
 
@@ -392,7 +395,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl p-6 text-white shadow-lg"
+            className="bg-gradient-to-br from-teal-600 to-cyan-700 rounded-2xl p-6 text-white shadow-lg"
           >
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">
@@ -561,6 +564,8 @@ export default function Dashboard() {
           </motion.div>
         )}
       </main>
+
+      <BottomNav />
     </div>
   );
 }

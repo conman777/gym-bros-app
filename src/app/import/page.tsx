@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
+import BottomNav from '@/components/BottomNav';
 
 const TEMPLATES = {
   'Demo Workout': `Monday - Upper Body
@@ -210,17 +211,18 @@ export default function ImportPage() {
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between gap-4">
             <Link
               href="/dashboard"
-              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-2 -ml-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
             >
               <ChevronLeft className="w-6 h-6 text-white" />
             </Link>
-            <h1 className="text-xl font-bold flex-1 text-center mr-8 text-white">Plans</h1>
+            <h1 className="text-xl font-bold text-center text-white">Plans</h1>
+            <div className="hidden md:flex">
+              <PageNav />
+            </div>
           </div>
-
-          <PageNav />
         </div>
       </header>
 
@@ -239,7 +241,7 @@ export default function ImportPage() {
                       ? 'bg-white text-[var(--primary)]'
                       : ['customize', 'preview'].indexOf(step) > i
                         ? 'bg-green-400 text-white'
-                        : 'bg-white/20 text-white/60'
+                        : 'bg-white/20 text-white/80'
                   }`}
                   animate={{ scale: step === s ? 1.1 : 1 }}
                 >
@@ -306,7 +308,7 @@ export default function ImportPage() {
                           </div>
                           <h3 className="text-lg font-semibold text-white">{info.name}</h3>
                         </div>
-                        <p className="text-white/70 mb-2">{info.description}</p>
+                        <p className="text-white/85 mb-2">{info.description}</p>
                         <div className="flex gap-4 text-sm">
                           <span
                             className={`px-3 py-1 rounded-full ${
@@ -319,7 +321,7 @@ export default function ImportPage() {
                           >
                             {info.difficulty}
                           </span>
-                          <span className="text-white/70">{info.daysPerWeek} days/week</span>
+                          <span className="text-white/85">{info.daysPerWeek} days/week</span>
                         </div>
                       </div>
                       {selectedTemplate === key && (
@@ -363,7 +365,7 @@ export default function ImportPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-white">Custom Workout</h3>
-                      <p className="text-white/70">Create your own plan</p>
+                      <p className="text-white/85">Create your own plan</p>
                     </div>
                   </div>
                 </motion.button>
@@ -396,7 +398,7 @@ export default function ImportPage() {
                 <label className="block text-sm font-medium text-white mb-2">
                   Workout Plan Details
                 </label>
-                <p className="text-xs text-white/70 mb-4">
+                <p className="text-xs text-white/85 mb-4">
                   Format: Day - Name, then Exercise: SetsxReps @ Weight
                 </p>
                 <textarea
@@ -406,13 +408,13 @@ export default function ImportPage() {
 Bench Press: 3x10 @ 61kg
 Incline Dumbbell Press: 3x12 @ 23kg
 ..."
-                  className="w-full h-64 p-4 bg-white/10 border border-white/20 text-white placeholder:text-white/40 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent font-mono text-sm"
+                  className="w-full h-64 p-4 bg-white/10 border border-white/20 text-white placeholder:text-white/75 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent font-mono text-sm"
                 />
 
                 <div className="mt-6">
                   <label className="block text-sm font-medium text-white mb-2">Start Date</label>
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-white/70" />
+                    <Calendar className="w-5 h-5 text-white/85" />
                     <input
                       type="date"
                       value={startDate}
@@ -467,12 +469,12 @@ Incline Dumbbell Press: 3x12 @ 23kg
                       className="border-b border-white/10 pb-4 last:border-0"
                     >
                       <h4 className="font-semibold text-lg text-white mb-2 flex items-center gap-2">
-                        <Dumbbell className="w-4 h-4 text-white/70" />
+                        <Dumbbell className="w-4 h-4 text-white/85" />
                         {workout.day}
                       </h4>
                       <ul className="space-y-2">
                         {workout.exercises.map((exercise, i) => (
-                          <li key={i} className="text-white/70 text-sm pl-6">
+                          <li key={i} className="text-white/85 text-sm pl-6">
                             <span className="font-medium text-white">{exercise.name}:</span>{' '}
                             {exercise.sets}x{exercise.reps} @ {exercise.weight}kg
                           </li>
@@ -495,7 +497,7 @@ Incline Dumbbell Press: 3x12 @ 23kg
                   whileTap={{ scale: 0.98 }}
                   onClick={handleImport}
                   disabled={importing}
-                  className="flex-1 bg-gradient-to-r from-green-400 to-emerald-500 text-white py-4 rounded-xl font-semibold text-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-gradient-to-r from-green-600 to-emerald-700 text-white py-4 rounded-xl font-semibold text-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {importing ? (
                     <>
@@ -519,6 +521,8 @@ Incline Dumbbell Press: 3x12 @ 23kg
           )}
         </AnimatePresence>
       </main>
+
+      <BottomNav />
     </div>
   );
 }

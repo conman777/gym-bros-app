@@ -110,36 +110,36 @@ export function HabitTrackingCard() {
       <div className="bg-white/5 rounded-lg p-2.5 border border-white/10">
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div>
-            <div className="text-white/50 font-medium mb-1.5">Today</div>
+            <div className="text-white/75 font-medium mb-1.5">Today</div>
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
                 <Cigarette className="w-3.5 h-3.5 text-orange-300 shrink-0" />
                 <span className="text-white font-semibold">{stats?.today.smoking || 0}</span>
-                <span className="text-white/40">cigs</span>
+                <span className="text-white/75">cigs</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Pill className="w-3.5 h-3.5 text-cyan-300 shrink-0" />
                 <span className="text-white font-semibold">
                   {stats?.today.nicotinePouches || 0}
                 </span>
-                <span className="text-white/40">pouches</span>
+                <span className="text-white/75">pouches</span>
               </div>
             </div>
           </div>
           <div>
-            <div className="text-white/50 font-medium mb-1.5">This Week</div>
+            <div className="text-white/75 font-medium mb-1.5">This Week</div>
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
                 <Cigarette className="w-3.5 h-3.5 text-orange-300 shrink-0" />
                 <span className="text-white font-semibold">{stats?.thisWeek.smoking || 0}</span>
-                <span className="text-white/40">cigs</span>
+                <span className="text-white/75">cigs</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Pill className="w-3.5 h-3.5 text-cyan-300 shrink-0" />
                 <span className="text-white font-semibold">
                   {stats?.thisWeek.nicotinePouches || 0}
                 </span>
-                <span className="text-white/40">pouches</span>
+                <span className="text-white/75">pouches</span>
               </div>
             </div>
           </div>

@@ -218,24 +218,27 @@ export default function WorkoutPage({ params }: { params: Promise<{ date: string
         {/* Header */}
         <header className="bg-[var(--surface)] shadow-sm sticky top-0 z-40">
           <div className="max-w-4xl mx-auto px-4 py-4">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center gap-4 mb-4">
               <Link
                 href="/dashboard"
-                className="p-2 -ml-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors"
+                className="p-2 -ml-2 rounded-lg hover:bg-[var(--surface-hover)] transition-colors flex-shrink-0"
               >
                 <ChevronLeft className="w-6 h-6" />
               </Link>
               <div className="text-center">
-                <h1 className="text-xl font-bold">Today's Workout</h1>
-                <p className="text-sm text-[var(--foreground-muted)]">
-                  {new Date(workout.date).toLocaleDateString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </p>
+                <h1 className="text-xl font-bold">
+                  Today's Workout{' '}
+                  <span className="text-sm text-[var(--foreground-muted)] font-normal">
+                    •{' '}
+                    {new Date(workout.date).toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </span>
+                </h1>
               </div>
-              <div className="w-10"></div>
+              <div />
             </div>
 
             {/* Progress bar */}

@@ -126,7 +126,7 @@ export default function RegisterPage() {
                 Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/80" />
                 <input
                   id="name"
                   type="text"
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                 Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/80" />
                 <input
                   id="email"
                   type="email"
@@ -162,7 +162,7 @@ export default function RegisterPage() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/80" />
                 <input
                   id="password"
                   type="password"
@@ -181,7 +181,7 @@ export default function RegisterPage() {
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/80" />
                 <input
                   id="confirmPassword"
                   type="password"
@@ -222,7 +222,7 @@ export default function RegisterPage() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-white/60 text-sm">
+            <p className="text-white/80 text-sm">
               Already have an account?{' '}
               <Link href="/login" className="text-white font-semibold hover:underline">
                 Login

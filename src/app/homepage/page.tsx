@@ -136,7 +136,7 @@ export default function Home() {
               </div>
 
               <h3 className="text-2xl font-bold text-white mb-2">CONOR</h3>
-              <div className="flex items-center justify-center gap-1 text-white/60">
+              <div className="flex items-center justify-center gap-1 text-white/80">
                 <Zap className="w-4 h-4" />
                 <span className="text-sm">Ready to train</span>
               </div>
@@ -184,7 +184,7 @@ export default function Home() {
               </div>
 
               <h3 className="text-2xl font-bold text-white mb-2">DEVLIN</h3>
-              <div className="flex items-center justify-center gap-1 text-white/60">
+              <div className="flex items-center justify-center gap-1 text-white/80">
                 <Zap className="w-4 h-4" />
                 <span className="text-sm">Ready to train</span>
               </div>

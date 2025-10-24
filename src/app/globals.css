@@ -8,7 +8,13 @@
   --secondary-dark: #059669;
   --accent: #f59e0b;
   --danger: #ef4444;
-  
+
+  /* Accessible text colors (WCAG AA compliant) */
+  --text-primary: rgba(255, 255, 255, 1);     /* 100% - headings, important text */
+  --text-secondary: rgba(255, 255, 255, 0.9);  /* 90% - body text */
+  --text-tertiary: rgba(255, 255, 255, 0.85);  /* 85% - secondary info */
+  --text-muted: rgba(255, 255, 255, 0.75);     /* 75% - minimum for accessibility */
+
   /* Neutral colors */
   --background: #f8fafc;
   --surface: #ffffff;

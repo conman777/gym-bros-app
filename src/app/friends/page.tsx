@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Users, TrendingUp, UserPlus, Activity, LogOut } from 'lucide-react';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
+import BottomNav from '@/components/BottomNav';
 import { useQuery } from '@tanstack/react-query';
 
 type TabType = 'feed' | 'stats' | 'add';
@@ -120,29 +121,35 @@ export default function FriendsPage() {
         {/* Global Header */}
         <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
           <div className="max-w-4xl mx-auto px-4 py-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-2xl font-bold text-white">
-                  Hey, {user?.name || 'Loading...'}! 💪
-                </h1>
-                <p className="text-sm text-white/80">
-                  {new Date().toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </p>
+            <div className="flex justify-between items-center gap-4">
+              <div className="flex items-center gap-4">
+                <div>
+                  <h1 className="text-2xl font-bold text-white">
+                    Hey, {user?.name || 'Loading...'}! 💪
+                  </h1>
+                  <p className="text-xs text-white/85">
+                    {new Date().toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </p>
+                </div>
               </div>
-              <button
-                onClick={handleLogout}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                aria-label="Logout"
-              >
-                <LogOut className="w-5 h-5 text-white/80" />
-              </button>
-            </div>
 
-            <PageNav />
+              <div className="flex items-center gap-6">
+                <div className="hidden md:flex">
+                  <PageNav />
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
+                  aria-label="Logout"
+                >
+                  <LogOut className="w-5 h-5 text-white/85" />
+                </button>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -177,7 +184,7 @@ export default function FriendsPage() {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex-1 relative px-6 py-3 rounded-xl font-semibold transition-all ${
-                      isActive ? 'text-white' : 'text-white/60 hover:text-white/80'
+                      isActive ? 'text-white' : 'text-white/85 hover:text-white/85'
                     }`}
                   >
                     {isActive && (
@@ -253,9 +260,9 @@ function ActivityFeedTab({ activities }: { activities: FriendActivity[] }) {
   if (activities.length === 0) {
     return (
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center">
-        <Activity className="w-16 h-16 mx-auto mb-4 text-white/40" />
-        <p className="text-white/60 text-lg">No recent activity from friends</p>
-        <p className="text-white/40 text-sm mt-2">
+        <Activity className="w-16 h-16 mx-auto mb-4 text-white/75" />
+        <p className="text-white/85 text-lg">No recent activity from friends</p>
+        <p className="text-white/75 text-sm mt-2">
           Activity will appear here when friends complete workouts
         </p>
       </div>
@@ -272,22 +279,22 @@ function ActivityFeedTab({ activities }: { activities: FriendActivity[] }) {
           className="bg-white/10 backdrop-blur-md rounded-2xl p-6"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-white font-bold text-xl">
               {activity.user.name[0].toUpperCase()}
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-white font-semibold">{activity.user.name}</span>
-                <span className="text-white/60 text-sm">completed a workout</span>
+                <span className="text-white/85 text-sm">completed a workout</span>
               </div>
-              <div className="flex flex-wrap gap-4 text-white/80 text-sm">
+              <div className="flex flex-wrap gap-4 text-white/85 text-sm">
                 <span>🔥 {activity.data.setsCompleted} sets</span>
                 <span>💪 {activity.data.exerciseCount} exercises</span>
                 {activity.data.exercises && activity.data.exercises.length > 0 && (
-                  <span className="text-white/60">{activity.data.exercises.join(', ')}</span>
+                  <span className="text-white/85">{activity.data.exercises.join(', ')}</span>
                 )}
               </div>
-              <p className="text-white/40 text-xs mt-2">
+              <p className="text-white/75 text-xs mt-2">
                 {new Date(activity.createdAt).toLocaleString()}
               </p>
             </div>
@@ -303,9 +310,9 @@ function StatsComparisonTab({ friends }: { friends: Friend[] }) {
   if (friends.length === 0) {
     return (
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center">
-        <Users className="w-16 h-16 mx-auto mb-4 text-white/40" />
-        <p className="text-white/60 text-lg">No friends to compare stats with</p>
-        <p className="text-white/40 text-sm mt-2">Add friends to see how you stack up!</p>
+        <Users className="w-16 h-16 mx-auto mb-4 text-white/75" />
+        <p className="text-white/85 text-lg">No friends to compare stats with</p>
+        <p className="text-white/75 text-sm mt-2">Add friends to see how you stack up!</p>
       </div>
     );
   }
@@ -333,7 +340,7 @@ function StatsComparisonTab({ friends }: { friends: Friend[] }) {
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center text-white font-bold">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-blue-700 flex items-center justify-center text-white font-bold">
                       {friend.name[0].toUpperCase()}
                     </div>
                     <span className="text-white font-medium">{friend.name}</span>
@@ -345,7 +352,7 @@ function StatsComparisonTab({ friends }: { friends: Friend[] }) {
                 <td className="px-6 py-4 text-center text-white font-semibold text-lg">
                   {friend.stats.totalExercises}
                 </td>
-                <td className="px-6 py-4 text-center text-white/80">
+                <td className="px-6 py-4 text-center text-white/85">
                   {friend.stats.lastWorkoutDate
                     ? new Date(friend.stats.lastWorkoutDate).toLocaleDateString()
                     : 'Never'}
@@ -503,7 +510,7 @@ function AddFriendsTab({
               >
                 <div>
                   <span className="text-white font-medium block">{user.name}</span>
-                  {user.email && <span className="text-white/60 text-sm">{user.email}</span>}
+                  {user.email && <span className="text-white/85 text-sm">{user.email}</span>}
                 </div>
                 <button
                   onClick={() => handleSendRequest(user.name)}
@@ -521,6 +528,8 @@ function AddFriendsTab({
           </div>
         )}
       </div>
+
+      <BottomNav />
     </div>
   );
 }
