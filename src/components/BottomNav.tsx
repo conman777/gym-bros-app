@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Calendar, TrendingUp, Users } from 'lucide-react';
+import { Home, Calendar, TrendingUp, Users, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { href: '/calendar', icon: Calendar, label: 'Calendar' },
   { href: '/stats', icon: TrendingUp, label: 'Stats' },
   { href: '/friends', icon: Users, label: 'Friends' },
+  { href: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export default function BottomNav() {

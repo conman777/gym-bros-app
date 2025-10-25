@@ -250,6 +250,8 @@ export default function FriendsPage() {
             )}
           </AnimatePresence>
         </div>
+
+        <BottomNav />
       </div>
     </>
   );
@@ -528,8 +530,6 @@ function AddFriendsTab({
           </div>
         )}
       </div>
-
-      <BottomNav />
     </div>
   );
 }
