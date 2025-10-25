@@ -224,7 +224,7 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen pb-6">
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
+      <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -278,7 +278,7 @@ export default function SettingsPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <h2 className="text-xl font-bold text-white mb-4">Account Info</h2>
           <div className="space-y-3">
@@ -298,7 +298,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -344,7 +344,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <div className="flex items-center gap-2 mb-4">
             <Shield className="w-6 h-6 text-blue-300" />
@@ -469,7 +469,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <div className="flex items-center gap-2 mb-4">
             <Palette className="w-6 h-6 text-purple-300" />
@@ -543,7 +543,7 @@ export default function SettingsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <div className="flex items-center gap-2 mb-4">
             <Lock className="w-6 h-6 text-white/80" />

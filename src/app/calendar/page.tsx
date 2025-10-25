@@ -134,7 +134,7 @@ function CalendarContent() {
   return (
     <div className="min-h-screen pb-6 overflow-hidden relative">
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
+      <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <Link
@@ -167,7 +167,7 @@ function CalendarContent() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigateMonth('prev')}
-            className="p-3 rounded-xl bg-white/10 backdrop-blur-md hover:bg-white/20 transition-colors shadow-lg border border-white/20"
+            className="p-3 rounded-xl bg-gray-500/[0.02] backdrop-blur-[4.6px] hover:bg-white/20 transition-colors shadow-lg border border-white/20"
           >
             <ChevronLeft className="w-5 h-5 text-white" />
           </motion.button>
@@ -190,7 +190,7 @@ function CalendarContent() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigateMonth('next')}
-            className="p-3 rounded-xl bg-white/10 backdrop-blur-md hover:bg-white/20 transition-colors shadow-lg border border-white/20"
+            className="p-3 rounded-xl bg-gray-500/[0.02] backdrop-blur-[4.6px] hover:bg-white/20 transition-colors shadow-lg border border-white/20"
           >
             <ChevronRight className="w-5 h-5 text-white" />
           </motion.button>
@@ -200,7 +200,7 @@ function CalendarContent() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 p-4"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl shadow-lg border border-white/20 p-4"
         >
           {/* Day Headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
@@ -304,7 +304,7 @@ function CalendarContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-6 bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+          className="mt-6 bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <h3 className="font-semibold text-white mb-4">Month Overview</h3>
           <div className="grid grid-cols-2 gap-4">

@@ -206,7 +206,7 @@ export default function ImportPage() {
   return (
     <div className="min-h-screen pb-6 overflow-hidden relative">
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
+      <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <Link
@@ -391,7 +391,7 @@ export default function ImportPage() {
             >
               <h2 className="text-2xl font-bold text-white mb-6">Customize Your Plan</h2>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 mb-6">
+              <div className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20 mb-6">
                 <label className="block text-sm font-medium text-white mb-2">
                   Workout Plan Details
                 </label>
@@ -455,7 +455,7 @@ Incline Dumbbell Press: 3x12 @ 23kg
             >
               <h2 className="text-2xl font-bold text-white mb-6">Review Your Plan</h2>
 
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 mb-6">
+              <div className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20 mb-6">
                 <div className="space-y-4 max-h-96 overflow-y-auto">
                   {preview.map((workout, index) => (
                     <motion.div

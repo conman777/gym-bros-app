@@ -91,7 +91,7 @@ export default function LoginPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-white/20"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-8 shadow-xl border border-white/20"
         >
           <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
 

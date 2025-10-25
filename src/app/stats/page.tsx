@@ -93,7 +93,7 @@ export default function StatsPage() {
   return (
     <div className="min-h-screen pb-6 overflow-hidden relative">
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
+      <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             <Link
@@ -156,7 +156,7 @@ export default function StatsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">This Month</h3>
@@ -199,7 +199,7 @@ export default function StatsPage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
               <Flame className="w-8 h-8 text-orange-400" />
@@ -220,7 +220,7 @@ export default function StatsPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
               <Award className="w-8 h-8 text-yellow-300" />
@@ -241,7 +241,7 @@ export default function StatsPage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
               <Target className="w-8 h-8 text-green-300" />
@@ -261,7 +261,7 @@ export default function StatsPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-lg border border-white/20"
           >
             <div className="flex items-center justify-between mb-3">
               <TrendingUp className="w-8 h-8 text-blue-300" />
@@ -284,7 +284,7 @@ export default function StatsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-lg border border-white/20"
           >
             <h3 className="text-lg font-semibold text-white mb-3">Last Workout</h3>
             <p className="text-white/85">

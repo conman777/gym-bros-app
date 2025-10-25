@@ -117,7 +117,7 @@ export default function FriendsPage() {
     <>
       <div className="min-h-screen relative">
         {/* Global Header */}
-        <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
+        <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] border-b border-white/20 shadow-sm sticky top-0 z-40">
           <div className="max-w-4xl mx-auto px-4 py-4">
             <div className="flex justify-between items-center gap-4">
               <div className="flex items-center gap-4">
@@ -172,7 +172,7 @@ export default function FriendsPage() {
 
           {/* Tabs */}
           <div className="mb-6">
-            <div className="flex gap-2 bg-white/10 backdrop-blur-md rounded-2xl p-2">
+            <div className="flex gap-2 bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-2">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -259,7 +259,7 @@ export default function FriendsPage() {
 function ActivityFeedTab({ activities }: { activities: FriendActivity[] }) {
   if (activities.length === 0) {
     return (
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center">
+      <div className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-12 text-center">
         <Activity className="w-16 h-16 mx-auto mb-4 text-white/75" />
         <p className="text-white/85 text-lg">No recent activity from friends</p>
         <p className="text-white/75 text-sm mt-2">
@@ -276,7 +276,7 @@ function ActivityFeedTab({ activities }: { activities: FriendActivity[] }) {
           key={activity.id}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white/10 backdrop-blur-md rounded-2xl p-6"
+          className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6"
         >
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-white font-bold text-xl">
@@ -309,7 +309,7 @@ function ActivityFeedTab({ activities }: { activities: FriendActivity[] }) {
 function StatsComparisonTab({ friends }: { friends: Friend[] }) {
   if (friends.length === 0) {
     return (
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 text-center">
+      <div className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-12 text-center">
         <Users className="w-16 h-16 mx-auto mb-4 text-white/75" />
         <p className="text-white/85 text-lg">No friends to compare stats with</p>
         <p className="text-white/75 text-sm mt-2">Add friends to see how you stack up!</p>
@@ -318,7 +318,7 @@ function StatsComparisonTab({ friends }: { friends: Friend[] }) {
   }
 
   return (
-    <div className="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden">
+    <div className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-white/10">
@@ -451,7 +451,7 @@ function AddFriendsTab({
     <div className="space-y-6">
       {/* Pending Requests */}
       {pendingRequests.length > 0 && (
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6">
+        <div className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6">
           <h3 className="text-white font-semibold text-lg mb-4">Pending Requests</h3>
           <div className="space-y-3">
             {pendingRequests.map((request: any) => (
@@ -481,7 +481,7 @@ function AddFriendsTab({
       )}
 
       {/* Search */}
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6">
+      <div className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6">
         <h3 className="text-white font-semibold text-lg mb-4">Find Friends</h3>
         <div className="flex gap-2 mb-4">
           <input

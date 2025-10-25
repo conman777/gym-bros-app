@@ -17,7 +17,7 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex flex-col items-center justify-center overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         {[...Array(5)].map((_, i) => (
@@ -82,7 +82,7 @@ export default function Home() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="relative group bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all hover:border-white/60"
+              className="relative group bg-gray-500/[0.02] backdrop-blur-[4.6px] border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all hover:border-white/60"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -101,7 +101,7 @@ export default function Home() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="relative group bg-white/10 backdrop-blur-md border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all hover:border-white/60"
+              className="relative group bg-gray-500/[0.02] backdrop-blur-[4.6px] border-2 border-white/20 rounded-2xl p-8 min-w-[200px] transition-all hover:border-white/60"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
 
