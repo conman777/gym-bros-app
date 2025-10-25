@@ -197,7 +197,7 @@ export default function Dashboard() {
       </Suspense>
 
       {/* Header */}
-      <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] shadow-[0_4px_30px_rgba(0,0,0,0.1)] sticky top-0 z-40">
+      <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] shadow-[0_4px_30px_rgba(0,0,0,0.1)] sticky top-0 z-40 border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -285,7 +285,7 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+              className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -358,7 +358,7 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+              className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300"
             >
               <div className="text-center py-8">
                 <Dumbbell className="w-16 h-16 text-white/85 mx-auto mb-4" />
@@ -387,7 +387,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300"
           >
             <div className="text-center py-4">
               <Dumbbell className="w-16 h-16 text-white/60 mx-auto mb-4" />
@@ -418,7 +418,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300"
           >
             <div className="flex items-center justify-between mb-2">
               <Trophy className="w-8 h-8 text-yellow-300" />
@@ -433,7 +433,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300"
           >
             <div className="flex items-center justify-between mb-2">
               <Flame className="w-8 h-8 text-orange-400" />
@@ -451,7 +451,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300"
           >
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">

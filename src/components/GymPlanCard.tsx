@@ -36,7 +36,7 @@ export function GymPlanCard({ plan, onViewDetails, onRegeneratePlan }: GymPlanCa
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+      className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-white/30 hover:shadow-[0_4px_30px_rgba(255,255,255,0.1)] transition-all duration-300"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
