@@ -19,7 +19,6 @@ import {
 import * as Progress from '@radix-ui/react-progress';
 import type { RehabExercise } from '@/lib/types';
 import { SetupProgressHandler } from './SetupProgressHandler';
-import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
 import { HabitTrackingCard } from '@/components/HabitTrackingCard';
 import BottomNav from '@/components/BottomNav';
@@ -170,7 +169,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
@@ -184,9 +183,7 @@ export default function Dashboard() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
-      <AnimatedBackground />
-
+    <div className="min-h-screen pb-6 overflow-hidden relative">
       {/* Setup Progress Handler - wrapped in Suspense for useSearchParams */}
       <Suspense fallback={null}>
         <SetupProgressHandler

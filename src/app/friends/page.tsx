@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, TrendingUp, UserPlus, Activity, LogOut } from 'lucide-react';
-import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
 import BottomNav from '@/components/BottomNav';
 import { useQuery } from '@tanstack/react-query';
@@ -116,8 +115,7 @@ export default function FriendsPage() {
 
   return (
     <>
-      <AnimatedBackground />
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900 relative">
+      <div className="min-h-screen relative">
         {/* Global Header */}
         <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
           <div className="max-w-4xl mx-auto px-4 py-4">

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Check, Dumbbell } from 'lucide-react';
 import { formatDateForUrl } from '@/lib/date-utils';
-import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { PageNav } from '@/components/PageNav';
 import BottomNav from '@/components/BottomNav';
 
@@ -133,9 +132,7 @@ function CalendarContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] pb-6 overflow-hidden relative">
-      <AnimatedBackground />
-
+    <div className="min-h-screen pb-6 overflow-hidden relative">
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
