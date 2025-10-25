@@ -36,7 +36,7 @@ export function GymPlanCard({ plan, onViewDetails, onRegeneratePlan }: GymPlanCa
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-cyan-500 to-blue-700 rounded-2xl p-6 text-white shadow-lg"
+      className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
@@ -127,7 +127,7 @@ export function GymPlanCard({ plan, onViewDetails, onRegeneratePlan }: GymPlanCa
       <div className="flex gap-2">
         <Link
           href="/import"
-          className="flex-1 flex items-center justify-center gap-2 bg-white text-cyan-700 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 bg-white text-blue-600 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
         >
           <Calendar className="w-4 h-4" />
           Import to Calendar

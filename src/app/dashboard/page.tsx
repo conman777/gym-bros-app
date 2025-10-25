@@ -197,7 +197,7 @@ export default function Dashboard() {
       </Suspense>
 
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm sticky top-0 z-40">
+      <header className="bg-gray-500/[0.02] backdrop-blur-[4.6px] shadow-[0_4px_30px_rgba(0,0,0,0.1)] sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -285,7 +285,7 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white/20 backdrop-blur-md rounded-2xl p-6 text-white shadow-lg border border-white/30"
+              className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -358,7 +358,7 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+              className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
             >
               <div className="text-center py-8">
                 <Dumbbell className="w-16 h-16 text-white/85 mx-auto mb-4" />
@@ -387,7 +387,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gradient-to-br from-cyan-500 to-blue-700 rounded-2xl p-6 text-white shadow-lg"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
           >
             <div className="text-center py-4">
               <Dumbbell className="w-16 h-16 text-white/60 mx-auto mb-4" />
@@ -397,7 +397,7 @@ export default function Dashboard() {
               </p>
               <button
                 onClick={() => setShowGymPlanModal(true)}
-                className="inline-flex items-center bg-white text-cyan-700 px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
+                className="inline-flex items-center bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
               >
                 Generate Plan
                 <ChevronRight className="w-5 h-5 ml-1" />
@@ -418,7 +418,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
           >
             <div className="flex items-center justify-between mb-2">
               <Trophy className="w-8 h-8 text-yellow-300" />
@@ -433,7 +433,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-5 shadow-lg border border-white/20"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
           >
             <div className="flex items-center justify-between mb-2">
               <Flame className="w-8 h-8 text-orange-400" />
@@ -451,7 +451,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-gradient-to-br from-teal-600 to-cyan-700 rounded-2xl p-6 text-white shadow-lg"
+            className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-6 text-white shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
           >
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">

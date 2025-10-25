@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { PageNav } from '@/components/PageNav';
 import BottomNav from '@/components/BottomNav';
+import { useWallpaper } from '@/hooks/useWallpaper';
+import { wallpaperPresets } from '@/lib/wallpaper-config';
 import {
   Dumbbell,
   Heart,
@@ -19,6 +21,9 @@ import {
   EyeOff,
   TrendingUp,
   Calendar,
+  Palette,
+  Upload,
+  Check,
 } from 'lucide-react';
 
 interface UserSettings {
@@ -51,6 +56,11 @@ export default function SettingsPage() {
     type: 'success' | 'error';
     text: string;
   } | null>(null);
+
+  // Wallpaper management
+  const { wallpaper, setPreset, setCustomWallpaper, getCurrentPreset } = useWallpaper();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingWallpaper, setUploadingWallpaper] = useState(false);
 
   useEffect(() => {
     fetchUserSettings();
@@ -125,6 +135,55 @@ export default function SettingsPage() {
       setMessage({ type: 'error', text: 'Failed to update setting' });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleWallpaperChange = (presetId: string) => {
+    setPreset(presetId);
+    // Dispatch custom event for same-tab updates
+    window.dispatchEvent(
+      new CustomEvent('wallpaperChange', {
+        detail: { type: 'gradient', preset: presetId },
+      })
+    );
+    setMessage({ type: 'success', text: 'Wallpaper updated successfully' });
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const handleCustomUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check if file is an image
+    if (!file.type.startsWith('image/')) {
+      setMessage({ type: 'error', text: 'Please upload an image file' });
+      return;
+    }
+
+    setUploadingWallpaper(true);
+    setMessage(null);
+
+    try {
+      const success = await setCustomWallpaper(file);
+      if (success) {
+        // Dispatch custom event for same-tab updates
+        window.dispatchEvent(
+          new CustomEvent('wallpaperChange', {
+            detail: { type: 'custom', customData: wallpaper.customData },
+          })
+        );
+        setMessage({ type: 'success', text: 'Custom wallpaper uploaded successfully' });
+        setTimeout(() => setMessage(null), 3000);
+      }
+    } catch (error) {
+      console.error('Failed to upload wallpaper:', error);
+      setMessage({ type: 'error', text: 'Failed to upload wallpaper' });
+    } finally {
+      setUploadingWallpaper(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -413,6 +472,80 @@ export default function SettingsPage() {
             <p className="text-blue-100 text-sm">
               ℹ️ Note: Total sets, exercises, and last workout date are always visible to friends
               (baseline stats)
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Appearance Settings */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20"
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <Palette className="w-6 h-6 text-purple-300" />
+            <h2 className="text-xl font-bold text-white">Appearance</h2>
+          </div>
+          <p className="text-white/80 text-sm mb-6">Customize your app's look with wallpapers</p>
+
+          {/* Wallpaper Presets */}
+          <div className="space-y-4">
+            <h3 className="text-white font-medium">Preset Wallpapers</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {wallpaperPresets.map((preset) => {
+                const isActive = wallpaper.type === preset.type && wallpaper.preset === preset.id;
+                return (
+                  <button
+                    key={preset.id}
+                    onClick={() => handleWallpaperChange(preset.id)}
+                    className={`relative h-24 rounded-lg ${preset.preview} transition-all ${
+                      isActive
+                        ? 'ring-4 ring-white scale-105'
+                        : 'hover:scale-105 hover:ring-2 hover:ring-white/50'
+                    }`}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-lg">
+                      <span className="text-white text-sm font-medium">{preset.name}</span>
+                    </div>
+                    {isActive && (
+                      <div className="absolute top-2 right-2 bg-white rounded-full p-1">
+                        <Check className="w-4 h-4 text-green-600" />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Custom Wallpaper Upload */}
+          <div className="mt-6 space-y-4">
+            <h3 className="text-white font-medium">Custom Wallpaper</h3>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleCustomUpload}
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingWallpaper}
+              className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors border border-white/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Upload className="w-5 h-5" />
+              {uploadingWallpaper ? 'Uploading...' : 'Upload Custom Image'}
+            </button>
+            {wallpaper.type === 'custom' && wallpaper.customData && (
+              <div className="mt-2 p-3 bg-purple-500/10 rounded-lg border border-purple-500/30">
+                <p className="text-purple-100 text-sm">
+                  ✓ Custom wallpaper active (max 2MB, images only)
+                </p>
+              </div>
+            )}
+            <p className="text-white/60 text-xs">
+              Upload your own background image (max 2MB). Supported formats: JPG, PNG, WebP
             </p>
           </div>
         </motion.div>
