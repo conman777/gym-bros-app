@@ -56,7 +56,7 @@ export function HabitTrackingCard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-orange-400/50 shadow-orange-500/30"
+        className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-orange-400/50 hover:shadow-orange-500/30 transition-all duration-300"
       >
         <div className="animate-pulse">
           <div className="h-5 bg-white/20 rounded w-1/3 mb-2"></div>
@@ -71,7 +71,7 @@ export function HabitTrackingCard() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-orange-400/50 shadow-orange-500/30"
+      className="bg-gray-500/[0.02] backdrop-blur-[4.6px] rounded-2xl p-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-2 border-transparent hover:border-orange-400/50 hover:shadow-orange-500/30 transition-all duration-300"
     >
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-base font-bold text-white">Habit Tracking</h2>
