@@ -230,7 +230,7 @@ export default function SettingsPage() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
+                className="p-2 rounded-lg transition-colors flex-shrink-0"
               >
                 <ChevronLeft className="w-6 h-6 text-white" />
               </button>

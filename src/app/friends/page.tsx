@@ -141,7 +141,7 @@ export default function FriendsPage() {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
+                  className="p-2 rounded-lg transition-colors flex-shrink-0"
                   aria-label="Logout"
                 >
                   <LogOut className="w-5 h-5 text-white/85" />

@@ -216,7 +216,7 @@ export default function Dashboard() {
               </div>
               <button
                 onClick={handleLogout}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors flex-shrink-0"
+                className="p-2 rounded-lg transition-colors flex-shrink-0"
                 aria-label="Switch user"
               >
                 <LogOut className="w-5 h-5 text-white/85" />
@@ -460,14 +460,14 @@ export default function Dashboard() {
                   href="/shoulder-rehab.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                  className="p-2 rounded-lg transition-colors"
                   title="View PDF"
                 >
                   <FileText className="w-5 h-5" />
                 </a>
                 <Link
                   href="/rehab/manage"
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                  className="p-2 rounded-lg transition-colors"
                   title="Manage Exercises"
                 >
                   <Settings className="w-5 h-5" />
