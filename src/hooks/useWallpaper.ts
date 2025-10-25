@@ -29,6 +29,13 @@ export function useWallpaper() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
       setWallpaperState(config);
+
+      // Dispatch custom event for same-tab updates
+      window.dispatchEvent(
+        new CustomEvent('wallpaperChange', {
+          detail: config,
+        })
+      );
     } catch (error) {
       console.error('Failed to save wallpaper:', error);
       // Handle localStorage quota exceeded

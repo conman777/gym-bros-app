@@ -140,12 +140,6 @@ export default function SettingsPage() {
 
   const handleWallpaperChange = (presetId: string) => {
     setPreset(presetId);
-    // Dispatch custom event for same-tab updates
-    window.dispatchEvent(
-      new CustomEvent('wallpaperChange', {
-        detail: { type: 'gradient', preset: presetId },
-      })
-    );
     setMessage({ type: 'success', text: 'Wallpaper updated successfully' });
     setTimeout(() => setMessage(null), 3000);
   };
@@ -166,12 +160,6 @@ export default function SettingsPage() {
     try {
       const success = await setCustomWallpaper(file);
       if (success) {
-        // Dispatch custom event for same-tab updates
-        window.dispatchEvent(
-          new CustomEvent('wallpaperChange', {
-            detail: { type: 'custom', customData: wallpaper.customData },
-          })
-        );
         setMessage({ type: 'success', text: 'Custom wallpaper uploaded successfully' });
         setTimeout(() => setMessage(null), 3000);
       }
