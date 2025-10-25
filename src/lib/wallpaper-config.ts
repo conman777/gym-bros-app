@@ -13,6 +13,7 @@ export interface WallpaperPreset {
   type: WallpaperType;
   gradient?: string;
   solidColor?: string;
+  customUrl?: string;
   preview: string; // Tailwind classes for preview
 }
 
@@ -20,9 +21,9 @@ export const wallpaperPresets: WallpaperPreset[] = [
   {
     id: 'default',
     name: 'Default',
-    type: 'gradient',
-    gradient: 'from-blue-900 via-purple-900 to-pink-900',
-    preview: 'bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900',
+    type: 'custom',
+    customUrl: '/default-wallpaper.jpg',
+    preview: 'bg-gradient-to-br from-blue-600 via-orange-500 to-pink-600',
   },
   {
     id: 'aurora',
@@ -76,6 +77,7 @@ export const wallpaperPresets: WallpaperPreset[] = [
 ];
 
 export const defaultWallpaper: WallpaperConfig = {
-  type: 'gradient',
+  type: 'custom',
   preset: 'default',
+  customUrl: '/default-wallpaper.jpg',
 };

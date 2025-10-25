@@ -104,12 +104,12 @@ export function AnimatedBackground() {
   }
 
   // Render custom image background
-  if (wallpaper.type === 'custom' && wallpaper.customData) {
+  if (wallpaper.type === 'custom' && (wallpaper.customData || wallpaper.customUrl)) {
     return (
       <div
         className="absolute inset-0 pointer-events-none bg-cover bg-center"
         style={{
-          backgroundImage: `url(${wallpaper.customData})`,
+          backgroundImage: `url(${wallpaper.customData || wallpaper.customUrl})`,
         }}
       >
         {/* Overlay to maintain glass effect visibility */}

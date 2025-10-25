@@ -96,6 +96,7 @@ export function useWallpaper() {
       await setWallpaper({
         type: preset.type,
         preset: preset.id,
+        customUrl: preset.customUrl,
       });
     }
   };
