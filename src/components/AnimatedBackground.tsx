@@ -18,6 +18,7 @@ export function AnimatedBackground() {
     }>
   >([]);
   const [wallpaper, setWallpaper] = useState<WallpaperConfig>(defaultWallpaper);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Load wallpaper from localStorage
   useEffect(() => {
@@ -29,6 +30,8 @@ export function AnimatedBackground() {
       }
     } catch (error) {
       console.error('Failed to load wallpaper:', error);
+    } finally {
+      setIsLoaded(true);
     }
   }, []);
 
@@ -94,6 +97,11 @@ export function AnimatedBackground() {
     }
     return '#1a1a1a';
   };
+
+  // Don't render until wallpaper is loaded from localStorage
+  if (!isLoaded) {
+    return null;
+  }
 
   // Render custom image background
   if (wallpaper.type === 'custom' && wallpaper.customData) {
