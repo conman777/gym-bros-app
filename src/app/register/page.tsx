@@ -56,7 +56,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[var(--primary)] via-[var(--primary-dark)] to-[var(--secondary)] flex flex-col items-center justify-center px-4 py-8">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(5)].map((_, i) => (
