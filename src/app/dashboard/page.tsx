@@ -387,7 +387,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg"
+            className="bg-gradient-to-br from-cyan-500 to-blue-700 rounded-2xl p-6 text-white shadow-lg"
           >
             <div className="text-center py-4">
               <Dumbbell className="w-16 h-16 text-white/60 mx-auto mb-4" />
@@ -397,7 +397,7 @@ export default function Dashboard() {
               </p>
               <button
                 onClick={() => setShowGymPlanModal(true)}
-                className="inline-flex items-center bg-white text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
+                className="inline-flex items-center bg-white text-cyan-700 px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition-colors"
               >
                 Generate Plan
                 <ChevronRight className="w-5 h-5 ml-1" />
