@@ -9,24 +9,64 @@ export function useWallpaper() {
   const [wallpaper, setWallpaperState] = useState<WallpaperConfig>(defaultWallpaper);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load wallpaper from localStorage on mount
+  // Load wallpaper from server on mount (with localStorage fallback)
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as WallpaperConfig;
-        setWallpaperState(parsed);
+    const loadWallpaper = async () => {
+      try {
+        // Try to fetch from server first
+        const response = await fetch('/api/user/wallpaper');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.wallpaper) {
+            const serverWallpaper = data.wallpaper as WallpaperConfig;
+            setWallpaperState(serverWallpaper);
+            // Update localStorage cache
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(serverWallpaper));
+            return;
+          }
+        }
+
+        // Fall back to localStorage if server fails or returns null
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored) as WallpaperConfig;
+          setWallpaperState(parsed);
+        }
+      } catch (error) {
+        console.error('Failed to load wallpaper from server, using localStorage:', error);
+        // Fall back to localStorage on error
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            const parsed = JSON.parse(stored) as WallpaperConfig;
+            setWallpaperState(parsed);
+          }
+        } catch (localError) {
+          console.error('Failed to load from localStorage:', localError);
+        }
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to load wallpaper:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    loadWallpaper();
   }, []);
 
-  // Save wallpaper to localStorage
-  const setWallpaper = (config: WallpaperConfig) => {
+  // Save wallpaper to server and localStorage
+  const setWallpaper = async (config: WallpaperConfig) => {
     try {
+      // Save to server first
+      const response = await fetch('/api/user/wallpaper', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallpaper: config }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save wallpaper to server');
+      }
+
+      // Save to localStorage as cache
       localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
       setWallpaperState(config);
 
@@ -41,15 +81,19 @@ export function useWallpaper() {
       // Handle localStorage quota exceeded
       if (error instanceof Error && error.name === 'QuotaExceededError') {
         alert('Image too large. Please upload a smaller image (max 2MB).');
+      } else {
+        // Still update state even if server save fails
+        setWallpaperState(config);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
       }
     }
   };
 
   // Set wallpaper by preset ID
-  const setPreset = (presetId: string) => {
+  const setPreset = async (presetId: string) => {
     const preset = wallpaperPresets.find((p) => p.id === presetId);
     if (preset) {
-      setWallpaper({
+      await setWallpaper({
         type: preset.type,
         preset: preset.id,
       });
@@ -67,9 +111,9 @@ export function useWallpaper() {
       }
 
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const base64 = e.target?.result as string;
-        setWallpaper({
+        await setWallpaper({
           type: 'custom',
           customData: base64,
         });

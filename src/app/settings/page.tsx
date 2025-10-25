@@ -138,8 +138,8 @@ export default function SettingsPage() {
     }
   };
 
-  const handleWallpaperChange = (presetId: string) => {
-    setPreset(presetId);
+  const handleWallpaperChange = async (presetId: string) => {
+    await setPreset(presetId);
     setMessage({ type: 'success', text: 'Wallpaper updated successfully' });
     setTimeout(() => setMessage(null), 3000);
   };

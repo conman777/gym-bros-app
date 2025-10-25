@@ -14,6 +14,7 @@ model User {
   email            String?           @unique
   passwordHash     String?
   rehabEnabled     Boolean           @default(false)
+  wallpaper        Json?
   rehabExercises   RehabExercise[]
   stats            Stats?
   workouts         Workout[]
